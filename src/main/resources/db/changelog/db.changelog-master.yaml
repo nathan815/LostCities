@@ -1,0 +1,5 @@
+databaseChangeLog:
+  liquibase.change-log=classpath:db/changelog/master.xml
+
+#- includeAll:
+#    path: classpath*:db/changelog/changes/
