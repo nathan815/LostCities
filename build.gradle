@@ -1,0 +1,58 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.0.M1'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.lostcities'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 10
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+
+ext {
+	springBootAdminVersion = '2.1.0-SNAPSHOT'
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-aop')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-validation')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('de.codecentric:spring-boot-admin-starter-client')
+	compile('de.codecentric:spring-boot-admin-starter-server')
+	compile('org.liquibase:liquibase-core')
+	compile('org.springframework.session:spring-session-core')
+	runtime('org.springframework.boot:spring-boot-devtools')
+	runtime('org.hsqldb:hsqldb')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+	}
+}
