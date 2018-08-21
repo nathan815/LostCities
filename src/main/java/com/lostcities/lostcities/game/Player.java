@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.game;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -15,6 +16,7 @@ public class Player {
 
     private Set<Card> hand;
 
+    @JsonProperty
     private Multimap<Color, Card> inPlay;
 
     public Player(Long playerId, String name, Game game) {

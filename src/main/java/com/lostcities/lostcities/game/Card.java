@@ -1,14 +1,18 @@
 package com.lostcities.lostcities.game;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lostcities.lostcities.game.exceptions.UnableToParseCardException;
 
 import java.util.Objects;
 
-//TODO ADD id and FIX hashcode
+
 public class Card {
+    @JsonIgnore
     private Integer instance;
+    @JsonProperty
     private Color color;
+    @JsonProperty
     private Integer number;
 
     public static Card fromString(String cardString) {
@@ -49,11 +53,11 @@ public class Card {
         return number;
     }
 
-    @JsonProperty
     public boolean isMultiplier() {
         return this.number.equals(1);
     }
 
+    @JsonProperty
     @Override
     public String toString() {
         return color + "_" + number + "_" +instance;

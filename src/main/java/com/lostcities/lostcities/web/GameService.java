@@ -2,6 +2,7 @@ package com.lostcities.lostcities.web;
 
 import com.lostcities.lostcities.entity.GameEntity;
 import com.lostcities.lostcities.entity.PlayerEntity;
+import com.lostcities.lostcities.game.Game;
 import com.lostcities.lostcities.repository.GameRepository;
 import com.lostcities.lostcities.repository.PlayerRepository;
 import com.lostcities.lostcities.web.model.CommandDto;
@@ -25,7 +26,7 @@ public class GameService {
         this.playerRepository = playerRepository;
     }
 
-    @RequestMapping("/")
+    @RequestMapping(method=RequestMethod.GET)
     public Collection<GameEntity> getGames() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -33,10 +34,13 @@ public class GameService {
     }
 
     @RequestMapping("/{id}")
-    public GameEntity getGameEntity(@PathVariable Long id) {
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.setId(id);
-        return gameEntity;
+    public Game getGameEntity(@PathVariable Long id) {
+        GameEntity gameEntity =  gameRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Game game = Game.fromGameEntity(gameEntity);
+
+        return game;
     }
 
     @RequestMapping(method=RequestMethod.POST)
@@ -52,7 +56,7 @@ public class GameService {
     }
 
     @RequestMapping(value="/{gameId}", method=RequestMethod.PATCH)
-    public GameEntity joinGame(@PathVariable Long gameId, @RequestParam Long playerId) {
+    public GameEntity joinGame(@PathVariable Long gameId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         GameEntity gameEntity = gameRepository.findById(gameId)

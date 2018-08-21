@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.game;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.entity.GameEntity;
@@ -7,14 +8,20 @@ import com.lostcities.lostcities.entity.GameEntity;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 
+
 public class Game {
     private Long gameId;
 
+    @JsonProperty
     private Player player1;
+
+    @JsonProperty
     private Player player2;
 
+    @JsonProperty
     private LinkedHashSet<Card> deck;
 
+    @JsonProperty
     private Multimap<Color, Card> discard = ArrayListMultimap.create();
 
     public Game(LinkedHashSet<Card> deck) {
