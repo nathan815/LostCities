@@ -1,5 +1,8 @@
 package com.lostcities.lostcities.web;
 
+import com.lostcities.lostcities.entity.PlayerEntity;
+import com.lostcities.lostcities.entity.UserEntity;
+import com.lostcities.lostcities.repository.PlayerRepository;
 import com.lostcities.lostcities.repository.UserRepository;
 import com.lostcities.lostcities.web.model.UserDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -30,16 +34,20 @@ import java.util.List;
 public class UserController {
 
     private UserDetailsManager userDetailsManager;
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
+
+    private PlayerRepository playerRepository;
 
     public UserController(
             UserRepository userRepository,
             JdbcUserDetailsManager userDetailsManager,
-            BCryptPasswordEncoder passwordEncoder) {
+            BCryptPasswordEncoder passwordEncoder,
+            PlayerRepository playerRepository) {
         this.userRepository = userRepository;
         this.userDetailsManager = userDetailsManager;
         this.passwordEncoder = passwordEncoder;
+        this.playerRepository = playerRepository;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -50,7 +58,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String doLogin(@RequestParam String username, @RequestParam String password) {
 
-        com.lostcities.lostcities.entity.User user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username);
 
         if(passwordEncoder.encode(password).equals(user.getPassword())) {
 
@@ -60,8 +68,10 @@ public class UserController {
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     new User(username, password, authorities), null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return "redirect:/home";
         }
-        return "redirect:/home";
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -86,6 +96,15 @@ public class UserController {
         userDetailsManager.createUser(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserEntity userEntity =
+                userRepository.findByUsername(accountDto.getEmail());
+
+        PlayerEntity player = new PlayerEntity();
+        player.setName(accountDto.getEmail());
+        player.setUser(userEntity);
+        playerRepository.save(player);
+
 
         return "redirect:/home";
     }

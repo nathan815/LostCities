@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class User {
 
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(length = 100, unique = true, nullable = false)
+    @Column(name= "username", length = 100, unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
@@ -113,7 +113,7 @@ public class User {
             return false;
         }
 
-        User user = (User) o;
+        UserEntity user = (UserEntity) o;
         return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
     }
 

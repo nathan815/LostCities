@@ -15,7 +15,7 @@ public class PlayerEntity {
 
     @OneToOne
     @JoinColumn(name="user_id")
-    private User user;
+    private UserEntity user;
 
     public PlayerEntity() {
 
@@ -37,11 +37,11 @@ public class PlayerEntity {
         this.name = name;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 }

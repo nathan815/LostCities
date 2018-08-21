@@ -1,9 +1,9 @@
 package com.lostcities.lostcities.repository;
 
-import com.lostcities.lostcities.entity.User;
+import com.lostcities.lostcities.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
-    User findByUsername(String username);
+    UserEntity findByUsername(String username);
 }
