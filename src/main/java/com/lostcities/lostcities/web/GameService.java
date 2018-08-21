@@ -42,4 +42,7 @@ public class GameService {
         gameEntity.setPlayer2(playerEntity);
         return gameRepository.save(gameEntity);
     }
+
+    @RequestMapping(value="/{gameId}", method=RequestMethod.POST)
+    public GameEntity exececuteCommand(CommandDto) {}
 }
