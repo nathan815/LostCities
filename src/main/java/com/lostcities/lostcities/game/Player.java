@@ -3,7 +3,7 @@ package com.lostcities.lostcities.game;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Player {
@@ -11,16 +11,19 @@ public class Player {
     private Long playerId;
     private Game game;
 
+    private String name;
+
     private Set<Card> hand;
 
     private Multimap<Color, Card> inPlay;
 
-    public Player(Long playerId, Game game) {
+    public Player(Long playerId, String name, Game game) {
         this.playerId = playerId;
+        this.name = name;
         this.game = game;
 
         inPlay = ArrayListMultimap.create();
-        hand = new HashSet<>();
+        hand = new LinkedHashSet<>();
     }
 
     public Long getPlayerId() {
@@ -34,6 +37,10 @@ public class Player {
 
     public Set<Card> getHand() {
         return hand;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Multimap<Color, Card> getInPlay() {

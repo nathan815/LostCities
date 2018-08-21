@@ -7,18 +7,18 @@ import javax.persistence.*;
 public class PlayerEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String name;
 
+    @OneToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
     public PlayerEntity() {
 
-    }
-
-    public PlayerEntity(String name) {
-        this.name = name;
     }
 
     public Long getId() {
@@ -35,5 +35,13 @@ public class PlayerEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+
+<form th:action="@{/signup}" th:object="${user}" method="POST" enctype="utf8">
+    <div>
+        <label>first</label>
+        <input th:field="*{firstName}"/>
+    </div>
+    <div>
+        <label>last</label>
+        <input th:field="*{lastName}"/>
+    </div>
+    <div>
+        <label>email</label>
+        <input type="email" th:field="*{email}"/>
+    </div>
+    <div>
+        <label>password</label>
+        <input type="password" th:field="*{password}"/>
+    </div>
+    <div>
+        <label>confirm</label>
+        <input type="password" th:field="*{matchingPassword}"/>
+    </div>
+    <button type="submit">submit</button>
+</form>
+
+<a th:href="@{/login}">login</a>
+</body>
+</html>

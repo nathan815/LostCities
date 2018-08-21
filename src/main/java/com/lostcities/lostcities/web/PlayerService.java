@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/api/players")
 public class PlayerService {
@@ -16,9 +19,17 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
+    @RequestMapping(method=RequestMethod.GET)
+    public Collection<PlayerEntity> getAllPlayers() {
+        Collection<PlayerEntity> players = new ArrayList<>();
+        playerRepository.findAll().forEach(players::add);
+        return players;
+    }
+
     @RequestMapping(method=RequestMethod.POST)
-    public PlayerEntity createPlayer(@RequestParam String name) {
-        PlayerEntity playerEntity = new PlayerEntity(name);
+    public PlayerEntity createPlayer(@RequestParam(name="name") String name) {
+        PlayerEntity playerEntity = new PlayerEntity();
+        playerEntity.setName(name);
         return playerRepository.save(playerEntity);
     }
 

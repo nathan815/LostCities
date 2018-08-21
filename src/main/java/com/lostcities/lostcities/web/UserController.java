@@ -1,0 +1,92 @@
+package com.lostcities.lostcities.web;
+
+import com.lostcities.lostcities.repository.UserRepository;
+import com.lostcities.lostcities.web.model.UserDto;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
+public class UserController {
+
+    private UserDetailsManager userDetailsManager;
+    private BCryptPasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+
+    public UserController(
+            UserRepository userRepository,
+            JdbcUserDetailsManager userDetailsManager,
+            BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userDetailsManager = userDetailsManager;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String doLogin(@RequestParam String username, @RequestParam String password) {
+
+        com.lostcities.lostcities.entity.User user = userRepository.findByUsername(username);
+
+        if(passwordEncoder.encode(password).equals(user.getPassword())) {
+
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    new User(username, password, authorities), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        return "redirect:/home";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String showRegistrationForm(WebRequest request, Model model) {
+        UserDto userDto = new UserDto();
+        model.addAttribute("user", userDto);
+        return "signup";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String registerUserAccount(
+            @ModelAttribute("user") @Valid UserDto accountDto,
+            BindingResult result, WebRequest request, Errors errors) {
+
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        UserDetails user = new User(
+                accountDto.getEmail(),
+                passwordEncoder.encode(accountDto.getPassword()),
+                authorities);
+
+        userDetailsManager.createUser(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return "redirect:/home";
+    }
+}
