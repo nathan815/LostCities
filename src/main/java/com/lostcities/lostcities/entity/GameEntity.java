@@ -28,11 +28,10 @@ public class GameEntity {
 
     }
 
-    public static GameEntity createGame(PlayerEntity player1, PlayerEntity player2) {
+    public static GameEntity createGame(PlayerEntity player1) {
         GameEntity gameEntity = new GameEntity();
         gameEntity.setSeed(random.nextLong());
         gameEntity.setPlayer1(player1);
-        gameEntity.setPlayer2(player2);
         return gameEntity;
     }
 

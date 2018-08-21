@@ -1,7 +1,5 @@
 package com.lostcities.lostcities.entity;
 
-import org.aspectj.apache.bcel.util.Play;
-
 import javax.persistence.*;
 
 @Entity(name="PlayerEntity")

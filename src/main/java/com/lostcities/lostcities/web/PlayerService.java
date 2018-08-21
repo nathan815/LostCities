@@ -2,17 +2,21 @@ package com.lostcities.lostcities.web;
 
 import com.lostcities.lostcities.entity.PlayerEntity;
 import com.lostcities.lostcities.repository.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/players")
 public class PlayerService {
 
-    @Autowired
     private PlayerRepository playerRepository;
 
-    @RequestMapping(value="/",method=RequestMethod.POST)
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
+
+    @RequestMapping(method=RequestMethod.POST)
     public PlayerEntity createPlayer(@RequestParam String name) {
         PlayerEntity playerEntity = new PlayerEntity(name);
         return playerRepository.save(playerEntity);
@@ -20,6 +24,6 @@ public class PlayerService {
 
     @RequestMapping(value="/{id}")
     public PlayerEntity getPlayer(@PathVariable Long id) {
-        return playerRepository.findById(id).get();
+        return playerRepository.findById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
     }
 }
