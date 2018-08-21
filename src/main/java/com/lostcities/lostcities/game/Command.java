@@ -24,7 +24,10 @@ public class Command {
     }
 
     protected void execute() {
-        if(getPlayCard() != null) {
+        if(getPlayCard() != null && getDiscardCard() != null) {
+            //todo: Create an exception
+            throw new RuntimeException();
+        } else if(getPlayCard() != null) {
             player.play(getPlayCard());
         } else if(getDiscardCard() != null) {
             player.discard(getDiscardCard());
