@@ -4,6 +4,7 @@ import com.lostcities.lostcities.entity.GameEntity;
 import com.lostcities.lostcities.entity.PlayerEntity;
 import com.lostcities.lostcities.repository.GameRepository;
 import com.lostcities.lostcities.repository.PlayerRepository;
+import com.lostcities.lostcities.web.model.CommandDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,5 +45,7 @@ public class GameService {
     }
 
     @RequestMapping(value="/{gameId}", method=RequestMethod.POST)
-    public GameEntity exececuteCommand(CommandDto) {}
+    public GameEntity exececuteCommand(CommandDto commandDto) {
+        return null;
+    }
 }

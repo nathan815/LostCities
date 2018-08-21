@@ -46,6 +46,7 @@ dependencies {
     compile('javax.xml.bind:jaxb-api:2.2.11')
 	//compile('org.liquibase:liquibase-core')
 	compile('org.springframework.session:spring-session-core')
+    compile('com.google.guava:guava:21.0')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.hsqldb:hsqldb')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
