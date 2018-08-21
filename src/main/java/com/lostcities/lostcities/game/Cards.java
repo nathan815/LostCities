@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 public class Cards {
 
-    public static Set<Card> getDeck(Long seed) {
+    public static LinkedHashSet<Card> getDeck(Long seed) {
         List<Card> deck = new LinkedList<>();
 
         for(Color color : Color.values()) {

@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.entity.GameEntity;
 
-import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 public class Game {
@@ -13,11 +13,11 @@ public class Game {
     private Player player1;
     private Player player2;
 
-    private Collection<Card> deck;
+    private LinkedHashSet<Card> deck;
 
     private Multimap<Color, Card> discard = ArrayListMultimap.create();
 
-    public Game(Collection<Card> deck) {
+    public Game(LinkedHashSet<Card> deck) {
         this.deck = deck;
     }
 
@@ -41,6 +41,13 @@ public class Game {
         player2.draw();
     }
 
+    Card draw() {
+        Card card = deck.stream().findFirst().get();
+        deck.remove(card);
+
+        return card;
+    }
+
 
     Optional<Player> getPlayerById(Long id) {
         if(player1.getPlayerId().equals(id)) {
@@ -53,9 +60,14 @@ public class Game {
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
-        Collection<Card> deck = Cards.getDeck(gameEntity.getSeed());
-
+        LinkedHashSet<Card> deck = Cards.getDeck(gameEntity.getSeed());
         Game game = new Game(deck);
         game.drawStartingHands();
+
+        return game;
+    }
+
+    public void discard(Card card) {
+        discard.put(card.color, card);
     }
 }

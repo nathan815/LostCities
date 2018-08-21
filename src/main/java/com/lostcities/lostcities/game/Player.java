@@ -42,14 +42,17 @@ public class Player {
 
     protected void play(Card card) {
         //TODO: implement
+        hand.remove(card);
     }
 
     protected void discard(Card card) {
-        //TODO: implement
+        //TODO: Fix problem discarding a single multiplier with multiple multipliers in hand.
+        hand.remove(card);
+        game.discard(card);
     }
 
     protected void draw() {
-        //TODO: implement
+        this.hand.add(game.draw());
     }
 
     protected void drawFromDiscard(Color color) {
