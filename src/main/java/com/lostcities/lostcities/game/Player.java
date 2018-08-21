@@ -5,6 +5,14 @@ public class Player {
     private Long playerId;
     private Game game;
 
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    protected void play(Card card) {
+
+    }
+
     protected void discard(Card card) {
 
     }
