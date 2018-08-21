@@ -29,7 +29,7 @@ public class GameService {
     public Collection<GameEntity> getGames() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return gameRepository.getGameEntitiesByPlayer1UserUsernameOrPlayer2UserUsername(user.getUsername());
+        return gameRepository.getGamesWithPlayer(user.getUsername());
     }
 
     @RequestMapping("/{id}")
