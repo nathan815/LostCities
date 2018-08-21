@@ -1,10 +1,10 @@
 package com.lostcities.lostcities.game;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Cards {
+
     public static Set<Card> getDeck(Long seed) {
         List<Card> deck = new LinkedList<>();
 
@@ -24,11 +24,10 @@ public class Cards {
         cards.add(new Card(color, 1));
         cards.add(new Card(color, 1));
 
-        cards.addAll(
-                IntStream
-                        .range(2, 10)
-                        .mapToObj((i)-> new Card(color, i))
-                        .collect(Collectors.toList()));
+        IntStream
+                .range(2, 10)
+                .mapToObj((i)-> new Card(color, i))
+                .forEach(cards::add);
 
         return cards;
     }
