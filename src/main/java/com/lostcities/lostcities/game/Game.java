@@ -22,23 +22,12 @@ public class Game {
     }
 
     private void drawStartingHands() {
-        player1.draw();
-        player1.draw();
-        player1.draw();
-        player1.draw();
-        player1.draw();
-        player1.draw();
-        player1.draw();
-        player1.draw();
 
-        player2.draw();
-        player2.draw();
-        player2.draw();
-        player2.draw();
-        player2.draw();
-        player2.draw();
-        player2.draw();
-        player2.draw();
+        for(int i=0; i < 8; i++) {
+            player1.draw();
+            player2.draw();
+        }
+
     }
 
     Card draw() {
@@ -68,6 +57,6 @@ public class Game {
     }
 
     public void discard(Card card) {
-        discard.put(card.color, card);
+        discard.put(card.getColor(), card);
     }
 }

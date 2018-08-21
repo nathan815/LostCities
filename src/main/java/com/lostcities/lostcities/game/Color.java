@@ -8,13 +8,13 @@ public enum Color {
     RED;
 
     public static Color fromString(String string) {
-        string = string.toLowerCase();
+        String lcColor = string.toLowerCase();
         for(Color color: values()) {
-            if(color.toString().toLowerCase().equals(string)) {
+            if(color.toString().toLowerCase().equals(lcColor)) {
                 return color;
             }
         }
 
-        return null;
+        throw new InvalidColorException(string);
     }
 }
