@@ -45,8 +45,7 @@ public class GameService {
     }
 
     @RequestMapping(value="/{gameId}", method=RequestMethod.POST)
-    public GameEntity exececuteCommand(@RequestBody CommandDto commandDto) {
-
+    public GameEntity executeCommand(@RequestBody CommandDto commandDto) {
         return null;
     }
 }

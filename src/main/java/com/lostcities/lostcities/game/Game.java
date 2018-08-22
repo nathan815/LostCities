@@ -30,6 +30,12 @@ public class Game {
 
     }
 
+    public void runCommands(LinkedHashSet<Command> commands) {
+        for(Command command : commands) {
+            command.execute();
+        }
+    }
+
     Card draw() {
         Card card = deck.stream().findFirst().get();
         deck.remove(card);
