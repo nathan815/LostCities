@@ -37,6 +37,22 @@ public class Game {
 
     }
 
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public LinkedHashSet<Card> getDeck() {
+        return deck;
+    }
+
+    public Multimap<Color, Card> getDiscard() {
+        return discard;
+    }
+
     public void runCommands(LinkedHashSet<Command> commands) {
         for(Command command : commands) {
             command.execute();
@@ -82,5 +98,9 @@ public class Game {
 
     public void discard(Card card) {
         discard.put(card.getColor(), card);
+    }
+
+    public Long getGameId() {
+        return gameId;
     }
 }

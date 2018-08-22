@@ -29,7 +29,6 @@ public class GameService {
     @GetMapping
     public Collection<GameEntity> getGames() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return gameRepository.getGamesWithPlayer(user.getUsername());
     }
 
@@ -71,7 +70,7 @@ public class GameService {
     }
 
     @PostMapping("/{gameId}")
-    public GameEntity exececuteCommand(@RequestBody CommandDto commandDto) {
+    public GameEntity executeCommand(@RequestBody CommandDto commandDto) {
 
         return null;
     }
