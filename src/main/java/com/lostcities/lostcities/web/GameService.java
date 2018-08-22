@@ -26,14 +26,14 @@ public class GameService {
         this.playerRepository = playerRepository;
     }
 
-    @RequestMapping(method=RequestMethod.GET)
+    @GetMapping
     public Collection<GameEntity> getGames() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return gameRepository.getGamesWithPlayer(user.getUsername());
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public Game getGameEntity(@PathVariable Long id) {
         GameEntity gameEntity =  gameRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -43,7 +43,7 @@ public class GameService {
         return game;
     }
 
-    @RequestMapping(method=RequestMethod.POST)
+    @PostMapping
     public GameEntity createGame() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -55,7 +55,7 @@ public class GameService {
         return gameRepository.save(gameEntity);
     }
 
-    @RequestMapping(value="/{gameId}", method=RequestMethod.PATCH)
+    @PatchMapping("/{gameId}")
     public GameEntity joinGame(@PathVariable Long gameId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -70,7 +70,7 @@ public class GameService {
         return gameRepository.save(gameEntity);
     }
 
-    @RequestMapping(value="/{gameId}", method=RequestMethod.POST)
+    @PostMapping("/{gameId}")
     public GameEntity exececuteCommand(@RequestBody CommandDto commandDto) {
 
         return null;
