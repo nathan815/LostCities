@@ -5,13 +5,9 @@ import java.util.stream.IntStream;
 
 public class Cards {
 
-    static List<Card> deck;
+    static List<Card> deck = buildDeck();
 
     public static LinkedHashSet<Card> getDeck(Long seed) {
-        if(deck == null) {
-            deck = buildDeck();
-        }
-
         List<Card> userDeck = new ArrayList<>(deck);
         Collections.shuffle(userDeck, new Random(seed));
 
