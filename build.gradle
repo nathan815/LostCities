@@ -28,6 +28,12 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
+test {
+	testLogging {
+		events "passed", "skipped", "failed"
+		exceptionFormat "full"
+	}
+}
 
 ext {
 	springBootAdminVersion = '2.1.0-SNAPSHOT'

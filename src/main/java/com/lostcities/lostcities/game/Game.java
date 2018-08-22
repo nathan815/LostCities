@@ -62,7 +62,7 @@ public class Game {
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
-        LinkedHashSet<Card> deck = Cards.getDeck(gameEntity.getSeed());
+        LinkedHashSet<Card> deck = Cards.getShuffledDeck(gameEntity.getSeed());
         Game game = new Game(deck);
 
         game.player1 = new Player(

@@ -5,9 +5,9 @@ import java.util.stream.IntStream;
 
 public class Cards {
 
-    static List<Card> deck = buildDeck();
+    private static final List<Card> deck = buildDeck();
 
-    public static LinkedHashSet<Card> getDeck(Long seed) {
+    public static LinkedHashSet<Card> getShuffledDeck(Long seed) {
         List<Card> userDeck = new ArrayList<>(deck);
         Collections.shuffle(userDeck, new Random(seed));
 
@@ -25,7 +25,7 @@ public class Cards {
     }
 
     private static Collection<Card> getCardsOfColor(Color color) {
-        Set<Card> cards = new HashSet<>();
+        List<Card> cards = new ArrayList<>();
 
         cards.add(new Card(color, 1, 0));
         cards.add(new Card(color, 1, 1));

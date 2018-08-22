@@ -23,7 +23,7 @@ public class GameTest {
         p2.setName("Rachel");
 
         gameEntity = GameEntity.createGame(p1);
-        gameEntity.setSeed(999L);
+        gameEntity.setSeed(1L);
         gameEntity.setPlayer2(p2);
 
         Game game = Game.fromGameEntity(gameEntity);
@@ -43,13 +43,13 @@ public class GameTest {
 
         assertEquals(
                 "Player 1's hand is valid",
-                "[BLUE_1_0, YELLOW_4_0, RED_9_0, YELLOW_3_0, YELLOW_9_0, BLUE_9_0, WHITE_7_0, RED_8_0]",
+                "[BLUE_1_2, GREEN_5_0, WHITE_7_0, YELLOW_7_0, YELLOW_2_0, BLUE_1_1, RED_4_0, YELLOW_9_0]",
                 player1.getHand().toString()
                 );
 
         assertEquals(
                 "Player 2's hand is valid",
-                "[BLUE_8_0, WHITE_6_0, WHITE_4_0, BLUE_1_2, GREEN_1_1, BLUE_1_1, WHITE_9_0, BLUE_4_0]",
+                "[RED_7_0, YELLOW_1_1, WHITE_1_2, YELLOW_1_0, WHITE_1_1, RED_6_0, BLUE_5_0, GREEN_3_0]",
                 player2.getHand().toString());
     }
 }
