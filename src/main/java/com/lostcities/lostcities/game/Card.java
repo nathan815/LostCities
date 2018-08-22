@@ -53,6 +53,7 @@ public class Card {
         return number;
     }
 
+    @JsonProperty
     public boolean isMultiplier() {
         return this.number.equals(1);
     }

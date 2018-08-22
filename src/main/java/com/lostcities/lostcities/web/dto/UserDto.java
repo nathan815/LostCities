@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.web.model;
+package com.lostcities.lostcities.web.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

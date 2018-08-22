@@ -4,7 +4,7 @@ import com.lostcities.lostcities.entity.PlayerEntity;
 import com.lostcities.lostcities.entity.UserEntity;
 import com.lostcities.lostcities.repository.PlayerRepository;
 import com.lostcities.lostcities.repository.UserRepository;
-import com.lostcities.lostcities.web.model.UserDto;
+import com.lostcities.lostcities.web.dto.UserDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

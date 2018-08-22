@@ -1,15 +1,24 @@
-package com.lostcities.lostcities.web.model;
+package com.lostcities.lostcities.web.dto;
 
-import com.lostcities.lostcities.game.Card;
 import com.lostcities.lostcities.game.Color;
 
 public class CommandDto {
+    private Long gameId;
     private Long playerId;
-    private Card play;
-    private Card discard;
+    private String play;
+    private String discard;
     private Color draw;
 
     public CommandDto() {
+
+    }
+
+    public Long getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(Long gameId) {
+        this.gameId = gameId;
     }
 
     public Long getPlayerId() {
@@ -20,19 +29,19 @@ public class CommandDto {
         this.playerId = playerId;
     }
 
-    public Card getPlay() {
+    public String getPlay() {
         return play;
     }
 
-    public void setPlay(Card play) {
+    public void setPlay(String play) {
         this.play = play;
     }
 
-    public Card getDiscard() {
+    public String getDiscard() {
         return discard;
     }
 
-    public void setDiscard(Card discard) {
+    public void setDiscard(String discard) {
         this.discard = discard;
     }
 

@@ -2,10 +2,11 @@ package com.lostcities.lostcities.web;
 
 import com.lostcities.lostcities.entity.GameEntity;
 import com.lostcities.lostcities.entity.PlayerEntity;
+import com.lostcities.lostcities.game.Command;
 import com.lostcities.lostcities.game.Game;
 import com.lostcities.lostcities.repository.GameRepository;
 import com.lostcities.lostcities.repository.PlayerRepository;
-import com.lostcities.lostcities.web.model.CommandDto;
+import com.lostcities.lostcities.web.dto.CommandDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -34,21 +35,16 @@ public class GameService {
     }
 
     @GetMapping("/{id}")
-    public Game getGameEntity(@PathVariable Long id) {
-        GameEntity gameEntity =  gameRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        Game game = Game.fromGameEntity(gameEntity);
-
-        return game;
+    public Game getGameCall(@PathVariable Long id) {
+        return createGame(id);
     }
+
 
     @PostMapping
     public GameEntity createGame() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        PlayerEntity playerEntity = playerRepository.getPlayerEntityByUserUsername(user.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        PlayerEntity playerEntity = getPlayerEntity(user);
 
         GameEntity gameEntity = GameEntity.createGame(playerEntity);
 
@@ -59,11 +55,9 @@ public class GameService {
     public GameEntity joinGame(@PathVariable Long gameId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        GameEntity gameEntity = gameRepository.findById(gameId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        GameEntity gameEntity = getGameEntity(gameId);
 
-        PlayerEntity playerEntity = playerRepository.getPlayerEntityByUserUsername(user.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        PlayerEntity playerEntity = getPlayerEntity(user);
 
         gameEntity.setPlayer2(playerEntity);
 
@@ -72,7 +66,27 @@ public class GameService {
 
     @PostMapping("/{gameId}")
     public GameEntity exececuteCommand(@RequestBody CommandDto commandDto) {
+        Game game = createGame(commandDto.getGameId());
+
+        Command command = new Command();
+
+
 
         return null;
+    }
+
+    private Game createGame(Long id) {
+        GameEntity gameEntity = getGameEntity(id);
+        return Game.fromGameEntity(gameEntity);
+    }
+
+    private GameEntity getGameEntity(Long id) {
+        return gameRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    private PlayerEntity getPlayerEntity(User user) {
+        return playerRepository.getPlayerEntityByUserUsername(user.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

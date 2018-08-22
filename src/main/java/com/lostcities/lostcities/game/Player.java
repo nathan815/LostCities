@@ -1,7 +1,7 @@
 package com.lostcities.lostcities.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 import java.util.LinkedHashSet;
@@ -14,17 +14,17 @@ public class Player {
 
     private String name;
 
-    private Set<Card> hand;
+    private LinkedHashSet<Card> hand;
 
     @JsonProperty
-    private Multimap<Color, Card> inPlay;
+    private LinkedHashMultimap<Color, Card> inPlay;
 
     public Player(Long playerId, String name, Game game) {
         this.playerId = playerId;
         this.name = name;
         this.game = game;
 
-        inPlay = ArrayListMultimap.create();
+        inPlay = LinkedHashMultimap.create();
         hand = new LinkedHashSet<>();
     }
 

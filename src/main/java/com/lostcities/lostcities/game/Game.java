@@ -1,8 +1,7 @@
 package com.lostcities.lostcities.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.lostcities.lostcities.entity.GameEntity;
 
 import java.util.LinkedHashSet;
@@ -22,19 +21,27 @@ public class Game {
     private LinkedHashSet<Card> deck;
 
     @JsonProperty
-    private Multimap<Color, Card> discard = ArrayListMultimap.create();
+    private LinkedHashMultimap<Color, Card> discard = LinkedHashMultimap.create();
 
-    public Game(LinkedHashSet<Card> deck) {
+    Optional<Player> getPlayerById(Long id) {
+        if(player1.getPlayerId().equals(id)) {
+            return Optional.of(player1);
+        } else if(player2.getPlayerId().equals(id)) {
+            return Optional.of(player2);
+        }
+
+        return Optional.empty();
+    }
+
+    private Game(LinkedHashSet<Card> deck) {
         this.deck = deck;
     }
 
     private void drawStartingHands() {
-
         for(int i=0; i < 8; i++) {
             player1.draw();
             player2.draw();
         }
-
     }
 
     public void runCommands(LinkedHashSet<Command> commands) {
@@ -50,15 +57,8 @@ public class Game {
         return card;
     }
 
-
-    Optional<Player> getPlayerById(Long id) {
-        if(player1.getPlayerId().equals(id)) {
-            return Optional.of(player1);
-        } else if(player2.getPlayerId().equals(id)) {
-            return Optional.of(player2);
-        }
-
-        return Optional.empty();
+    public void discard(Card card) {
+        discard.put(card.getColor(), card);
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
@@ -78,9 +78,5 @@ public class Game {
         game.drawStartingHands();
 
         return game;
-    }
-
-    public void discard(Card card) {
-        discard.put(card.getColor(), card);
     }
 }
