@@ -2,6 +2,7 @@ package com.lostcities.lostcities.entity;
 
 import com.lostcities.lostcities.LostcitiesApplication;
 import com.lostcities.lostcities.repository.PlayerRepository;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,7 +18,7 @@ public class PlayerEntityTest {
     @Autowired
     private PlayerRepository playerRepository;
 
-    //@Test
+    @Test
     public void createPlayer() {
         PlayerEntity playerEntity = playerRepository.save(createBob());
 

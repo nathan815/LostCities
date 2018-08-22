@@ -43,13 +43,13 @@ public class GameTest {
 
         assertEquals(
                 "Player 1's hand is valid",
-                "[BLUE_9_0, YELLOW_4_0, RED_5_0, YELLOW_3_0, YELLOW_9_0, BLUE_1_1, WHITE_2_0, RED_4_0]",
+                "[BLUE_1_0, YELLOW_4_0, RED_9_0, YELLOW_3_0, YELLOW_9_0, BLUE_9_0, WHITE_7_0, RED_8_0]",
                 player1.getHand().toString()
                 );
 
         assertEquals(
                 "Player 2's hand is valid",
-                "[BLUE_6_0, WHITE_1_0, WHITE_3_0, BLUE_2_0, GREEN_5_0, BLUE_3_0, WHITE_6_0, BLUE_8_0]",
+                "[BLUE_8_0, WHITE_6_0, WHITE_4_0, BLUE_1_2, GREEN_1_1, BLUE_1_1, WHITE_9_0, BLUE_4_0]",
                 player2.getHand().toString());
     }
 }
