@@ -28,7 +28,6 @@ public class GameTest {
 
         Game game = Game.fromGameEntity(gameEntity);
 
-
         Player player1 = game.getPlayerById(1L).get();
         Player player2 = game.getPlayerById(2L).get();
 

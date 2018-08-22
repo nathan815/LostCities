@@ -7,6 +7,13 @@ public class Command {
     private Card discardCard;
     private Color drawCardColor;
 
+    public Command(Player player, Card playCard, Card discardCard, Color drawCardColor) {
+        this.player = player;
+        this.playCard = playCard;
+        this.discardCard = discardCard;
+        this.drawCardColor = drawCardColor;
+    }
+
     public Player getPlayer() {
         return player;
     }

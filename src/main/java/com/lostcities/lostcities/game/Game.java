@@ -23,7 +23,7 @@ public class Game {
     @JsonProperty
     private LinkedHashMultimap<Color, Card> discard = LinkedHashMultimap.create();
 
-    Optional<Player> getPlayerById(Long id) {
+    public Optional<Player> getPlayerById(Long id) {
         if(player1.getPlayerId().equals(id)) {
             return Optional.of(player1);
         } else if(player2.getPlayerId().equals(id)) {
@@ -37,6 +37,18 @@ public class Game {
         this.deck = deck;
     }
 
+    public Long getId() {
+        return gameId;
+    }
+
+    public LinkedHashSet<Card> getDeck() {
+        return deck;
+    }
+
+    public LinkedHashMultimap<Color, Card> getDiscard() {
+        return discard;
+    }
+
     private void drawStartingHands() {
         for(int i=0; i < 8; i++) {
             player1.draw();
@@ -46,8 +58,12 @@ public class Game {
 
     public void runCommands(LinkedHashSet<Command> commands) {
         for(Command command : commands) {
-            command.execute();
+            runCommand(command);
         }
+    }
+
+    public void runCommand(Command command) {
+        command.execute();
     }
 
     Card draw() {
@@ -74,6 +90,9 @@ public class Game {
                 gameEntity.getPlayer2().getId(),
                 gameEntity.getPlayer2().getName(),
                 game);
+
+        game.player1.setOpponent(game.player2);
+        game.player2.setOpponent(game.player1);
 
         game.drawStartingHands();
 

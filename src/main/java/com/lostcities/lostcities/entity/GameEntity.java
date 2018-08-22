@@ -1,6 +1,7 @@
 package com.lostcities.lostcities.entity;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Random;
 
 @Entity(name="GameEntity")
@@ -65,5 +66,14 @@ public class GameEntity {
 
     public void setSeed(Long seed) {
         this.seed = seed;
+    }
+
+    public Optional<PlayerEntity> getPlayerEntityById(Long id) {
+        if(player1.getId().equals(id)) {
+            return Optional.of(player1);
+        } else if(player2.getId().equals(id)) {
+            return Optional.of(player2);
+        }
+        return Optional.empty();
     }
 }

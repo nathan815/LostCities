@@ -14,6 +14,8 @@ public class Player {
 
     private String name;
 
+    private Player opponent;
+
     private LinkedHashSet<Card> hand;
 
     @JsonProperty
@@ -45,6 +47,14 @@ public class Player {
         return name;
     }
 
+    public Player getOpponent() {
+        return opponent;
+    }
+
+    public void setOpponent(Player opponent) {
+        this.opponent = opponent;
+    }
+
     public Multimap<Color, Card> getInPlay() {
         return inPlay;
     }
@@ -67,4 +77,6 @@ public class Player {
     protected void drawFromDiscard(Color color) {
         //TODO: implement
     }
+
+
 }

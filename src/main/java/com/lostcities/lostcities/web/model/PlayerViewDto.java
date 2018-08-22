@@ -20,12 +20,12 @@ public class PlayerViewDto {
 
         PlayerViewDto playerViewDto = new PlayerViewDto();
 
-        playerViewDto.setGameId(game.getGameId());
+        playerViewDto.setGameId(game.getId());
         playerViewDto.setPlayerId(currentPlayer.getPlayerId());
         playerViewDto.setDiscard(game.getDiscard());
         playerViewDto.setPlayerPlayedCards(currentPlayer.getInPlay());
 
-        Player opponent = game.getPlayer1() == currentPlayer ? game.getPlayer2() : game.getPlayer1();
+        Player opponent = currentPlayer.getOpponent();
         playerViewDto.setOpponentPlayedCards(opponent.getInPlay());
 
         return playerViewDto;
