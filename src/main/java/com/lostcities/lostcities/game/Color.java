@@ -1,5 +1,7 @@
 package com.lostcities.lostcities.game;
 
+import com.lostcities.lostcities.game.exceptions.InvalidColorException;
+
 public enum Color {
     YELLOW,
     BLUE,

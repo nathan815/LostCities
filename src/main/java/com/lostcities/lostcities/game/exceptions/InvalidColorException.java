@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.game;
+package com.lostcities.lostcities.game.exceptions;
 
 public class InvalidColorException extends RuntimeException {
 

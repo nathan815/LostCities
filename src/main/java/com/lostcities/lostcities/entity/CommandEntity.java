@@ -9,13 +9,15 @@ import java.util.Date;
 @Table(name="commands")
 public class CommandEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="game_id")
+    @OneToOne
+    @JoinColumn(name="games_id")
     private GameEntity game;
 
-    @Column(name="player_id")
+    @OneToOne
+    @JoinColumn(name="player_id")
     private PlayerEntity player;
 
     @Column(name="play_card")
