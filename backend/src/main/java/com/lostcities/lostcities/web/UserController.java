@@ -71,7 +71,7 @@ public class UserController {
 
             return "redirect:/home";
         }
-        return "redirect:/login";k
+        return "redirect:/login";
     }
 
     @GetMapping("/signup")
