@@ -4,7 +4,9 @@ import com.lostcities.lostcities.entity.PlayerEntity;
 import com.lostcities.lostcities.entity.UserEntity;
 import com.lostcities.lostcities.repository.PlayerRepository;
 import com.lostcities.lostcities.repository.UserRepository;
+import com.lostcities.lostcities.web.dto.LoginDto;
 import com.lostcities.lostcities.web.dto.UserDto;
+import org.apache.juli.logging.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,10 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
@@ -60,6 +59,23 @@ public class UserController {
 
         UserEntity user = userRepository.findByUsername(username);
 
+        if (sharedLogin(username, password, user)) {
+            return "redirect:/home";
+        }
+        return "redirect:/login";
+    }
+
+    @PostMapping(value = "/api/rest-login", produces = "application/json")
+    public LoginDto doRestLogin(@RequestBody LoginDto loginDto) {
+
+        UserEntity user = userRepository.findByUsername(loginDto.getUsername());
+
+        sharedLogin(loginDto.getUsername(), loginDto.getPassword(), user);
+        loginDto.setPassword(null);
+        return loginDto;
+    }
+
+    private boolean sharedLogin(@RequestParam String username, @RequestParam String password, UserEntity user) {
         if(passwordEncoder.encode(password).equals(user.getPassword())) {
 
             List<GrantedAuthority> authorities = new ArrayList<>();
@@ -69,9 +85,9 @@ public class UserController {
                     new User(username, password, authorities), null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return "redirect:/home";
+            return true;
         }
-        return "redirect:/login";
+        return false;
     }
 
     @GetMapping("/signup")

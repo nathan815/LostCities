@@ -4,14 +4,14 @@
     export default {
         data() {
             return {
-                email: "",
+                username: "",
                 password: ""
             }
         },
         methods: {
             async login() {
-                const result = await axios.post('/api/login', {
-                    email: this.email,
+                const result = await axios.post('/api/rest-login', {
+                    username: this.username,
                     password: this.password
                 });
                 console.log(result);
@@ -23,10 +23,10 @@
 <template>
     <div>
         <h1>Login</h1>
-        <form action="/login" method="post" @submit.prevent="login" v-model="email">
+        <form action="/login" method="post" @submit.prevent="login">
             <div>
                 <label> Email:
-                    <input type="text" name="username"/>
+                    <input type="text" name="username"  v-model="username"/>
                 </label>
             </div>
             <div>
