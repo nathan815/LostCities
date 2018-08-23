@@ -65,7 +65,8 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @PostMapping(value = "/api/rest-login", produces = "application/json")
+    @PostMapping("/api/rest-login")
+    @ResponseBody
     public LoginDto doRestLogin(@RequestBody LoginDto loginDto) {
 
         UserEntity user = userRepository.findByUsername(loginDto.getUsername());
