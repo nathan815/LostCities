@@ -1,1 +1,3 @@
 rootProject.name = 'lostcities'
+include 'backend'
+include 'frontend'
