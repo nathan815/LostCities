@@ -8,6 +8,7 @@ import java.util.Objects;
 
 
 public class Card {
+
     @JsonIgnore
     private Integer instance;
     @JsonProperty
@@ -18,7 +19,7 @@ public class Card {
     public static Card fromString(String cardString) {
         String[] parts = cardString.split("_", 3);
         try {
-            if (parts.length == 3) {
+            if(parts.length == 3) {
 
                 return new Card(
                         Color.fromString(parts[0]),
@@ -61,7 +62,7 @@ public class Card {
     @JsonProperty
     @Override
     public String toString() {
-        return color + "_" + number + "_" +instance;
+        return color + "_" + number + "_" + instance;
     }
 
     @Override
@@ -71,8 +72,8 @@ public class Card {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
         return Objects.equals(instance, card.instance) &&
                 color == card.color &&

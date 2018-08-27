@@ -4,20 +4,20 @@ import javax.persistence.*;
 import java.util.Optional;
 import java.util.Random;
 
-@Entity(name="GameEntity")
-@Table(name="games")
+@Entity(name = "GameEntity")
+@Table(name = "games")
 public class GameEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="player1_id")
+    @JoinColumn(name = "player1_id")
     private PlayerEntity player1;
 
     @OneToOne
-    @JoinColumn(name="player2_id")
+    @JoinColumn(name = "player2_id")
     private PlayerEntity player2;
 
     @Column

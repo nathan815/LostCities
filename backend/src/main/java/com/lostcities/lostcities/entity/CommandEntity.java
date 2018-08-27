@@ -7,30 +7,30 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="commands")
+@Table(name = "commands")
 public class CommandEntity {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="games_id")
+    @JoinColumn(name = "games_id")
     private GameEntity game;
 
     @OneToOne
-    @JoinColumn(name="player_id")
+    @JoinColumn(name = "player_id")
     private PlayerEntity player;
 
-    @Column(name="play_card")
+    @Column(name = "play_card")
     private String play;
 
-    @Column(name="discard_card")
+    @Column(name = "discard_card")
     private String discard;
 
-    @Column(name="draw_card")
+    @Column(name = "draw_card")
     private Color draw;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     @CreationTimestamp
     private Date creationDate;
 

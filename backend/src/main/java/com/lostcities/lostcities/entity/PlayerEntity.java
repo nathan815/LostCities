@@ -2,19 +2,19 @@ package com.lostcities.lostcities.entity;
 
 import javax.persistence.*;
 
-@Entity(name="PlayerEntity")
-@Table(name="players")
+@Entity(name = "PlayerEntity")
+@Table(name = "players")
 public class PlayerEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String name;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public PlayerEntity() {

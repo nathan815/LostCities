@@ -6,6 +6,7 @@ import com.lostcities.lostcities.web.dto.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,27 +16,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class UserController {
+@RequestMapping("/api")
+public class AccountController {
 
     private AccountService accountService;
 
-    public UserController(AccountService accountService) {
+    public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
-    @PostMapping("/api/authentication")
+    @PostMapping("/authentication")
     public Map<String, String> authentication(@RequestBody @Valid AccountCredentialsDto accountCredentials) {
         try {
             String token = accountService.authenticateWithCredentials(accountCredentials);
-            Map<String,String> result = new HashMap<>();
+            Map<String, String> result = new HashMap<>();
             result.put("token", token);
             return result;
-        } catch(AuthenticationException e) {
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public UserDto register(@RequestBody @Valid UserDto userDto) {
         return accountService.createAccount(userDto);
     }

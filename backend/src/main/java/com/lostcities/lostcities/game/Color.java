@@ -11,7 +11,7 @@ public enum Color {
 
     public static Color fromString(String string) {
         String lcColor = string.toLowerCase();
-        for(Color color: values()) {
+        for(Color color : values()) {
             if(color.toString().toLowerCase().equals(lcColor)) {
                 return color;
             }

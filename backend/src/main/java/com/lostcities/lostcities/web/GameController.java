@@ -23,13 +23,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/games")
-public class GameService {
+public class GameController {
 
     private GameRepository gameRepository;
     private PlayerRepository playerRepository;
     private CommandRepository commandRepository;
 
-    public GameService(
+    public GameController(
             GameRepository gameRepository,
             PlayerRepository playerRepository,
             CommandRepository commandRepository) {
@@ -75,7 +75,6 @@ public class GameService {
 
         return gameRepository.save(gameEntity);
     }
-
 
 
     @PostMapping("/{gameId}")

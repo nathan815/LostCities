@@ -50,7 +50,7 @@ public class Game {
     }
 
     private void drawStartingHands() {
-        for(int i=0; i < 8; i++) {
+        for(int i = 0; i < 8; i++) {
             player1.draw();
             player2.draw();
         }

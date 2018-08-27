@@ -33,7 +33,7 @@ public class Cards {
 
         IntStream
                 .range(2, 10)
-                .mapToObj((i)-> new Card(color, i))
+                .mapToObj((i) -> new Card(color, i))
                 .forEach(cards::add);
 
         return cards;

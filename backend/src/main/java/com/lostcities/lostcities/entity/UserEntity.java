@@ -17,18 +17,18 @@ import java.util.Objects;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name= "username", length = 100, unique = true, nullable = false)
+    @Column(name = "username", length = 100, unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
-    @Column(name = "password",length = 60)
+    @Column(name = "password", length = 60)
     private String password;
 
     @Size(max = 50)
@@ -106,10 +106,10 @@ public class UserEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
 
