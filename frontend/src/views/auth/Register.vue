@@ -9,13 +9,11 @@
                 username: "",
                 password: "",
                 confirmPassword: "",
-                error: null,
-                loading: false,
             }
         },
         methods: {
             register() {
-                alert('register')
+                this.$store.dispatch('auth/register');
             }
         }
     }

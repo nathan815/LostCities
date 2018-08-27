@@ -1,6 +1,6 @@
 <script>
-    import axios from 'axios';
     import AuthPage from "./AuthPage";
+    import {mapState} from 'vuex';
 
     export default {
         components: { AuthPage },
@@ -8,26 +8,18 @@
             return {
                 username: '',
                 password: '',
-                error: null,
-                loading: false,
-            }
+            };
         },
+        computed: mapState({
+            error: state => state.auth.error,
+            loading: state => state.auth.isLoading,
+        }),
         methods: {
-            async login() {
-                this.loading = true;
-                this.error = null;
-                try {
-                    const result = await axios.post('/api/authentication', {
-                        username: this.username,
-                        password: this.password
-                    });
-
-                } catch (err) {
-                    if (err.response.status === 401) {
-                        this.error = "Incorrect username or password.";
-                    }
-                }
-                this.loading = false;
+            login() {
+                this.$store.dispatch('auth/login', {
+                    username: this.username,
+                    password: this.password
+                });
             }
         }
     }

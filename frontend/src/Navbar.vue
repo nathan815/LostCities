@@ -1,10 +1,12 @@
 <script>
+    import {mapActions, mapState} from 'vuex';
+
     export default {
-        methods: {
-            logout() {
-                alert('logout')
-            }
-        }
+        computed: mapState({
+            isLoggedIn: state => state.auth.isLoggedIn,
+            user: state => state.auth.user,
+        }),
+        methods: mapActions('auth', ['logout']),
     }
 </script>
 <template>
@@ -18,26 +20,32 @@
             <b-collapse is-nav id="nav-collapse">
 
                 <b-navbar-nav>
-                    <b-nav-item to="/dashboard" class="nav-item" exact>
-                        Games
-                    </b-nav-item>
-                    <b-nav-item to="/games" class="nav-item">
-                        Users
-                    </b-nav-item>
+                    <b-nav-item to="/games" exact><i class="fas fa-list-ul"></i> Games</b-nav-item>
+                    <b-nav-item to="/leaderboard"><i class="fas fa-trophy"></i> Leaderboard</b-nav-item>
                 </b-navbar-nav>
 
-                <b-navbar-nav class="ml-auto">
+                <b-navbar-nav v-if="isLoggedIn" class="ml-auto">
 
-                    <b-nav-item to="/login" class="nav-item">Login</b-nav-item>
+                    <b-form>
+                        <b-button v-if="isLoggedIn" to="/games/new"
+                                  variant="light" class="my- mr-2">
+                            <i class="fas fa-plus-square"></i> Start a Game
+                        </b-button>
+                    </b-form>
 
-                    <b-nav-item to="/register" class="nav-item">Register</b-nav-item>
-
-                    <b-nav-item-dropdown text="My Account" right>
+                    <b-nav-item-dropdown :text="user.username" right>
                         <b-dropdown-item to="/settings">Settings</b-dropdown-item>
                         <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
                     </b-nav-item-dropdown>
+                </b-navbar-nav>
+
+                <b-navbar-nav v-else class="ml-auto">
+
+                    <b-nav-item to="/login">Login</b-nav-item>
+                    <b-nav-item to="/register">Register</b-nav-item>
 
                 </b-navbar-nav>
+
             </b-collapse>
 
         </div>

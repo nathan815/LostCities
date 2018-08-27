@@ -1,29 +1,37 @@
 package com.lostcities.lostcities.web.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lostcities.lostcities.entity.UserEntity;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 public class UserDto {
-    @NotNull
-    @NotEmpty
+
+    @NotBlank
     private String firstName;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String lastName;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @Email
     private String email;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @JsonIgnore
     private String password;
-    private String matchingPassword;
+
+    public static UserDto fromUserEntity(UserEntity userEntity) {
+        UserDto userDto = new UserDto();
+        userDto.setUsername(userEntity.getUsername());
+        userDto.setEmail(userEntity.getEmail());
+        return userDto;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -41,20 +49,14 @@ public class UserDto {
         this.lastName = lastName;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getMatchingPassword() {
-        return matchingPassword;
-    }
-
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
     }
 
     public String getEmail() {
