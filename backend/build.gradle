@@ -50,7 +50,7 @@ dependencies {
 	compile('de.codecentric:spring-boot-admin-starter-client')
 	compile('de.codecentric:spring-boot-admin-starter-server')
     compile('javax.xml.bind:jaxb-api:2.2.11')
-	//compile('org.liquibase:liquibase-core')
+	compile 'io.jsonwebtoken:jjwt:0.7.0'
 	compile('org.springframework.session:spring-session-core')
     compile('com.google.guava:guava:21.0')
 	runtime('org.springframework.boot:spring-boot-devtools')

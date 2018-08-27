@@ -1,128 +1,42 @@
 package com.lostcities.lostcities.web;
 
-import com.lostcities.lostcities.entity.PlayerEntity;
-import com.lostcities.lostcities.entity.UserEntity;
-import com.lostcities.lostcities.repository.PlayerRepository;
-import com.lostcities.lostcities.repository.UserRepository;
-import com.lostcities.lostcities.web.dto.LoginDto;
+import com.lostcities.lostcities.service.AccountService;
+import com.lostcities.lostcities.web.dto.AccountCredentialsDto;
 import com.lostcities.lostcities.web.dto.UserDto;
-import org.apache.juli.logging.Log;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.AuthenticationException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-@Controller
+@RestController
 public class UserController {
 
-    private UserDetailsManager userDetailsManager;
-    private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
+    private AccountService accountService;
 
-    private PlayerRepository playerRepository;
-
-    public UserController(
-            UserRepository userRepository,
-            JdbcUserDetailsManager userDetailsManager,
-            BCryptPasswordEncoder passwordEncoder,
-            PlayerRepository playerRepository) {
-        this.userRepository = userRepository;
-        this.userDetailsManager = userDetailsManager;
-        this.passwordEncoder = passwordEncoder;
-        this.playerRepository = playerRepository;
+    public UserController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String doLogin(@RequestParam String username, @RequestParam String password) {
-
-        UserEntity user = userRepository.findByUsername(username);
-
-        if (sharedLogin(username, password, user)) {
-            return "redirect:/home";
+    @PostMapping("/api/authentication")
+    public Map<String, String> authentication(@RequestBody @Valid AccountCredentialsDto accountCredentials) {
+        try {
+            String token = accountService.authenticateWithCredentials(accountCredentials);
+            Map<String,String> result = new HashMap<>();
+            result.put("token", token);
+            return result;
+        } catch(AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        return "redirect:/login";
     }
 
-    @PostMapping("/api/rest-login")
-    @ResponseBody
-    public LoginDto doRestLogin(@RequestBody LoginDto loginDto) {
-
-        UserEntity user = userRepository.findByUsername(loginDto.getUsername());
-
-        sharedLogin(loginDto.getUsername(), loginDto.getPassword(), user);
-        loginDto.setPassword(null);
-        return loginDto;
-    }
-
-    private boolean sharedLogin(@RequestParam String username, @RequestParam String password, UserEntity user) {
-        if(passwordEncoder.encode(password).equals(user.getPassword())) {
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    new User(username, password, authorities), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return true;
-        }
-        return false;
-    }
-
-    @GetMapping("/signup")
-    public String showRegistrationForm(WebRequest request, Model model) {
-        UserDto userDto = new UserDto();
-        model.addAttribute("user", userDto);
-        return "signup";
-    }
-
-    @PostMapping("/signup")
-    public String registerUserAccount(
-            @ModelAttribute("user") @Valid UserDto accountDto,
-            BindingResult result, WebRequest request, Errors errors) {
-
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        UserDetails user = new User(
-                accountDto.getEmail(),
-                passwordEncoder.encode(accountDto.getPassword()),
-                authorities);
-
-        userDetailsManager.createUser(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        UserEntity userEntity =
-                userRepository.findByUsername(accountDto.getEmail());
-
-        PlayerEntity player = new PlayerEntity();
-        player.setName(accountDto.getEmail());
-        player.setUser(userEntity);
-        playerRepository.save(player);
-
-
-        return "redirect:/home";
+    @PostMapping("/api/register")
+    public UserDto register(@RequestBody @Valid UserDto userDto) {
+        return accountService.createAccount(userDto);
     }
 }

@@ -1,10 +1,13 @@
 package com.lostcities.lostcities.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotEmpty;
 
-public class LoginDto {
+public class AccountCredentialsDto {
 
+    @NotEmpty
     private String username;
+
+    @NotEmpty
     private String password;
 
     public String getUsername() {

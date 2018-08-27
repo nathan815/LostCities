@@ -14,12 +14,16 @@ public class UserDto {
 
     @NotNull
     @NotEmpty
-    private String password;
-    private String matchingPassword;
+    private String username;
 
     @NotNull
     @NotEmpty
     private String email;
+
+    @NotNull
+    @NotEmpty
+    private String password;
+    private String matchingPassword;
 
     public String getFirstName() {
         return firstName;
@@ -59,5 +63,13 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

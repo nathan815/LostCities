@@ -12,6 +12,7 @@ import com.lostcities.lostcities.repository.GameRepository;
 import com.lostcities.lostcities.repository.PlayerRepository;
 import com.lostcities.lostcities.web.dto.CommandDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,8 @@ public class GameService {
 
     @GetMapping
     public Collection<GameEntity> getGames() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return gameRepository.getGamesWithPlayer(user.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return gameRepository.getGamesWithPlayer(auth.getName());
     }
 
     @GetMapping("/{id}")
@@ -79,7 +79,7 @@ public class GameService {
 
 
     @PostMapping("/{gameId}")
-    public Game exececuteCommand(@RequestBody CommandDto commandDto) {
+    public Game executeCommand(@RequestBody CommandDto commandDto) {
         GameEntity gameEntity = getGameEntity(commandDto.getGameId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
