@@ -4,6 +4,9 @@
 
     export default {
         components: { AuthPage },
+        beforeDestroy() {
+            this.clearError();
+        },
         data() {
             return {
                 username: '',
@@ -15,12 +18,18 @@
             loading: state => state.auth.isLoading,
         }),
         methods: {
-            login() {
-                this.$store.dispatch('auth/login', {
+            async login() {
+                await this.$store.dispatch('auth/login', {
                     username: this.username,
                     password: this.password
                 });
-            }
+                if(!this.error) {
+                    this.$router.push('/');
+                }
+            },
+            clearError() {
+                this.$store.dispatch('auth/clearError');
+            },
         }
     }
 </script>
@@ -31,7 +40,7 @@
         <b-alert variant="danger"
                  dismissible
                  :show="error != null"
-                 @dismissed="error = null">
+                 @dismissed="clearError">
             {{ error }}
         </b-alert>
 

@@ -27,7 +27,7 @@
                 <b-navbar-nav v-if="isLoggedIn" class="ml-auto">
 
                     <b-form>
-                        <b-button v-if="isLoggedIn" to="/games/new"
+                        <b-button to="/games/new"
                                   variant="light" class="my- mr-2">
                             <i class="fas fa-plus-square"></i> Start a Game
                         </b-button>
@@ -37,6 +37,7 @@
                         <b-dropdown-item to="/settings">Settings</b-dropdown-item>
                         <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
                     </b-nav-item-dropdown>
+
                 </b-navbar-nav>
 
                 <b-navbar-nav v-else class="ml-auto">

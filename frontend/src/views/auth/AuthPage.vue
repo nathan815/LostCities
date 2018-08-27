@@ -12,7 +12,6 @@
         <div class="page-box">
             <h1 class="pb-2 mb-4 border-bottom">{{ title }}</h1>
             <slot></slot>
-
         </div>
 
     </div>

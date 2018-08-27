@@ -1,8 +1,9 @@
 <script>
     import Navbar from '@/Navbar';
+    import AlertMessage from "./components/AlertMessage";
 
     export default {
-        components: { Navbar }
+        components: { AlertMessage, Navbar }
     }
 </script>
 <template>
@@ -11,6 +12,7 @@
         <Navbar />
 
         <div class="container main-container">
+            <AlertMessage />
             <router-view />
         </div>
 

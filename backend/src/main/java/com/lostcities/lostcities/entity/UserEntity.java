@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 
@@ -21,29 +20,18 @@ public class UserEntity {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
     @Column(name = "username", length = 100, unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
     @NotNull
-    @Size(min = 60, max = 60)
     @Column(name = "password", length = 60)
     private String password;
-
-    @Size(max = 50)
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    @Column(name = "last_name", length = 50)
-    private String lastName;
 
     @Column
     private Boolean enabled;
 
     @Email
-    @Size(min = 5, max = 100)
     @Column(length = 100, unique = true)
     private String email;
 
@@ -69,22 +57,6 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public Boolean getEnabled() {
@@ -126,8 +98,6 @@ public class UserEntity {
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 "}";
     }

@@ -1,5 +1,4 @@
 import authApi from '@/api/auth';
-import router from '@/router';
 
 const LOCAL_STORAGE_KEY = 'auth';
 
@@ -26,7 +25,6 @@ const actions = {
                 commit('setToken', response.data.token);
                 commit('setUser', response.data.user);
                 commit('loginSuccess');
-                router.push('/');
             }
             else {
                 throw new Error(response.data);
@@ -42,6 +40,9 @@ const actions = {
     logout({ commit }) {
         localStorage.removeItem(LOCAL_STORAGE_KEY);
         commit('logout');
+    },
+    clearError({ commit }) {
+        commit('clearError');
     },
 };
 
@@ -68,6 +69,9 @@ const mutations = {
         state.isLoggedIn = false;
         state.token = null;
         state.user = null;
+    },
+    clearError(state) {
+        state.error = null;
     },
 };
 

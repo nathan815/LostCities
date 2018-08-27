@@ -1,20 +1,46 @@
 <script>
     import AuthPage from "./AuthPage";
+    import {mapState} from 'vuex';
 
     export default {
         components: { AuthPage },
+        beforeDestroy() {
+            this.clearError();
+        },
         data() {
             return {
                 email: "",
                 username: "",
                 password: "",
                 confirmPassword: "",
+                loading: false,
             }
         },
+        computed: mapState({
+            error: state => state.account.error
+        }),
         methods: {
-            register() {
-                this.$store.dispatch('auth/register');
-            }
+            async register() {
+                this.loading = true;
+                await this.$store.dispatch('account/register', {
+                    email: this.email,
+                    username: this.username,
+                    password: this.password,
+                    confirmPassword: this.confirmPassword,
+                });
+                this.loading = false;
+
+                if(!this.error) {
+                    this.$store.dispatch('alert/show', {
+                        message: 'Your account has been created. You may now login.',
+                        variant: 'success'
+                    });
+                    this.$router.push('/login');
+                }
+            },
+            clearError() {
+                this.$store.dispatch('account/clearError');
+            },
         }
     }
 </script>
@@ -24,7 +50,7 @@
         <b-alert variant="danger"
                  dismissible
                  :show="error != null"
-                 @dismissed="error = null">
+                 @dismissed="clearError">
             {{ error }}
         </b-alert>
 
