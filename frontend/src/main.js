@@ -1,12 +1,17 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue'
 
-Vue.config.productionTip = false
+import App from './App.vue';
+import router from './router/router';
+import store from './store/store';
+
+Vue.config.productionTip = false;
+Vue.use(BootstrapVue);
+Vue.component('b-navbar');
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+    el: '#app',
+    render: h => h(App),
+    router,
+    store,
+});

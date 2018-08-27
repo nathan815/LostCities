@@ -1,18 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld />
-  </div>
+    <div class="home">
+        <div class="jumbotron d-flex justify-content-around align-items-center">
+            <div class="text-center">
+                <h1 class="display-4">Lost Cities</h1>
+                <p class="lead">Play <b>Lost Cities</b> against others!</p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">Play Now</a>
+            </div>
+            <div>
+                <img src="../assets/game-setup.png" class="rounded" />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
-    // @ is an alias to /src
-    import HelloWorld from '@/components/HelloWorld.vue'
-
     export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    }
 </script>
+
+<style>
+    .jumbotron {
+
+    }
+</style>

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
     lintOnSave: false,
     devServer: {
@@ -5,9 +7,16 @@ module.exports = {
         proxy: {
             // proxy all requests starting with /api to backend api
             '/api': {
-                target: 'http://localhost:8080',
+                target: 'http://localhost:8080/',
                 changeOrigin: true
             }
         }
-    }
-}
+    },
+    configureWebpack: {
+        resolve: {
+            alias: {
+                '~': path.resolve(__dirname, 'src/'),
+            },
+        },
+    },
+};
