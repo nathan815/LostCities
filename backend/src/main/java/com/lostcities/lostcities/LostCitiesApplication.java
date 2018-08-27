@@ -11,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableJpaRepositories
-public class LostcitiesApplication implements WebMvcConfigurer {
+public class LostCitiesApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LostcitiesApplication.class, args);
+		SpringApplication.run(LostCitiesApplication.class, args);
 	}
 
     public void addViewControllers(ViewControllerRegistry registry) {

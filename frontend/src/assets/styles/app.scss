@@ -1,6 +1,6 @@
 
 $theme-colors: (
-      "primary": #837845,
+      "primary": #816f1e,
 );
 
 @import "~bootstrap/scss/bootstrap.scss";
@@ -15,7 +15,7 @@ body {
 }
 
 .bg-tan {
-  background: #837845 !important;
+  background: map-get($theme-colors, 'primary') !important;
 }
 
 .page-box {

@@ -7,7 +7,6 @@ import store from './store/store';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
-Vue.component('b-navbar');
 
 new Vue({
     el: '#app',
