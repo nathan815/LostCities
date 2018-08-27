@@ -1,51 +1,46 @@
 <script>
     export default {
-        data() {
-            return {
-                navIsActive: false,
-            };
-        },
         methods: {
-            toggleMenu: () => this.navIsActive = !this.navIsActive
-        },
+            logout() {
+                alert('logout')
+            }
+        }
     }
 </script>
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-tan">
+
+    <b-navbar toggleable="md" type="dark" variant="primary">
         <div class="container">
-            <router-link class="navbar-brand" to="/">Lost Cities</router-link>
 
-            <div class="collapse navbar-collapse">
+            <b-navbar-brand to="/">Lost Cities</b-navbar-brand>
+            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-                <ul class="navbar-nav mr-auto">
-                    <router-link tag="li" to="/dashboard" class="nav-item" exact>
-                        <a class="nav-link">Games</a>
-                    </router-link>
-                    <router-link tag="li" to="/games" class="nav-item">
-                        <a class="nav-link">Users</a>
-                    </router-link>
-                </ul>
+            <b-collapse is-nav id="nav-collapse">
 
-                <ul class="navbar-nav">
+                <b-navbar-nav>
+                    <b-nav-item to="/dashboard" class="nav-item" exact>
+                        Games
+                    </b-nav-item>
+                    <b-nav-item to="/games" class="nav-item">
+                        Users
+                    </b-nav-item>
+                </b-navbar-nav>
 
-                    <router-link tag="li" to="/login" class="nav-item">
-                        <a class="nav-link">Login</a>
-                    </router-link>
+                <b-navbar-nav class="ml-auto">
 
-                    <router-link tag="li" to="/register" class="nav-item">
-                        <a class="nav-link">Register</a>
-                    </router-link>
+                    <b-nav-item to="/login" class="nav-item">Login</b-nav-item>
+
+                    <b-nav-item to="/register" class="nav-item">Register</b-nav-item>
 
                     <b-nav-item-dropdown text="My Account" right>
-                        <b-dropdown-item href="#">EN</b-dropdown-item>
-                        <b-dropdown-item href="#">ES</b-dropdown-item>
-                        <b-dropdown-item href="#">RU</b-dropdown-item>
-                        <b-dropdown-item href="#">FA</b-dropdown-item>
+                        <b-dropdown-item to="/settings">Settings</b-dropdown-item>
+                        <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
                     </b-nav-item-dropdown>
 
-                </ul>
-            </div>
+                </b-navbar-nav>
+            </b-collapse>
+
         </div>
-    </nav>
+    </b-navbar>
 
 </template>

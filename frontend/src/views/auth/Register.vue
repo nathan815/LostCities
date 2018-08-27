@@ -12,6 +12,11 @@
                 error: null,
                 loading: false,
             }
+        },
+        methods: {
+            register() {
+                alert('register')
+            }
         }
     }
 </script>
@@ -25,7 +30,7 @@
             {{ error }}
         </b-alert>
 
-        <form method="post" @submit.prevent="login">
+        <form method="post" @submit.prevent="register">
 
             <div class="form-group">
                 <label for="username">Username</label>
@@ -35,7 +40,7 @@
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" class="form-control" required
+                <input type="email" class="form-control" required
                        id="email" placeholder="Email" v-model="email">
             </div>
 
@@ -48,7 +53,8 @@
             <div class="form-group">
                 <label for="confirm-password">Confirm Password</label>
                 <input type="password" class="form-control" required
-                       id="confirm-password" placeholder="Confirm Password" v-model="confirmPassword">
+                       id="confirm-password" placeholder="Confirm Password"
+                       v-model="confirmPassword">
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="loading">
@@ -59,7 +65,3 @@
         </form>
     </AuthPage>
 </template>
-
-<style scoped>
-
-</style>

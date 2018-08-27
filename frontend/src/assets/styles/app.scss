@@ -14,10 +14,6 @@ body {
   background: #f5f5f5;
 }
 
-.bg-tan {
-  background: map-get($theme-colors, 'primary') !important;
-}
-
 .page-box {
   border-radius: 4px;
   background: #fff;
