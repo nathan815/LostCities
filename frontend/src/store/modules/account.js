@@ -6,11 +6,11 @@ const state = {
 
 const actions = {
     async register({ commit }, data) {
+        commit('clearError');
         if(data.password !== data.confirmPassword) {
-            commit('registerError', 'Passwords do not match');
+            commit('setError', 'Passwords do not match');
             return;
         }
-        commit('clearError');
         try {
             await accountApi.register(data);
         } catch(err) {

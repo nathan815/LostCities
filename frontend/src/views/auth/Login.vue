@@ -1,6 +1,6 @@
 <script>
-    import AuthPage from "./AuthPage";
-    import {mapState} from 'vuex';
+    import AuthPage from './AuthPage';
+    import { mapState } from 'vuex';
 
     export default {
         components: { AuthPage },
@@ -23,7 +23,7 @@
                     username: this.username,
                     password: this.password
                 });
-                if(!this.error) {
+                if (!this.error) {
                     this.$router.push('/');
                 }
             },

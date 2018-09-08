@@ -7,8 +7,10 @@ const actions = {
     show({ commit }, options) {
         commit('show', options);
     },
-    dismiss({ commit }) {
-        commit('dismiss);')
+    dismiss({ commit, state }) {
+        if(state.message) {
+            commit('dismiss');
+        }
     },
 };
 

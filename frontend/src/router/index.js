@@ -24,6 +24,8 @@ router.beforeEach((to, from, next) => {
         return next('/');
     }
 
+    store.dispatch('alert/dismiss');
+
     next();
 });
 

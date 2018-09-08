@@ -10,9 +10,9 @@ try {
 const state = {
     isLoading: false,
     isLoggedIn: !!auth,
-    user: auth ? auth.user : null,
     error: null,
-    token: null,
+    user: auth ? auth.user : null,
+    token: auth ? auth.token : null,
 };
 
 const actions = {
