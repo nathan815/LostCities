@@ -2,11 +2,21 @@ import authApi from '@/api/auth';
 
 const LOCAL_STORAGE_KEY = 'auth';
 
-let auth = null;
-try {
-    auth = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-} catch (err) {}
+function readAuthFromLocalStorage() {
+    let token = null;
+    try {
+        token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    } catch (err) {
+        console.log('Error parsing auth token');
+    }
+    return token;
+}
 
+function saveAuthToLocalStorage(auth) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(auth));
+}
+
+const auth = readAuthFromLocalStorage();
 const state = {
     isLoading: false,
     isLoggedIn: !!auth,
@@ -21,10 +31,7 @@ const actions = {
         try {
             const response = await authApi.authenticate({ username, password });
             if (response.data.token) {
-                localStorage.setItem(
-                    LOCAL_STORAGE_KEY,
-                    JSON.stringify(response.data)
-                );
+                saveAuthToLocalStorage(response.data);
                 commit('setToken', response.data.token);
                 commit('setUser', response.data.user);
                 commit('loginSuccess');
