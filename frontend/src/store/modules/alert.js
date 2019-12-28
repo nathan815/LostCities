@@ -8,7 +8,7 @@ const actions = {
         commit('show', options);
     },
     dismiss({ commit, state }) {
-        if(state.message) {
+        if (state.message) {
             commit('dismiss');
         }
     },
@@ -28,5 +28,5 @@ export default {
     namespaced: true,
     state,
     actions,
-    mutations
+    mutations,
 };

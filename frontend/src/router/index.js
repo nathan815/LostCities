@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import routes from './routes';
 import store from '../store';
 
@@ -10,7 +10,7 @@ const router = new Router({
     base: process.env.BASE_URL,
     linkActiveClass: 'active',
     linkExactActiveClass: 'exact-active',
-    routes: routes
+    routes: routes,
 });
 
 router.beforeEach((to, from, next) => {
@@ -20,7 +20,7 @@ router.beforeEach((to, from, next) => {
         return next('/login');
     }
 
-    if(to.meta.requiresGuest && loggedIn) {
+    if (to.meta.requiresGuest && loggedIn) {
         return next('/');
     }
 

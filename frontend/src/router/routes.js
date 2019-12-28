@@ -1,12 +1,11 @@
-import Home from '@/views/Home.vue'
+import Home from '@/views/Home.vue';
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
 
 export default [
-
     {
         path: '/',
-        component: Home
+        component: Home,
     },
 
     {
@@ -20,5 +19,4 @@ export default [
         component: Register,
         meta: { requiresGuest: true },
     },
-
 ];

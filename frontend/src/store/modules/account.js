@@ -7,13 +7,13 @@ const state = {
 const actions = {
     async register({ commit }, data) {
         commit('clearError');
-        if(data.password !== data.confirmPassword) {
+        if (data.password !== data.confirmPassword) {
             commit('setError', 'Passwords do not match');
             return;
         }
         try {
             await accountApi.register(data);
-        } catch(err) {
+        } catch (err) {
             commit('setError', 'Unable to create account');
         }
     },

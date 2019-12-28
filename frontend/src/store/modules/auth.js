@@ -5,7 +5,7 @@ const LOCAL_STORAGE_KEY = 'auth';
 let auth = null;
 try {
     auth = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-} catch(err) { }
+} catch (err) {}
 
 const state = {
     isLoading: false,
@@ -21,12 +21,14 @@ const actions = {
         try {
             const response = await authApi.authenticate({ username, password });
             if (response.data.token) {
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(response.data));
+                localStorage.setItem(
+                    LOCAL_STORAGE_KEY,
+                    JSON.stringify(response.data)
+                );
                 commit('setToken', response.data.token);
                 commit('setUser', response.data.user);
                 commit('loginSuccess');
-            }
-            else {
+            } else {
                 throw new Error(response.data);
             }
         } catch (err) {

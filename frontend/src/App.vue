@@ -1,19 +1,17 @@
 <script>
-    import Navbar from '@/Navbar';
+import Navbar from '@/Navbar';
 
-    export default {
-        components: { Navbar }
-    }
+export default {
+    components: { Navbar },
+};
 </script>
 <template>
     <div>
-
         <Navbar />
 
         <div class="container main-container">
             <router-view />
         </div>
-
     </div>
 </template>
 

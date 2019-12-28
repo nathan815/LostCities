@@ -12,9 +12,9 @@ module.exports = {
             // proxy all requests starting with /api to backend api
             '/api': {
                 target: BACKEND_URL,
-                changeOrigin: true
-            }
-        }
+                changeOrigin: true,
+            },
+        },
     },
     configureWebpack: {
         resolve: {
