@@ -12,6 +12,7 @@ buildscript {
     }
 }
 
+apply plugin: 'com.gradle.build-scan'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
