@@ -12,7 +12,10 @@ buildscript {
     }
 }
 
-apply plugin: 'com.gradle.build-scan'
+plugins {
+    id "com.gradle.build-scan" version "3.1.1"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -68,6 +71,9 @@ dependencyManagement {
 }
 
 buildScan {
-    licenseAgreementUrl = "https://gradle.com/terms-of-service"
-    licenseAgree = "yes"
+    if (System.getenv("CI")) {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+        publishAlways()
+    }
 }
