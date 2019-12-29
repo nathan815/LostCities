@@ -13,6 +13,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
@@ -21,6 +22,12 @@ apply plugin: 'io.spring.dependency-management'
 group = 'com.lostcities'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 10
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
 
 repositories {
     mavenCentral()
