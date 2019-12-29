@@ -1,13 +1,19 @@
+before_install:
+  # Download Code Climate test reporter tool
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
 matrix:
   include:
-
-    # Backend
+    # -- Backend -- #
     - language: java
-      before_install: cd backend
+      before_install:
+        - cd backend
       jdk: oraclejdk13
 
       script:
         - ./gradlew build --scan -s
+        - ./gradlew jacocoTestReport
 
       # Gradle Caching
       before_cache:
@@ -18,8 +24,7 @@ matrix:
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
 
-
-    # Frontend
+    # -- Frontend -- #
     - language: node_js
       node_js: 12
 
@@ -30,3 +35,14 @@ matrix:
       script:
         - npm run test
         - npm run test:e2e -- --headless
+
+# Collect and upload test coverage results to Code Climate
+after_script:
+  - cd $TRAVIS_BUILD_DIR
+  # Format coverage
+  - ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.frontend.json frontend/coverage/lcov.info
+  - ./cc-test-reporter format-coverage -t jacoco -o coverage/codeclimate.backend.json backend/build/reports/jacoco/test/jacocoTestReport.xml
+    # Sum both coverage parts into coverage/codeclimate.json
+  - ./cc-test-reporter sum-coverage coverage/codeclimate.*.json -p 2
+    # Upload coverage/codeclimate.json
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter upload-coverage; fi
