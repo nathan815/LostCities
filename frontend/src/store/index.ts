@@ -18,5 +18,5 @@ export interface RootState {
     alert: AlertState;
 }
 
-const store = getStoreBuilder<RootState>().vuexStore();
-export default store;
+const buildStore = () => getStoreBuilder<RootState>().vuexStore();
+export default buildStore;

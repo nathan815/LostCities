@@ -4,14 +4,15 @@ import './registerServiceWorker';
 
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import buildStore from './store';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
+const store = buildStore();
 new Vue({
-    el: '#app',
-    render: h => h(App),
     router,
     store,
+    el: '#app',
+    render: h => h(App),
 });
