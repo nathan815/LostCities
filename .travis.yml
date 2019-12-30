@@ -1,16 +1,11 @@
-matrix:
+language: minimal
+jobs:
   include:
-    # -- Backend -- #
-    - language: java
+    - name: backend
+      language: java
+      jdk: oraclejdk13
       before_install:
         - cd backend
-      jdk: oraclejdk13
-
-      script:
-        - ./gradlew build --scan -s
-        - ./gradlew jacocoTestReport
-
-      # Gradle Caching
       before_cache:
         - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -19,20 +14,23 @@ matrix:
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
 
-    # -- Frontend -- #
-    - language: node_js
+      script:
+        - ./gradlew build --scan -s
+        - ./gradlew jacocoTestReport
+      after_success:
+        - bash <(curl -s https://codecov.io/bash) # Upload test report results to Codecov
+
+    - name: frontend
+      language: node_js
       node_js: 12
+      cache: npm
 
       install:
         - cd frontend
-        - npm install
         - npm install -g codecov
+        - npm ci
 
       script:
         - npm run test
         - npm run test:e2e -- --headless
-        - codecov
-
-# Collect and upload test coverage results to Codecov
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+        - codecov # Upload test report results to Codecov
