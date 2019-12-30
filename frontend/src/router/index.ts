@@ -14,6 +14,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+    //@ts-ignore
     const loggedIn = store.state.auth.isLoggedIn;
 
     if (to.meta.requiresAuth && !loggedIn) {
