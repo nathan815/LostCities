@@ -5,7 +5,7 @@ module.exports = {
     ],
     collectCoverage: true,
     collectCoverageFrom: [
-        'src/**/*.{js,vue}',
-        '!src/main.js', // No need to cover main file
+        'src/**/*.{js,ts,vue}',
+        '!src/main.ts', // No need to cover main file
     ],
 };
