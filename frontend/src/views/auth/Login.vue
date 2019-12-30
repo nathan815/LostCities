@@ -1,47 +1,43 @@
-<script>
-import AuthPage from './AuthPage';
-import { mapState } from 'vuex';
+<script lang="ts">
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import AuthPage from './AuthPage.vue';
+import auth from '@/store/modules/auth';
 
-export default {
+@Component({
     components: { AuthPage },
+})
+export default class Login extends Vue {
+    private username: string = '';
+    private password: string = '';
+
+    get error() {
+        return auth.state.error;
+    }
+    get loading() {
+        return auth.state.isLoading;
+    }
+    async login() {
+        await auth.login({
+            username: this.username,
+            password: this.password,
+        });
+        if (!this.error) {
+            this.$router.push('/');
+        }
+    }
+    clearError() {
+        auth.clearError();
+    }
     beforeDestroy() {
         this.clearError();
-    },
-    data() {
-        return {
-            username: '',
-            password: '',
-        };
-    },
-    computed: mapState({
-        error: state => state.auth.error,
-        loading: state => state.auth.isLoading,
-    }),
-    methods: {
-        async login() {
-            await this.$store.dispatch('auth/login', {
-                username: this.username,
-                password: this.password,
-            });
-            if (!this.error) {
-                this.$router.push('/');
-            }
-        },
-        clearError() {
-            this.$store.dispatch('auth/clearError');
-        },
-    },
-};
+    }
+}
 </script>
 
 <template>
     <AuthPage title="Login">
-        <b-alert
-            variant="danger"
-            dismissible
-            :show="error != null"
-            @dismissed="clearError"
-        >
+        <b-alert variant="danger" dismissible :show="error != null" @dismissed="clearError">
             {{ error }}
         </b-alert>
 
@@ -49,44 +45,36 @@ export default {
             <div class="form-group">
                 <label for="username">Username</label>
                 <input
+                    id="username"
+                    v-model="username"
                     type="text"
                     class="form-control"
                     required
-                    id="username"
                     placeholder="Username"
-                    v-model="username"
                 />
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input
+                    id="password"
+                    v-model="password"
                     type="password"
                     class="form-control"
                     required
-                    id="password"
                     placeholder="Password"
-                    v-model="password"
                 />
             </div>
 
-            <button
-                type="submit"
-                class="btn btn-primary btn-block btn-lg"
-                :disabled="loading"
-            >
+            <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="loading">
                 Login
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right" />
             </button>
         </form>
 
         <div class="alert alert-secondary text-center mt-4 mb-0">
             Don't have an account yet?
-            <router-link
-                tag="button"
-                to="/register"
-                class="btn btn-secondary btn-sm"
-            >
+            <router-link tag="button" to="/register" class="btn btn-secondary btn-sm">
                 Register
             </router-link>
         </div>

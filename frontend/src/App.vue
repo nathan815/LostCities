@@ -1,10 +1,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Navbar from './Navbar.vue';
+import AlertMessage from './components/AlertMessage.vue';
 
 @Component({
     components: {
-        Navbar,
+        Navbar, AlertMessage
     },
 })
 export default class App extends Vue {}
@@ -14,6 +15,7 @@ export default class App extends Vue {}
     <div>
         <Navbar />
         <div class="container main-container">
+            <AlertMessage />
             <router-view />
         </div>
     </div>

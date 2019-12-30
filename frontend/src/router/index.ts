@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import routes from './routes';
-import store from '../store';
+import auth from '@/store/modules/auth';
+import alert from '@/store/modules/alert';
 
 Vue.use(Router);
 
@@ -14,19 +15,17 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    //@ts-ignore
-    const loggedIn = store.state.auth.isLoggedIn;
+    const { isLoggedIn } = auth.state;
 
-    if (to.meta.requiresAuth && !loggedIn) {
+    if (to.meta.requiresAuth && !isLoggedIn) {
         return next('/login');
     }
 
-    if (to.meta.requiresGuest && loggedIn) {
+    if (to.meta.requiresGuest && isLoggedIn) {
         return next('/');
     }
 
-    store.dispatch('alert/dismiss');
-
+    alert.dismiss();
     next();
 });
 

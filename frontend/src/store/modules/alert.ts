@@ -1,32 +1,35 @@
-const state = {
+import { createModuleBuilder } from '@/store/helpers';
+import { RootState } from '@/store';
+
+interface AlertOptions {
+    message: string | null;
+    variant: string | null;
+}
+interface AlertState extends AlertOptions {}
+
+const initialState: AlertState = {
     message: null,
     variant: null,
 };
-
-const actions = {
-    show({ commit }, options) {
-        commit('show', options);
-    },
-    dismiss({ commit, state }) {
-        if (state.message) {
-            commit('dismiss');
-        }
-    },
-};
+const { mutation, moduleBuilder } = createModuleBuilder<AlertState, RootState>(
+    'alert',
+    initialState
+);
 
 const mutations = {
-    show(state, { message, variant }) {
-        state.message = message;
-        state.variant = variant;
-    },
-    dismiss(state) {
+    show: mutation(function show(state, options: AlertOptions) {
+        state.message = options.message;
+        state.variant = options.variant;
+    }),
+    dismiss: mutation(function dismiss(state) {
         state.message = null;
-    },
+    }),
 };
 
 export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
+    get state() {
+        return moduleBuilder.state()();
+    },
+    show: mutations.show,
+    dismiss: mutations.dismiss,
 };
