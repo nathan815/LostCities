@@ -53,53 +53,53 @@ export default class Register extends Vue {
             <div class="form-group">
                 <label for="username">Username</label>
                 <input
+                    id="username"
+                    v-model="registerData.username"
                     type="text"
                     class="form-control"
                     required
-                    id="username"
                     placeholder="Username"
-                    v-model="registerData.username"
                 />
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
                 <input
+                    id="email"
+                    v-model="registerData.email"
                     type="email"
                     class="form-control"
                     required
-                    id="email"
                     placeholder="Email"
-                    v-model="registerData.email"
                 />
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input
+                    id="password"
+                    v-model="registerData.password"
                     type="password"
                     class="form-control"
                     required
-                    id="password"
                     placeholder="Password"
-                    v-model="registerData.password"
                 />
             </div>
 
             <div class="form-group">
                 <label for="confirm-password">Confirm Password</label>
                 <input
+                    id="confirm-password"
+                    v-model="registerData.confirmPassword"
                     type="password"
                     class="form-control"
                     required
-                    id="confirm-password"
                     placeholder="Confirm Password"
-                    v-model="registerData.confirmPassword"
                 />
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="loading">
-                <i class="fas fa-check"/>
+                <i class="fas fa-check" />
                 Create Account
             </button>
         </form>

@@ -11,10 +11,7 @@ const initialState: AlertState = {
     message: null,
     variant: null,
 };
-const { mutation, getState } = createModuleBuilder<AlertState, RootState>(
-    'alert',
-    initialState
-);
+const { mutation, getState } = createModuleBuilder<AlertState, RootState>('alert', initialState);
 
 const mutations = {
     show: mutation(function show(state, options: AlertOptions) {

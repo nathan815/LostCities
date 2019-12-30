@@ -20,16 +20,16 @@ export default class Navbar extends Vue {
     <b-navbar toggleable="md" type="dark" variant="primary">
         <div class="container">
             <b-navbar-brand to="/">Lost Cities</b-navbar-brand>
-            <b-navbar-toggle target="nav-collapse"/>
+            <b-navbar-toggle target="nav-collapse" />
 
-            <b-collapse is-nav id="nav-collapse">
+            <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
                     <b-nav-item to="/games" exact>
-                        <i class="fas fa-list-ul"/>
+                        <i class="fas fa-list-ul" />
                         Games
                     </b-nav-item>
                     <b-nav-item to="/leaderboard">
-                        <i class="fas fa-trophy"/>
+                        <i class="fas fa-trophy" />
                         Leaderboard
                     </b-nav-item>
                 </b-navbar-nav>
@@ -37,7 +37,7 @@ export default class Navbar extends Vue {
                 <b-navbar-nav v-if="isLoggedIn" class="ml-auto">
                     <b-form>
                         <b-button to="/games/new" variant="light" class="my- mr-2">
-                            <i class="fas fa-plus-square"/>
+                            <i class="fas fa-plus-square" />
                             Start a Game
                         </b-button>
                     </b-form>

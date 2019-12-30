@@ -21,7 +21,7 @@ export default class AlertMessage extends Vue {
 </script>
 
 <template>
-    <b-alert :show="show" :variant="variant" @dismissed="dismiss" dismissible>
+    <b-alert :show="show" :variant="variant" dismissible @dismissed="dismiss">
         {{ message }}
     </b-alert>
 </template>
