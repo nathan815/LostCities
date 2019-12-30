@@ -9,7 +9,7 @@ const initialState: AccountState = {
     registerError: null,
 };
 
-const { mutation, action, moduleBuilder } = createModuleBuilder<AccountState, RootState>(
+const { mutation, action, getState } = createModuleBuilder<AccountState, RootState>(
     'account',
     initialState
 );
@@ -31,7 +31,7 @@ export interface RegisterData {
 
 export default {
     get state() {
-        return moduleBuilder.state()();
+        return getState();
     },
     register: action(async function register(context, data: RegisterData) {
         mutations.clearRegisterError();

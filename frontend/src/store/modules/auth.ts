@@ -26,7 +26,7 @@ const initialState: AuthState = {
     error: null,
     auth: authInfo,
 };
-const { mutation, action, getter, moduleBuilder } = createModuleBuilder<AuthState, RootState>(
+const { mutation, action, getter, getState } = createModuleBuilder<AuthState, RootState>(
     'auth',
     initialState
 );
@@ -64,7 +64,7 @@ const mutations = {
 
 export default {
     get state(): AuthState {
-        return moduleBuilder.state()();
+        return getState();
     },
 
     get currentUser() {
