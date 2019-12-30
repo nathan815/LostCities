@@ -27,11 +27,11 @@ export default class Register extends Vue {
         this.loading = false;
 
         if (!this.error) {
+            this.$router.push('/login');
             alert.show({
                 message: 'Your account has been created. You may now login.',
                 variant: 'success',
             });
-            this.$router.push('/login');
         }
     }
     clearError() {
