@@ -5,7 +5,7 @@ interface AlertOptions {
     message: string | null;
     variant: string | null;
 }
-interface AlertState extends AlertOptions {}
+export interface AlertState extends AlertOptions {}
 
 const initialState: AlertState = {
     message: null,

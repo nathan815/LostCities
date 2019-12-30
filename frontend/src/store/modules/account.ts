@@ -2,7 +2,7 @@ import accountApi from '@/api/account';
 import { createModuleBuilder } from '@/store/helpers';
 import { RootState } from '@/store';
 
-interface AccountState {
+export interface AccountState {
     registerError: string | null;
 }
 const initialState: AccountState = {
