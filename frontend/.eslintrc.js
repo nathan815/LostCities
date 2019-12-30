@@ -6,10 +6,11 @@ module.exports = {
         jest: true,
     },
 
-    extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
+    extends: ['plugin:vue/recommended', 'plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
 
     rules: {
-        'no-unused-vars': 'warn',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': 'warn',
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     },
@@ -20,10 +21,7 @@ module.exports = {
 
     overrides: [
         {
-            files: [
-                '**/__tests__/*.{j,t}s?(x)',
-                '**/tests/unit/**/*.spec.{j,t}s?(x)',
-            ],
+            files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
             env: {
                 jest: true,
             },
