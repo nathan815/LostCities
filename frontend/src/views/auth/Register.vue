@@ -1,59 +1,51 @@
-<script>
-import AuthPage from './AuthPage';
-import { mapState } from 'vuex';
+<script lang="ts">
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import AuthPage from './AuthPage.vue';
+import account, { RegisterData } from '@/store/modules/account';
+import alert from '@/store/modules/alert';
 
-export default {
+@Component({
     components: { AuthPage },
+})
+export default class Register extends Vue {
+    private registerData: RegisterData = {
+        email: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
+    };
+    private loading = false;
+
+    get error() {
+        return account.state.registerError;
+    }
+
+    async register() {
+        this.loading = true;
+        await account.register(this.registerData);
+        this.loading = false;
+
+        if (!this.error) {
+            alert.show({
+                message: 'Your account has been created. You may now login.',
+                variant: 'success',
+            });
+            this.$router.push('/login');
+        }
+    }
+    clearError() {
+        account.clearRegisterError();
+    }
     beforeDestroy() {
         this.clearError();
-    },
-    data() {
-        return {
-            email: '',
-            username: '',
-            password: '',
-            confirmPassword: '',
-            loading: false,
-        };
-    },
-    computed: mapState({
-        error: state => state.account.error,
-    }),
-    methods: {
-        async register() {
-            this.loading = true;
-            await this.$store.dispatch('account/register', {
-                email: this.email,
-                username: this.username,
-                password: this.password,
-                confirmPassword: this.confirmPassword,
-            });
-            this.loading = false;
-
-            if (!this.error) {
-                this.$store.dispatch('alert/show', {
-                    message:
-                        'Your account has been created. You may now login.',
-                    variant: 'success',
-                });
-                this.$router.push('/login');
-            }
-        },
-        clearError() {
-            this.$store.dispatch('account/clearError');
-        },
-    },
-};
+    }
+}
 </script>
 
 <template>
     <AuthPage title="Register">
-        <b-alert
-            variant="danger"
-            dismissible
-            :show="error != null"
-            @dismissed="clearError"
-        >
+        <b-alert variant="danger" dismissible :show="error != null" @dismissed="clearError">
             {{ error }}
         </b-alert>
 
@@ -66,7 +58,7 @@ export default {
                     required
                     id="username"
                     placeholder="Username"
-                    v-model="username"
+                    v-model="registerData.username"
                 />
             </div>
 
@@ -78,7 +70,7 @@ export default {
                     required
                     id="email"
                     placeholder="Email"
-                    v-model="email"
+                    v-model="registerData.email"
                 />
             </div>
 
@@ -90,7 +82,7 @@ export default {
                     required
                     id="password"
                     placeholder="Password"
-                    v-model="password"
+                    v-model="registerData.password"
                 />
             </div>
 
@@ -102,16 +94,12 @@ export default {
                     required
                     id="confirm-password"
                     placeholder="Confirm Password"
-                    v-model="confirmPassword"
+                    v-model="registerData.confirmPassword"
                 />
             </div>
 
-            <button
-                type="submit"
-                class="btn btn-primary btn-block btn-lg"
-                :disabled="loading"
-            >
-                <i class="fas fa-check"></i>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" :disabled="loading">
+                <i class="fas fa-check"/>
                 Create Account
             </button>
         </form>

@@ -1,39 +1,49 @@
 import accountApi from '@/api/account';
+import { createModuleBuilder } from '@/store/helpers';
+import { RootState } from '@/store';
 
-const state = {
-    error: null,
+interface AccountState {
+    registerError: string | null;
+}
+const initialState: AccountState = {
+    registerError: null,
 };
 
-const actions = {
-    async register({ commit }, data) {
-        commit('clearError');
+const { mutation, action, moduleBuilder } = createModuleBuilder<AccountState, RootState>(
+    'account',
+    initialState
+);
+const mutations = {
+    setRegisterError: mutation(function setRegisterError(state, error: string) {
+        state.registerError = error;
+    }),
+    clearRegisterError: mutation(function clearRegisterError(state) {
+        state.registerError = null;
+    }),
+};
+
+export interface RegisterData {
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export default {
+    get state() {
+        return moduleBuilder.state()();
+    },
+    register: action(async function register(context, data: RegisterData) {
+        mutations.clearRegisterError();
         if (data.password !== data.confirmPassword) {
-            commit('setError', 'Passwords do not match');
+            mutations.setRegisterError('Passwords do not match');
             return;
         }
         try {
             await accountApi.register(data);
         } catch (err) {
-            commit('setError', 'Unable to create account');
+            mutations.setRegisterError('Unable to create account');
         }
-    },
-    clearError({ commit }) {
-        commit('clearError');
-    },
-};
-
-const mutations = {
-    setError(state, error) {
-        state.error = error;
-    },
-    clearError(state) {
-        state.error = null;
-    },
-};
-
-export default {
-    namespaced: true,
-    state,
-    actions,
-    mutations,
+    }),
+    clearRegisterError: mutations.clearRegisterError,
 };
