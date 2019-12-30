@@ -2,17 +2,26 @@ import authApi from '@/api/auth';
 
 const LOCAL_STORAGE_KEY = 'auth';
 
-function readAuthFromLocalStorage() {
+interface AuthUserInfo {
+    username: string;
+    email: string;
+}
+interface AuthInfo {
+    user: AuthUserInfo;
+    token: string;
+}
+
+function readAuthFromLocalStorage(): AuthInfo | null {
     let token = null;
     try {
-        token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+        token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '');
     } catch (err) {
         console.log('Error parsing auth token');
     }
     return token;
 }
 
-function saveAuthToLocalStorage(auth) {
+function saveAuthToLocalStorage(auth: AuthInfo) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(auth));
 }
 
