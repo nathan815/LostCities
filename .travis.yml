@@ -32,5 +32,4 @@ jobs:
 
       script:
         - npm run test
-        - npm run test:e2e -- --headless
         - codecov # Upload test report results to Codecov
