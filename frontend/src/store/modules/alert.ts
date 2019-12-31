@@ -11,7 +11,10 @@ const initialState: AlertState = {
     message: null,
     variant: null,
 };
-const { mutation, getState } = createModuleBuilder<AlertState, RootState>('alert', initialState);
+const { mutation, action, getState } = createModuleBuilder<AlertState, RootState>(
+    'alert',
+    initialState
+);
 
 const mutations = {
     show: mutation(function show(state, options: AlertOptions) {
@@ -28,5 +31,9 @@ export default {
         return getState();
     },
     show: mutations.show,
-    dismiss: mutations.dismiss,
+    dismiss: action(function dismiss({ state }) {
+        if (state.message) {
+            mutations.dismiss();
+        }
+    }),
 };

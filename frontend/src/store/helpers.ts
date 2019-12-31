@@ -5,7 +5,7 @@ export function createModuleBuilder<S, R>(name: string, initialState: S) {
     const { commit, dispatch, read, state } = builder;
     return {
         moduleBuilder: builder,
-        getState: state.call(builder),
+        getState: builder.state(),
         mutation: commit.bind(builder),
         action: dispatch.bind(builder),
         getter: read.bind(builder),
