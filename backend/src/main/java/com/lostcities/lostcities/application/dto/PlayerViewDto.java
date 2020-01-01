@@ -2,19 +2,21 @@ package com.lostcities.lostcities.application.dto;
 
 import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.domain.model.game.Card;
+import com.lostcities.lostcities.domain.model.game.CardDeck;
 import com.lostcities.lostcities.domain.model.game.Color;
 import com.lostcities.lostcities.domain.model.game.Game;
 import com.lostcities.lostcities.domain.model.game.Player;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 public class PlayerViewDto {
     private Long gameId;
     private Long playerId;
     private LinkedHashSet<Card> hand;
-    private Multimap<Color, Card> discard;
-    private Multimap<Color, Card> playerPlayedCards;
-    private Multimap<Color, Card> opponentPlayedCards;
+    private Map<Color, CardDeck> discard;
+    private Map<Color, CardDeck> playerPlayedCards;
+    private Map<Color, CardDeck> opponentPlayedCards;
 
     public static PlayerViewDto createFromGame(Game game, Player currentPlayer) {
 
@@ -55,27 +57,27 @@ public class PlayerViewDto {
         this.hand = hand;
     }
 
-    public Multimap<Color, Card> getDiscard() {
+    public Map<Color, CardDeck> getDiscard() {
         return discard;
     }
 
-    public void setDiscard(Multimap<Color, Card> discard) {
+    public void setDiscard(Map<Color, CardDeck> discard) {
         this.discard = discard;
     }
 
-    public Multimap<Color, Card> getPlayerPlayedCards() {
+    public Map<Color, CardDeck> getPlayerPlayedCards() {
         return playerPlayedCards;
     }
 
-    public void setPlayerPlayedCards(Multimap<Color, Card> playerPlayedCards) {
+    public void setPlayerPlayedCards(Map<Color, CardDeck> playerPlayedCards) {
         this.playerPlayedCards = playerPlayedCards;
     }
 
-    public Multimap<Color, Card> getOpponentPlayedCards() {
+    public Map<Color, CardDeck> getOpponentPlayedCards() {
         return opponentPlayedCards;
     }
 
-    public void setOpponentPlayedCards(Multimap<Color, Card> opponentPlayedCards) {
+    public void setOpponentPlayedCards(Map<Color, CardDeck> opponentPlayedCards) {
         this.opponentPlayedCards = opponentPlayedCards;
     }
 }

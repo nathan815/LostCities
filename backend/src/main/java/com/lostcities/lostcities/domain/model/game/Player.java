@@ -3,9 +3,9 @@ package com.lostcities.lostcities.domain.model.game;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-
+import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Map;
 
 public class Player {
 
@@ -16,18 +16,18 @@ public class Player {
 
     private Player opponent;
 
-    private LinkedHashSet<Card> hand;
+    private CardDeck hand;
 
     @JsonProperty
-    private LinkedHashMultimap<Color, Card> inPlay;
+    private Map<Color, CardDeck> inPlay;
 
     public Player(Long playerId, String name, Game game) {
         this.playerId = playerId;
         this.name = name;
         this.game = game;
 
-        inPlay = LinkedHashMultimap.create();
-        hand = new LinkedHashSet<>();
+        inPlay = new HashMap<>();
+        hand = new CardDeck();
     }
 
     public Long getPlayerId() {
@@ -39,7 +39,7 @@ public class Player {
         return null;
     }
 
-    public Set<Card> getHand() {
+    public CardDeck getHand() {
         return hand;
     }
 
@@ -55,7 +55,7 @@ public class Player {
         this.opponent = opponent;
     }
 
-    public Multimap<Color, Card> getInPlay() {
+    public Map<Color, CardDeck> getInPlay() {
         return inPlay;
     }
 

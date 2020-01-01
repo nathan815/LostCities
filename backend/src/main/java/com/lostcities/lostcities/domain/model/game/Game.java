@@ -1,11 +1,12 @@
 package com.lostcities.lostcities.domain.model.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.LinkedHashMultimap;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
-
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 
 public class Game {
@@ -18,10 +19,10 @@ public class Game {
     private Player player2;
 
     @JsonProperty
-    private LinkedHashSet<Card> deck;
+    private CardDeck deck;
 
     @JsonProperty
-    private LinkedHashMultimap<Color, Card> discard = LinkedHashMultimap.create();
+    private Map<Color, CardDeck> discard = new HashMap<>();
 
     public Optional<Player> getPlayerById(Long id) {
         if(player1.getPlayerId().equals(id)) {
@@ -33,7 +34,7 @@ public class Game {
         return Optional.empty();
     }
 
-    private Game(LinkedHashSet<Card> deck) {
+    private Game(CardDeck deck) {
         this.deck = deck;
     }
 
@@ -41,11 +42,11 @@ public class Game {
         return gameId;
     }
 
-    public LinkedHashSet<Card> getDeck() {
+    public CardDeck getDeck() {
         return deck;
     }
 
-    public LinkedHashMultimap<Color, Card> getDiscard() {
+    public Map<Color, CardDeck> getDiscard() {
         return discard;
     }
 
@@ -67,18 +68,18 @@ public class Game {
     }
 
     Card draw() {
-        Card card = deck.stream().findFirst().get();
+        Card card = deck.getFirst().get();
         deck.remove(card);
 
         return card;
     }
 
     public void discard(Card card) {
-        discard.put(card.getColor(), card);
+        discard.get(card.getColor()).add(card);
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
-        LinkedHashSet<Card> deck = Cards.getShuffledDeck(gameEntity.getSeed());
+        CardDeck deck = CardDeck.getShuffledDeck(new Random(gameEntity.getSeed()));
         Game game = new Game(deck);
 
         game.player1 = new Player(
