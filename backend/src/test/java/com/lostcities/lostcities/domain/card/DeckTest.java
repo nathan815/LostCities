@@ -1,16 +1,16 @@
 package com.lostcities.lostcities.domain.card;
 
-import com.lostcities.lostcities.domain.model.game.CardDeck;
+import com.lostcities.lostcities.domain.model.game.Deck;
 import java.util.Random;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class CardDeckTest {
+public class DeckTest {
 
     @Test
     public void getShuffledDeck_returnsProperlyShuffledDeckGivenASeed() {
-        CardDeck deck = CardDeck.getShuffledDeck(new Random(1L));
+        Deck deck = Deck.getShuffledDeck(new Random(1L));
         String expectedCards = "BLUE_1_2,RED_7_0,GREEN_5_0,YELLOW_1_1,WHITE_7_0,WHITE_1_2,YELLOW_7_0,YELLOW_1_0," +
                 "YELLOW_2_0,WHITE_1_1,BLUE_1_1,RED_6_0,RED_4_0,BLUE_5_0,YELLOW_9_0,GREEN_3_0,GREEN_4_0,GREEN_8_0," +
                 "YELLOW_5_0,RED_9_0,BLUE_1_0,RED_5_0,YELLOW_1_2,GREEN_6_0,WHITE_8_0,BLUE_6_0,RED_8_0,BLUE_9_0,WHITE_4_0," +

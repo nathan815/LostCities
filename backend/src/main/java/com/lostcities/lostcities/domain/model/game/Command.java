@@ -36,7 +36,7 @@ public class Command {
         return drawCardColor;
     }
 
-    protected void execute(CardDeck deck, GameBoard board) {
+    protected void execute(Deck deck, GameBoard board) {
         if(playCard != null) {
             player.removeFromHand(playCard);
             board.addPlayCard(player, playCard);

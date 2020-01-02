@@ -18,11 +18,11 @@ public class Game {
     private Player player2;
 
     @JsonProperty
-    private CardDeck deck;
+    private Deck deck;
 
     private GameBoard board;
 
-    public Game(CardDeck deck, GameBoard board, Player player1, Player player2) {
+    public Game(Deck deck, GameBoard board, Player player1, Player player2) {
         player1.setOpponent(player2);
         player2.setOpponent(player1);
         this.deck = deck;
@@ -36,7 +36,7 @@ public class Game {
         return gameId;
     }
 
-    public CardDeck getDeck() {
+    public Deck getDeck() {
         return deck;
     }
 
@@ -64,7 +64,7 @@ public class Game {
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
-        CardDeck deck = CardDeck.getShuffledDeck(new Random(gameEntity.getSeed()));
+        Deck deck = Deck.getShuffledDeck(new Random(gameEntity.getSeed()));
         Player player1 = new Player(
                 gameEntity.getPlayer1().getId(),
                 gameEntity.getPlayer1().getName());

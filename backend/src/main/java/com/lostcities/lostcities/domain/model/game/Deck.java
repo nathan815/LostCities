@@ -12,24 +12,27 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.joining;
 
-public class CardDeck {
+/**
+ * A deck of Lost Cities cards for players to draw from
+ */
+public class Deck {
 
     private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildDeck());
 
     private List<Card> cards;
 
-    public CardDeck(List<Card> cards) {
+    public Deck(List<Card> cards) {
         this.cards = cards;
     }
 
-    public CardDeck() {
+    public Deck() {
         this(new ArrayList<>());
     }
 
-    public static CardDeck getShuffledDeck(Random randomGenerator) {
+    public static Deck getShuffledDeck(Random randomGenerator) {
         List<Card> cards = new ArrayList<>(STARTING_DECK);
         Collections.shuffle(cards, randomGenerator);
-        return new CardDeck(cards);
+        return new Deck(cards);
     }
 
     private static List<Card> buildDeck() {

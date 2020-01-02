@@ -15,7 +15,7 @@ public class Player {
 
     private Set<Card> hand;
 
-    private Map<Color, CardDeck> inPlay;
+    private Map<Color, Deck> inPlay;
 
     public Player(Long playerId, String name) {
         this.playerId = playerId;
@@ -50,7 +50,7 @@ public class Player {
         this.opponent = opponent;
     }
 
-    public Map<Color, CardDeck> getInPlay() {
+    public Map<Color, Deck> getInPlay() {
         return inPlay;
     }
 
@@ -58,7 +58,7 @@ public class Player {
         hand.add(card);
     }
 
-    protected void drawFromDeck(CardDeck deck) {
+    protected void drawFromDeck(Deck deck) {
         deck.draw().ifPresent(card -> hand.add(card));
     }
 

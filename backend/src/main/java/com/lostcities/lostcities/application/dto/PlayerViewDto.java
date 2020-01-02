@@ -1,11 +1,10 @@
 package com.lostcities.lostcities.application.dto;
 
 import com.lostcities.lostcities.domain.model.game.Card;
-import com.lostcities.lostcities.domain.model.game.CardDeck;
+import com.lostcities.lostcities.domain.model.game.Deck;
 import com.lostcities.lostcities.domain.model.game.Color;
 import com.lostcities.lostcities.domain.model.game.Game;
 import com.lostcities.lostcities.domain.model.game.Player;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,9 +12,9 @@ public class PlayerViewDto {
     private Long gameId;
     private Long playerId;
     private Set<Card> hand;
-    private Map<Color, CardDeck> discard;
-    private Map<Color, CardDeck> playerPlayedCards;
-    private Map<Color, CardDeck> opponentPlayedCards;
+    private Map<Color, Deck> discard;
+    private Map<Color, Deck> playerPlayedCards;
+    private Map<Color, Deck> opponentPlayedCards;
 
     public static PlayerViewDto createFromGame(Game game, Player currentPlayer) {
 
@@ -55,27 +54,27 @@ public class PlayerViewDto {
         this.hand = hand;
     }
 
-    public Map<Color, CardDeck> getDiscard() {
+    public Map<Color, Deck> getDiscard() {
         return discard;
     }
 
-    public void setDiscard(Map<Color, CardDeck> discard) {
+    public void setDiscard(Map<Color, Deck> discard) {
         this.discard = discard;
     }
 
-    public Map<Color, CardDeck> getPlayerPlayedCards() {
+    public Map<Color, Deck> getPlayerPlayedCards() {
         return playerPlayedCards;
     }
 
-    public void setPlayerPlayedCards(Map<Color, CardDeck> playerPlayedCards) {
+    public void setPlayerPlayedCards(Map<Color, Deck> playerPlayedCards) {
         this.playerPlayedCards = playerPlayedCards;
     }
 
-    public Map<Color, CardDeck> getOpponentPlayedCards() {
+    public Map<Color, Deck> getOpponentPlayedCards() {
         return opponentPlayedCards;
     }
 
-    public void setOpponentPlayedCards(Map<Color, CardDeck> opponentPlayedCards) {
+    public void setOpponentPlayedCards(Map<Color, Deck> opponentPlayedCards) {
         this.opponentPlayedCards = opponentPlayedCards;
     }
 }
