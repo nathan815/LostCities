@@ -18,6 +18,18 @@ public class Card {
     @JsonProperty
     private int number;
 
+    public Card(Color color, Integer number) {
+        this.instance = 0;
+        this.color = color;
+        this.number = number;
+    }
+
+    public Card(Color color, Integer number, Integer instance) {
+        this.instance = instance;
+        this.color = color;
+        this.number = number;
+    }
+
     public static Card fromString(String cardString) {
         String[] parts = cardString.split("_", 3);
         if(parts.length < 3) {
@@ -43,18 +55,6 @@ public class Card {
             throw new IllegalArgumentException("Expedition card number must be between 2 and 10");
         }
         return new Card(color, number, 0);
-    }
-
-    public Card(Color color, Integer number) {
-        this.instance = 0;
-        this.color = color;
-        this.number = number;
-    }
-
-    public Card(Color color, Integer number, Integer instance) {
-        this.instance = instance;
-        this.color = color;
-        this.number = number;
     }
 
     public Color getColor() {
