@@ -35,11 +35,11 @@ public class CardTest {
     @Test
     public void testExpeditionCardsEquality() {
         // Expedition cards are numbered 2-10
-        assertEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.RED, 0));
+        assertEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.RED, 3));
         assertEquals(Card.createExpeditionCard(Color.GREEN, 2), Card.createExpeditionCard(Color.GREEN, 2));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.RED, 1));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.BLUE, 0));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.GREEN, 0));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.RED, 4));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.BLUE, 3));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 4), Card.createExpeditionCard(Color.GREEN, 5));
         assertNotEquals(Card.createExpeditionCard(Color.BLUE, 5), Card.createExpeditionCard(Color.BLUE, 10));
     }
 }
