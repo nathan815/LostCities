@@ -8,7 +8,6 @@ import java.util.Set;
 public class Player {
 
     private Long playerId;
-    private Game game;
 
     private String name;
 
@@ -55,19 +54,16 @@ public class Player {
         return inPlay;
     }
 
-    protected void play(Card card) {
-        //TODO: implement
-        hand.remove(card);
+    protected void addToHand(Card card) {
+        hand.add(card);
     }
 
-    protected void discard(Card card) {
-        //TODO: Fix problem discarding a single multiplier with multiple multipliers in hand.
-        hand.remove(card);
-        game.discard(card);
+    protected void drawFromDeck(CardDeck deck) {
+        deck.draw().ifPresent(card -> hand.add(card));
     }
 
-    protected void draw() {
-        this.hand.add(game.draw());
+    protected void removeFromHand(Card card) {
+        hand.remove(card);
     }
 
     protected void drawFromDiscard(Color color) {

@@ -1,6 +1,8 @@
 package com.lostcities.lostcities.domain.model.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -22,13 +24,13 @@ public class Game {
     @JsonProperty
     private CardDeck deck;
 
-    @JsonProperty
-    private Map<Color, CardDeck> discard = new HashMap<>();
+    private GameBoard board;
 
-    public Game(CardDeck deck, Player player1, Player player2) {
+    public Game(CardDeck deck, GameBoard board, Player player1, Player player2) {
         player1.setOpponent(player2);
         player2.setOpponent(player1);
         this.deck = deck;
+        this.board = board;
         this.player1 = player1;
         this.player2 = player2;
         drawStartingHands();
@@ -42,10 +44,6 @@ public class Game {
         return deck;
     }
 
-    public Map<Color, CardDeck> getDiscard() {
-        return discard;
-    }
-
     public Optional<Player> getPlayerById(Long id) {
         return Stream.of(player1, player2)
                 .filter(player -> player.getPlayerId().equals(id))
@@ -54,8 +52,8 @@ public class Game {
 
     private void drawStartingHands() {
         for(int i = 0; i < 8; i++) {
-            player1.draw();
-            player2.draw();
+            deck.draw().ifPresent(card -> player1.addToHand(card));
+            deck.draw().ifPresent(card -> player2.addToHand(card));
         }
     }
 
@@ -66,16 +64,7 @@ public class Game {
     }
 
     public void runCommand(Command command) {
-        command.execute();
-    }
-
-    Card draw() {
-        Card card = deck.draw();
-        return card;
-    }
-
-    public void discard(Card card) {
-        discard.get(card.getColor()).add(card);
+        command.execute(deck, board);
     }
 
     public static Game fromGameEntity(GameEntity gameEntity) {
@@ -87,6 +76,6 @@ public class Game {
         Player player2 = new Player(
                 gameEntity.getPlayer2().getId(),
                 gameEntity.getPlayer2().getName());
-        return new Game(deck, player1, player2);
+        return new Game(deck, new GameBoard(), player1, player2);
     }
 }

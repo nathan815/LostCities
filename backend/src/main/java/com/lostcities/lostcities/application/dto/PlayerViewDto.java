@@ -23,7 +23,6 @@ public class PlayerViewDto {
 
         playerViewDto.setGameId(game.getId());
         playerViewDto.setPlayerId(currentPlayer.getPlayerId());
-        playerViewDto.setDiscard(game.getDiscard());
         playerViewDto.setPlayerPlayedCards(currentPlayer.getInPlay());
 
         Player opponent = currentPlayer.getOpponent();

@@ -63,11 +63,8 @@ public class CardDeck {
         return cards.remove(card);
     }
 
-    public Card draw() {
-        if(cards.isEmpty()) {
-            throw new RuntimeException("Deck is empty");
-        }
-        return cards.remove(0);
+    public Optional<Card> draw() {
+        return cards.stream().findFirst();
     }
 
     public void add(Card card) {
@@ -76,10 +73,6 @@ public class CardDeck {
 
     public int size() {
         return cards.size();
-    }
-
-    public Optional<Card> getFirst() {
-        return cards.stream().findFirst();
     }
 
     @Override
