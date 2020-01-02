@@ -22,27 +22,27 @@ public class GameBoardTest {
     }
 
     @Test
-    public void addPlayCard_shouldAddCardToInPlayCardsForPlayer() {
+    public void addCardInPlay_shouldAddCardToInPlayCardsForPlayer() {
         long playerId = 1;
         Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
         Card redCard = Card.createExpeditionCard(Color.RED, 2);
-        board.addPlayCard(playerId, blueCard);
-        board.addPlayCard(playerId, redCard);
+        board.addCardInPlay(playerId, blueCard);
+        board.addCardInPlay(playerId, redCard);
 
         assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, playerId), contains(blueCard));
         assertThat(board.getCardsOfColorPlayedBy(Color.RED, playerId), contains(redCard));
     }
 
     @Test
-    public void getCardsColorMapForPlayer_shouldReturnMapOfAllCardsPlayedByGivenPlayer() {
+    public void getCardsPlayedBy_shouldReturnMapOfAllCardsPlayedByGivenPlayer() {
         long playerId = 1;
         // play some cards
         Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
         Card redCard = Card.createExpeditionCard(Color.RED, 4);
         Card yellowCard = Card.createExpeditionCard(Color.YELLOW, 7);
-        board.addPlayCard(playerId, blueCard);
-        board.addPlayCard(playerId, redCard);
-        board.addPlayCard(playerId, yellowCard);
+        board.addCardInPlay(playerId, blueCard);
+        board.addCardInPlay(playerId, redCard);
+        board.addCardInPlay(playerId, yellowCard);
 
         Multimap<Color, Card> cardsColorMap = board.getCardsPlayedBy(playerId);
         assertThat(cardsColorMap.get(Color.BLUE), contains(blueCard));
@@ -51,7 +51,7 @@ public class GameBoardTest {
     }
 
     @Test
-    public void drawFromDiscard_shouldRemoveAndReturnCardsInCorrectOrder() {
+    public void drawFromDiscard_shouldRemoveAndReturnCardsInLastInFirstOutOrder() {
         List<Card> cards = Arrays.asList(
                 Card.createExpeditionCard(Color.GREEN, 2),
                 Card.createExpeditionCard(Color.GREEN, 4),

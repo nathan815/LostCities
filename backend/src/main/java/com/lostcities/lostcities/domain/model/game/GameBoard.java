@@ -25,7 +25,7 @@ public class GameBoard {
         this(LinkedHashMultimap.create(), new HashMap<>());
     }
 
-    protected void addPlayCard(long playerId, Card card) {
+    protected void addCardInPlay(long playerId, Card card) {
         getCardsPlayedBy(playerId).put(card.getColor(), card);
     }
 
