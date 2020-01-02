@@ -1,7 +1,5 @@
-package com.lostcities.lostcities.domain.card;
+package com.lostcities.lostcities.domain.model.game;
 
-import com.lostcities.lostcities.domain.model.game.Card;
-import com.lostcities.lostcities.domain.model.game.Color;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

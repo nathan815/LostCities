@@ -1,8 +1,5 @@
-package com.lostcities.lostcities.domain.card;
+package com.lostcities.lostcities.domain.model.game;
 
-import com.lostcities.lostcities.domain.model.game.Card;
-import com.lostcities.lostcities.domain.model.game.Color;
-import com.lostcities.lostcities.domain.model.game.Deck;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
