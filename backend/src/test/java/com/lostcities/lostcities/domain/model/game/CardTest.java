@@ -40,4 +40,14 @@ public class CardTest {
         assertNotEquals(Card.createExpeditionCard(Color.RED, 4), Card.createExpeditionCard(Color.GREEN, 5));
         assertNotEquals(Card.createExpeditionCard(Color.BLUE, 5), Card.createExpeditionCard(Color.BLUE, 10));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createExpeditionCard_shouldThrowExceptionForNumberLessThan2() {
+        Card.createExpeditionCard(Color.GREEN, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createExpeditionCard_shouldThrowExceptionForNumberGreatThan10() {
+        Card.createExpeditionCard(Color.GREEN, 11);
+    }
 }

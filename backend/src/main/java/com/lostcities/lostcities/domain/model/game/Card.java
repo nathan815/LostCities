@@ -40,7 +40,7 @@ public class Card {
 
     public static Card createExpeditionCard(Color color, int number) {
         if(number < 2 || number > 10) {
-            throw new IllegalArgumentException("Expedition card numbers must be between 2 and 10");
+            throw new IllegalArgumentException("Expedition card number must be between 2 and 10");
         }
         return new Card(color, number, 0);
     }
