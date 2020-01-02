@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.domain.model.game;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
@@ -32,19 +33,25 @@ public class GameBoard {
         cardsPlayedByPlayer.get(playerId).put(card.getColor(), card);
     }
 
-    protected Optional<Card> drawFromDiscard(Color color) {
-        return discardByColor.get(color).stream().findFirst();
-    }
-
-    protected void addToDiscard(Card card) {
-        discardByColor.put(card.getColor(), card);
-    }
-
     protected Collection<Card> getColorCardsPlayedBy(Color color, long playerId) {
         return cardsPlayedByPlayer.get(playerId).get(color);
     }
 
     protected Multimap<Color, Card> getAllCardsPlayedBy(long playerId) {
         return cardsPlayedByPlayer.get(playerId);
+    }
+
+    protected Optional<Card> drawFromDiscard(Color color) {
+        var cardOpt = Optional.ofNullable(Iterables.getLast(discardByColor.get(color), null));
+        cardOpt.ifPresent(card -> discardByColor.remove(color, card));
+        return cardOpt;
+    }
+
+    protected Collection<Card> getDiscardForColor(Color color) {
+        return discardByColor.get(color);
+    }
+
+    protected void addToDiscard(Card card) {
+        discardByColor.put(card.getColor(), card);
     }
 }
