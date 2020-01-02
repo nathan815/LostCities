@@ -26,14 +26,14 @@ public class GameBoard {
     }
 
     protected void addPlayCard(long playerId, Card card) {
-        getCardsColorMapForPlayer(playerId).put(card.getColor(), card);
+        getCardsPlayedBy(playerId).put(card.getColor(), card);
     }
 
-    protected Collection<Card> getColorCardsPlayedBy(Color color, long playerId) {
-        return getCardsColorMapForPlayer(playerId).get(color);
+    protected Collection<Card> getCardsOfColorPlayedBy(Color color, long playerId) {
+        return getCardsPlayedBy(playerId).get(color);
     }
 
-    protected Multimap<Color, Card> getCardsColorMapForPlayer(long playerId) {
+    protected Multimap<Color, Card> getCardsPlayedBy(long playerId) {
         if(!cardsPlayedByPlayer.containsKey(playerId)) {
             cardsPlayedByPlayer.put(playerId, LinkedHashMultimap.create());
         }

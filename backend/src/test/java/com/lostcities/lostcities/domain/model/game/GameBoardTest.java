@@ -29,8 +29,8 @@ public class GameBoardTest {
         board.addPlayCard(playerId, blueCard);
         board.addPlayCard(playerId, redCard);
 
-        assertThat(board.getColorCardsPlayedBy(Color.BLUE, playerId), contains(blueCard));
-        assertThat(board.getColorCardsPlayedBy(Color.RED, playerId), contains(redCard));
+        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, playerId), contains(blueCard));
+        assertThat(board.getCardsOfColorPlayedBy(Color.RED, playerId), contains(redCard));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class GameBoardTest {
         board.addPlayCard(playerId, redCard);
         board.addPlayCard(playerId, yellowCard);
 
-        Multimap<Color, Card> cardsColorMap = board.getCardsColorMapForPlayer(playerId);
+        Multimap<Color, Card> cardsColorMap = board.getCardsPlayedBy(playerId);
         assertThat(cardsColorMap.get(Color.BLUE), contains(blueCard));
         assertThat(cardsColorMap.get(Color.RED), contains(redCard));
         assertThat(cardsColorMap.get(Color.YELLOW), contains(yellowCard));
