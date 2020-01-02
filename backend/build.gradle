@@ -27,7 +27,13 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
+    doLast {
+        println("Coverage HTML: ${buildDir}/reports/jacoco/test/html/index.html")
+        println("Coverage XML: ${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    }
 }
+
+task coverage(dependsOn: jacocoTestReport)
 
 repositories {
     mavenCentral()
