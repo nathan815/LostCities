@@ -20,4 +20,9 @@ public class ColorTest {
         assertEquals(Color.RED, Color.fromString("rEd"));
         assertEquals(Color.GREEN, Color.fromString("green"));
     }
+
+    @Test(expected = InvalidColorException.class)
+    public void fromString_invalidName_shouldThrowException() {
+        Color.fromString("hello");
+    }
 }
