@@ -2,35 +2,44 @@ package com.lostcities.lostcities.domain.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Objects;
 
 
 public class Card {
 
+    private static final int WAGER_CARD_NUMBER = 1;
+
     @JsonIgnore
-    private Integer instance;
+    private int instance;
+
     @JsonProperty
     private Color color;
+
     @JsonProperty
-    private Integer number;
+    private int number;
 
     public static Card fromString(String cardString) {
         String[] parts = cardString.split("_", 3);
+        if(parts.length < 3) {
+            throw new UnableToParseCardException(cardString);
+        }
+
         try {
-            if(parts.length == 3) {
-
-                return new Card(
-                        Color.fromString(parts[0]),
-                        Integer.parseInt(parts[1]),
-                        Integer.parseInt(parts[2]));
-            }
-
-            //TODO make exception for improper card
-            throw new UnableToParseCardException("Invalid card format");
-        } catch (RuntimeException exception) {
+            return new Card(
+                    Color.fromString(parts[0]),
+                    Integer.parseInt(parts[1]),
+                    Integer.parseInt(parts[2]));
+        } catch (NumberFormatException exception) {
             throw new UnableToParseCardException(cardString, exception);
         }
+    }
+
+    public static Card createWagerCard(Color color, int instance) {
+        return new Card(color, WAGER_CARD_NUMBER, instance);
+    }
+
+    public static Card createExpeditionCard(Color color, int number) {
+        return new Card(color, number, 0);
     }
 
     public Card(Color color, Integer number) {
@@ -54,8 +63,8 @@ public class Card {
     }
 
     @JsonProperty
-    public boolean isMultiplier() {
-        return this.number.equals(1);
+    public boolean isWager() {
+        return number == WAGER_CARD_NUMBER;
     }
 
     @JsonProperty

@@ -5,9 +5,9 @@ import com.lostcities.lostcities.domain.model.game.Color;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class CardTest {
-
 
     @Test
     public void toString_returnsProperlyFormattedString() {
@@ -22,5 +22,24 @@ public class CardTest {
         String cardString = card.toString();
         Card testCard = Card.fromString(cardString);
         assertEquals(testCard, card);
+    }
+
+    @Test
+    public void testWagerCardsEquality() {
+        // Wager cards are all numbered 1 but have different "instance" numbers
+        assertEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 0));
+        assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 1));
+        assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.BLUE, 0));
+    }
+
+    @Test
+    public void testExpeditionCardsEquality() {
+        // Expedition cards are numbered 2-10
+        assertEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.RED, 0));
+        assertEquals(Card.createExpeditionCard(Color.GREEN, 2), Card.createExpeditionCard(Color.GREEN, 2));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.RED, 1));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.BLUE, 0));
+        assertNotEquals(Card.createExpeditionCard(Color.RED, 0), Card.createExpeditionCard(Color.GREEN, 0));
+        assertNotEquals(Card.createExpeditionCard(Color.BLUE, 5), Card.createExpeditionCard(Color.BLUE, 10));
     }
 }

@@ -46,12 +46,12 @@ public class Deck {
     private static Collection<Card> getCardsOfColor(Color color) {
         List<Card> cards = new ArrayList<>();
 
-        cards.add(new Card(color, 1, 0));
-        cards.add(new Card(color, 1, 1));
-        cards.add(new Card(color, 1, 2));
+        cards.add(Card.createWagerCard(color, 0));
+        cards.add(Card.createWagerCard(color, 1));
+        cards.add(Card.createWagerCard(color, 2));
 
         cards.addAll(IntStream.range(2, 10)
-                .mapToObj((i) -> new Card(color, i))
+                .mapToObj((i) -> Card.createExpeditionCard(color, i))
                 .collect(Collectors.toList()));
 
         return cards;
