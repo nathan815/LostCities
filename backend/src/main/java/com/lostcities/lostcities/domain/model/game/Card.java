@@ -32,7 +32,7 @@ public class Card {
 
     public static Card fromString(String cardString) {
         String[] parts = cardString.split("_", 3);
-        if(parts.length < 3) {
+        if(parts.length != 3) {
             throw new UnableToParseCardException(cardString);
         }
 

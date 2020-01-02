@@ -11,17 +11,40 @@ public class CardTest {
 
     @Test
     public void toString_returnsProperlyFormattedString() {
-        Card card = new Card(Color.RED, 1, 0);
+        Card card = new Card(Color.RED, 2);
         String cardString = card.toString();
-        assertEquals(cardString, "RED_1_0");
+        assertEquals(cardString, "RED_2_0");
     }
 
     @Test
     public void fromString_createsValidCardFromString() {
-        Card card = new Card(Color.RED, 1, 0);
-        String cardString = card.toString();
-        Card testCard = Card.fromString(cardString);
-        assertEquals(testCard, card);
+        Card expectedCard = new Card(Color.RED, 2);
+        assertEquals(expectedCard, Card.fromString("RED_2_0"));
+    }
+
+    @Test(expected = UnableToParseCardException.class)
+    public void fromString_shouldThrowForInvalidStringWithLessThan3Parts() {
+        Card.fromString("RED_3");
+    }
+
+    @Test(expected = UnableToParseCardException.class)
+    public void fromString_shouldThrowForInvalidStringWithMoreThan3Parts() {
+        Card.fromString("RED_1_2_3");
+    }
+
+    @Test(expected = UnableToParseCardException.class)
+    public void fromString_shouldThrowForInvalidStringWithNoUnderscores() {
+        Card.fromString("RED");
+    }
+
+    @Test(expected = UnableToParseCardException.class)
+    public void fromString_shouldThrowForInvalidStringWithNonIntegerCardNumber() {
+        Card.fromString("RED_HELLO_0");
+    }
+
+    @Test(expected = UnableToParseCardException.class)
+    public void fromString_shouldThrowForInvalidStringWithNonIntegerInstance() {
+        Card.fromString("RED_3_HELLO");
     }
 
     @Test
@@ -30,6 +53,8 @@ public class CardTest {
         assertEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 0));
         assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 1));
         assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.BLUE, 0));
+        assertFalse(Card.createWagerCard(Color.RED, 0).equals(null));
+        assertFalse(Card.createWagerCard(Color.RED, 0).equals(new Object()));
     }
 
     @Test
