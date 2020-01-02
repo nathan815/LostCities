@@ -13,7 +13,7 @@ public class GameBoard {
     // Cards discarded by color
     private Multimap<Color, Card> discardByColor;
 
-    // Cards by color in play by each player
+    // Cards in play by color by each player id
     private Map<Long, Multimap<Color, Card>> cardsPlayedByPlayer;
 
     public GameBoard(Multimap<Color, Card> discard, Map<Long, Multimap<Color, Card>> cardsPlayedByPlayer) {
@@ -25,19 +25,18 @@ public class GameBoard {
         this(LinkedHashMultimap.create(), new HashMap<>());
     }
 
-    protected void addPlayCard(Player player, Card card) {
-        addPlayCard(player.getPlayerId(), card);
-    }
-
     protected void addPlayCard(long playerId, Card card) {
-        cardsPlayedByPlayer.get(playerId).put(card.getColor(), card);
+        getCardsColorMapForPlayer(playerId).put(card.getColor(), card);
     }
 
     protected Collection<Card> getColorCardsPlayedBy(Color color, long playerId) {
-        return cardsPlayedByPlayer.get(playerId).get(color);
+        return getCardsColorMapForPlayer(playerId).get(color);
     }
 
-    protected Multimap<Color, Card> getAllCardsPlayedBy(long playerId) {
+    protected Multimap<Color, Card> getCardsColorMapForPlayer(long playerId) {
+        if(!cardsPlayedByPlayer.containsKey(playerId)) {
+            cardsPlayedByPlayer.put(playerId, LinkedHashMultimap.create());
+        }
         return cardsPlayedByPlayer.get(playerId);
     }
 

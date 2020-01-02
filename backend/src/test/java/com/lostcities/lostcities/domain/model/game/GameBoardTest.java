@@ -1,12 +1,15 @@
 package com.lostcities.lostcities.domain.model.game;
 
+import com.google.common.collect.Multimap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class GameBoardTest {
@@ -16,6 +19,35 @@ public class GameBoardTest {
     @Before
     public void setUpBoard() {
         board = new GameBoard();
+    }
+
+    @Test
+    public void addPlayCard_shouldAddCardToInPlayCardsForPlayer() {
+        long playerId = 1;
+        Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
+        Card redCard = Card.createExpeditionCard(Color.RED, 2);
+        board.addPlayCard(playerId, blueCard);
+        board.addPlayCard(playerId, redCard);
+
+        assertThat(board.getColorCardsPlayedBy(Color.BLUE, playerId), contains(blueCard));
+        assertThat(board.getColorCardsPlayedBy(Color.RED, playerId), contains(redCard));
+    }
+
+    @Test
+    public void getCardsColorMapForPlayer_shouldReturnMapOfAllCardsPlayedByGivenPlayer() {
+        long playerId = 1;
+        // play some cards
+        Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
+        Card redCard = Card.createExpeditionCard(Color.RED, 4);
+        Card yellowCard = Card.createExpeditionCard(Color.YELLOW, 7);
+        board.addPlayCard(playerId, blueCard);
+        board.addPlayCard(playerId, redCard);
+        board.addPlayCard(playerId, yellowCard);
+
+        Multimap<Color, Card> cardsColorMap = board.getCardsColorMapForPlayer(playerId);
+        assertThat(cardsColorMap.get(Color.BLUE), contains(blueCard));
+        assertThat(cardsColorMap.get(Color.RED), contains(redCard));
+        assertThat(cardsColorMap.get(Color.YELLOW), contains(yellowCard));
     }
 
     @Test

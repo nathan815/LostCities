@@ -39,7 +39,7 @@ public class Command {
     protected void execute(Deck deck, GameBoard board) {
         if(playCard != null) {
             player.removeFromHand(playCard);
-            board.addPlayCard(player, playCard);
+            board.addPlayCard(player.getPlayerId(), playCard);
         } else if(discardCard != null) {
             player.removeFromHand(discardCard);
             board.addToDiscard(discardCard);
