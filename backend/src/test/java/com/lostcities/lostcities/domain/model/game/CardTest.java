@@ -3,7 +3,9 @@ package com.lostcities.lostcities.domain.model.game;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CardTest {
 
@@ -49,5 +51,24 @@ public class CardTest {
     @Test(expected = IllegalArgumentException.class)
     public void createExpeditionCard_shouldThrowExceptionForNumberGreatThan10() {
         Card.createExpeditionCard(Color.GREEN, 11);
+    }
+
+    @Test
+    public void createWagerCard_shouldConstructCardWithNumber1() {
+        assertEquals(1, Card.createWagerCard(Color.RED, 0).getNumber());
+        assertEquals(1, Card.createWagerCard(Color.RED, 1).getNumber());
+        assertEquals(1, Card.createWagerCard(Color.RED, 2).getNumber());
+    }
+
+    @Test
+    public void isWager_shouldReturnTrueForWagerCard() {
+        assertTrue(Card.createWagerCard(Color.RED, 2).isWager());
+        assertTrue(Card.createWagerCard(Color.GREEN, 1).isWager());
+    }
+
+    @Test
+    public void isWager_shouldReturnFalseForExpeditionCard() {
+        assertFalse(Card.createExpeditionCard(Color.RED, 10).isWager());
+        assertFalse(Card.createExpeditionCard(Color.GREEN, 3).isWager());
     }
 }
