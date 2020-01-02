@@ -1,19 +1,18 @@
 package com.lostcities.lostcities.application.dto;
 
-import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.domain.model.game.Card;
 import com.lostcities.lostcities.domain.model.game.CardDeck;
 import com.lostcities.lostcities.domain.model.game.Color;
 import com.lostcities.lostcities.domain.model.game.Game;
 import com.lostcities.lostcities.domain.model.game.Player;
-
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class PlayerViewDto {
     private Long gameId;
     private Long playerId;
-    private LinkedHashSet<Card> hand;
+    private Set<Card> hand;
     private Map<Color, CardDeck> discard;
     private Map<Color, CardDeck> playerPlayedCards;
     private Map<Color, CardDeck> opponentPlayedCards;
@@ -49,11 +48,11 @@ public class PlayerViewDto {
         this.playerId = playerId;
     }
 
-    public LinkedHashSet<Card> getHand() {
+    public Set<Card> getHand() {
         return hand;
     }
 
-    public void setHand(LinkedHashSet<Card> hand) {
+    public void setHand(Set<Card> hand) {
         this.hand = hand;
     }
 

@@ -75,7 +75,7 @@ public class Card {
         if(o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
         return Objects.equals(instance, card.instance) &&
-                color == card.color &&
+                Objects.equals(color, card.color) &&
                 Objects.equals(number, card.number);
     }
 }

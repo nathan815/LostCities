@@ -17,14 +17,10 @@ public class CardDeck {
 
     private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildDeck());
 
-    private LinkedHashSet<Card> cards;
-
-    public CardDeck(LinkedHashSet<Card> cards) {
-        this.cards = cards;
-    }
+    private List<Card> cards;
 
     public CardDeck(List<Card> cards) {
-        this(new LinkedHashSet<>(cards));
+        this.cards = cards;
     }
 
     public CardDeck() {
@@ -59,12 +55,19 @@ public class CardDeck {
         return cards;
     }
 
-    public LinkedHashSet<Card> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
-    public void remove(Card card) {
-        cards.remove(card);
+    public boolean draw(Card card) {
+        return cards.remove(card);
+    }
+
+    public Card draw() {
+        if(cards.isEmpty()) {
+            throw new RuntimeException("Deck is empty");
+        }
+        return cards.remove(0);
     }
 
     public void add(Card card) {

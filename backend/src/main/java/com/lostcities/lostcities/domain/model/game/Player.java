@@ -1,11 +1,9 @@
 package com.lostcities.lostcities.domain.model.game;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Player {
 
@@ -16,18 +14,16 @@ public class Player {
 
     private Player opponent;
 
-    private CardDeck hand;
+    private Set<Card> hand;
 
-    @JsonProperty
     private Map<Color, CardDeck> inPlay;
 
-    public Player(Long playerId, String name, Game game) {
+    public Player(Long playerId, String name) {
         this.playerId = playerId;
         this.name = name;
-        this.game = game;
 
         inPlay = new HashMap<>();
-        hand = new CardDeck();
+        hand = new LinkedHashSet<>();
     }
 
     public Long getPlayerId() {
@@ -39,7 +35,7 @@ public class Player {
         return null;
     }
 
-    public CardDeck getHand() {
+    public Set<Card> getHand() {
         return hand;
     }
 

@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Stream;
 
 
 public class Game {
@@ -24,18 +25,13 @@ public class Game {
     @JsonProperty
     private Map<Color, CardDeck> discard = new HashMap<>();
 
-    public Optional<Player> getPlayerById(Long id) {
-        if(player1.getPlayerId().equals(id)) {
-            return Optional.of(player1);
-        } else if(player2.getPlayerId().equals(id)) {
-            return Optional.of(player2);
-        }
-
-        return Optional.empty();
-    }
-
-    private Game(CardDeck deck) {
+    public Game(CardDeck deck, Player player1, Player player2) {
+        player1.setOpponent(player2);
+        player2.setOpponent(player1);
         this.deck = deck;
+        this.player1 = player1;
+        this.player2 = player2;
+        drawStartingHands();
     }
 
     public Long getId() {
@@ -48,6 +44,12 @@ public class Game {
 
     public Map<Color, CardDeck> getDiscard() {
         return discard;
+    }
+
+    public Optional<Player> getPlayerById(Long id) {
+        return Stream.of(player1, player2)
+                .filter(player -> player.getPlayerId().equals(id))
+                .findFirst();
     }
 
     private void drawStartingHands() {
@@ -68,9 +70,7 @@ public class Game {
     }
 
     Card draw() {
-        Card card = deck.getFirst().get();
-        deck.remove(card);
-
+        Card card = deck.draw();
         return card;
     }
 
@@ -80,23 +80,13 @@ public class Game {
 
     public static Game fromGameEntity(GameEntity gameEntity) {
         CardDeck deck = CardDeck.getShuffledDeck(new Random(gameEntity.getSeed()));
-        Game game = new Game(deck);
-
-        game.player1 = new Player(
+        Player player1 = new Player(
                 gameEntity.getPlayer1().getId(),
-                gameEntity.getPlayer1().getName(),
-                game);
+                gameEntity.getPlayer1().getName());
 
-        game.player2 = new Player(
+        Player player2 = new Player(
                 gameEntity.getPlayer2().getId(),
-                gameEntity.getPlayer2().getName(),
-                game);
-
-        game.player1.setOpponent(game.player2);
-        game.player2.setOpponent(game.player1);
-
-        game.drawStartingHands();
-
-        return game;
+                gameEntity.getPlayer2().getName());
+        return new Game(deck, player1, player2);
     }
 }
