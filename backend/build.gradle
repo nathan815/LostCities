@@ -33,7 +33,9 @@ jacocoTestReport {
     }
 }
 
-task coverage(dependsOn: jacocoTestReport)
+task coverage(type: GradleBuild) {
+    tasks = ['test', 'jacocoTestReport']
+}
 
 repositories {
     mavenCentral()
