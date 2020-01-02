@@ -66,7 +66,7 @@ public class Deck {
     }
 
     public Optional<Card> draw() {
-        return cards.stream().findFirst();
+        return cards.isEmpty() ? Optional.empty() : Optional.of(cards.remove(0));
     }
 
     public void add(Card card) {

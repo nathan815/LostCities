@@ -1,6 +1,13 @@
 package com.lostcities.lostcities.domain.card;
 
+import com.lostcities.lostcities.domain.model.game.Card;
+import com.lostcities.lostcities.domain.model.game.Color;
 import com.lostcities.lostcities.domain.model.game.Deck;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import org.junit.Test;
 
@@ -18,6 +25,23 @@ public class DeckTest {
                 "WHITE_1_0,GREEN_9_0,WHITE_2_0,GREEN_1_0,GREEN_1_1,GREEN_2_0,GREEN_7_0,RED_1_2,YELLOW_6_0,YELLOW_3_0," +
                 "RED_2_0,YELLOW_8_0,RED_3_0,WHITE_5_0,BLUE_3_0";
         assertEquals(expectedCards, deck.toString());
+    }
+
+    @Test
+    public void draw_alwaysReturnsAndRemovesFirstCard() {
+        List<Card> cards = Arrays.asList(
+                new Card(Color.RED, 2),
+                new Card(Color.BLUE, 3));
+        Deck deck = new Deck(new ArrayList<>(cards));
+        assertEquals(Optional.of(cards.get(0)), deck.draw());
+        assertEquals(Optional.of(cards.get(1)), deck.draw());
+        assertEquals(Optional.empty(), deck.draw());
+    }
+
+    @Test
+    public void draw_returnsEmptyOptionalWhenDeckIsEmpty() {
+        Deck emptyDeck = new Deck(Collections.emptyList());
+        assertEquals(Optional.empty(), emptyDeck.draw());
     }
 
 }
