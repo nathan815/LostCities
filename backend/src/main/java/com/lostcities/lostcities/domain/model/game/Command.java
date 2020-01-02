@@ -8,6 +8,12 @@ public class Command {
     private Color drawCardColor;
 
     public Command(Player player, Card playCard, Card discardCard, Color drawCardColor) {
+        if(playCard != null && discardCard != null) {
+            throw new IllegalArgumentException("Cannot simultaneously play a card and discard a card");
+        }
+        if(playCard == null && discardCard == null) {
+            throw new IllegalArgumentException("Must either play a card or discard a card");
+        }
         this.player = player;
         this.playCard = playCard;
         this.discardCard = discardCard;
@@ -30,23 +36,19 @@ public class Command {
         return drawCardColor;
     }
 
-    protected void execute() {
-        if(getPlayCard() != null && getDiscardCard() != null) {
-            //todo: Create an exception
-            throw new RuntimeException();
-        } else if(getPlayCard() != null) {
-            player.play(getPlayCard());
-        } else if(getDiscardCard() != null) {
-            player.discard(getDiscardCard());
-        } else {
-            //todo: Create an exception
-            throw new RuntimeException();
+    protected void execute(CardDeck deck, GameBoard board) {
+        if(playCard != null) {
+            player.removeFromHand(playCard);
+            board.addPlayCard(player, playCard);
+        } else if(discardCard != null) {
+            player.removeFromHand(discardCard);
+            board.addToDiscard(discardCard);
         }
 
-        if(getDrawCardColor() != null) {
-            player.drawFromDiscard(getDrawCardColor());
+        if(drawCardColor != null) {
+            board.drawFromDiscard(drawCardColor).ifPresent(card -> player.addToHand(card));
         } else {
-            player.draw();
+            deck.draw().ifPresent(card -> player.addToHand(card));
         }
     }
 }
