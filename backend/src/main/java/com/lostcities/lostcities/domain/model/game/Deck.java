@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.joining;
  */
 public class Deck {
 
-    private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildDeck());
+    private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildStartingCardList());
 
     private List<Card> cards;
 
@@ -35,7 +35,7 @@ public class Deck {
         return new Deck(cards);
     }
 
-    private static List<Card> buildDeck() {
+    private static List<Card> buildStartingCardList() {
         List<Card> deck = new LinkedList<>();
         for(Color color : Color.values()) {
             deck.addAll(getCardsOfColor(color));
