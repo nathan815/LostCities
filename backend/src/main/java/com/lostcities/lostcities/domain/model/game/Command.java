@@ -14,6 +14,9 @@ public class Command {
         if(playCard == null && discardCard == null) {
             throw new IllegalArgumentException("Must either play a card or discard a card");
         }
+        if(discardCard != null && discardCard.getColor() == drawCardColor) {
+            throw new IllegalArgumentException("Cannot draw the card just discarded");
+        }
         this.player = player;
         this.playCard = playCard;
         this.discardCard = discardCard;
@@ -37,6 +40,10 @@ public class Command {
     }
 
     protected void execute(Deck deck, GameBoard board) {
+        if(deck.isEmpty()) {
+            throw new RuntimeException("Cannot take a turn when deck is empty");
+        }
+
         if(playCard != null) {
             player.removeFromHand(playCard);
             board.addCardInPlay(player.getPlayerId(), playCard);
@@ -46,7 +53,9 @@ public class Command {
         }
 
         if(drawCardColor != null) {
-            board.drawFromDiscard(drawCardColor).ifPresent(card -> player.addToHand(card));
+            Card card = board.drawFromDiscard(drawCardColor)
+                    .orElseThrow(() -> new RuntimeException("No cards in " + drawCardColor + " discard"));
+            player.addToHand(card);
         } else {
             deck.draw().ifPresent(card -> player.addToHand(card));
         }

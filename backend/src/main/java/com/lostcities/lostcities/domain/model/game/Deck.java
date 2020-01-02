@@ -77,6 +77,10 @@ public class Deck {
         return cards.size();
     }
 
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
+
     @Override
     public String toString() {
         return cards.stream().map(Card::toString).collect(joining(","));
