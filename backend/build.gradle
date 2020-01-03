@@ -23,32 +23,11 @@ group = 'com.lostcities'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 10
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-    doLast {
-        println("Coverage HTML: ${buildDir}/reports/jacoco/test/html/index.html")
-        println("Coverage XML: ${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-    }
-}
-
-task coverage(type: GradleBuild) {
-    tasks = ['test', 'jacocoTestReport']
-}
-
 repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://repo.spring.io/milestone" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-}
-
-test {
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
-    }
 }
 
 ext {
@@ -86,5 +65,36 @@ buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
         publishAlways()
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+    doLast {
+        println("Coverage HTML: ${buildDir}/reports/jacoco/test/html/index.html")
+        println("Coverage XML: ${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            def packageDir = "**/com/lostcities/lostcities"
+            fileTree(dir: it, exclude: [
+                    "${packageDir}/LostCitiesApplication*",
+                    // No need to test web controllers, DB entities, and DTOs
+                    "${packageDir}/presentation/web/**",
+                    "${packageDir}/persistence/entity/**",
+                    "${packageDir}/application/dto/**"
+            ])
+        }))
     }
 }
