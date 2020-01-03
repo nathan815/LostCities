@@ -68,7 +68,7 @@ public class Deck {
     public Optional<Card> draw() {
         return cards.isEmpty() ? Optional.empty() : Optional.of(cards.remove(0));
     }
-    
+
     public int size() {
         return cards.size();
     }
