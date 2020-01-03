@@ -1,21 +1,22 @@
 package com.lostcities.lostcities.domain.model.game;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Player {
 
-    private Long id;
+    private long id;
     private String name;
     private Set<Card> hand;
 
-    public Player(Long id, String name) {
+    public Player(long id, String name) {
         this.id = id;
         this.name = name;
         this.hand = new LinkedHashSet<>();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -35,4 +36,16 @@ public class Player {
         hand.remove(card);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
