@@ -32,8 +32,12 @@ public class Player {
         hand.add(card);
     }
 
-    protected void removeFromHand(Card card) {
-        hand.remove(card);
+    protected boolean removeFromHand(Card card) {
+        return hand.remove(card);
+    }
+
+    protected boolean hasCard(Card card) {
+        return hand.contains(card);
     }
 
     @Override
