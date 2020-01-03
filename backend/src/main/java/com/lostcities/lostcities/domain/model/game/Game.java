@@ -40,7 +40,7 @@ public class Game {
 
     public Optional<Player> getPlayerById(Long id) {
         return Stream.of(player1, player2)
-                .filter(player -> player.getPlayerId().equals(id))
+                .filter(player -> player.getId().equals(id))
                 .findFirst();
     }
 

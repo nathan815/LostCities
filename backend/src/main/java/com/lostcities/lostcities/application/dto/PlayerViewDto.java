@@ -21,7 +21,7 @@ public class PlayerViewDto {
         PlayerViewDto playerViewDto = new PlayerViewDto();
 
         playerViewDto.setGameId(game.getId());
-        playerViewDto.setPlayerId(currentPlayer.getPlayerId());
+        playerViewDto.setPlayerId(currentPlayer.getId());
 
         return playerViewDto;
     }

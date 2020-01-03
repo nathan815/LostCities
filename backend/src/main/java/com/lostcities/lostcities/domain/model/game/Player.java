@@ -5,20 +5,18 @@ import java.util.Set;
 
 public class Player {
 
-    private Long playerId;
-
+    private Long id;
     private String name;
-
     private Set<Card> hand;
 
-    public Player(Long playerId, String name) {
-        this.playerId = playerId;
+    public Player(Long id, String name) {
+        this.id = id;
         this.name = name;
         this.hand = new LinkedHashSet<>();
     }
 
-    public Long getPlayerId() {
-        return playerId;
+    public Long getId() {
+        return id;
     }
 
     public Set<Card> getHand() {

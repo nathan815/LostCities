@@ -31,8 +31,8 @@ public class GameTest {
         Player player1 = game.getPlayerById(1L).get();
         Player player2 = game.getPlayerById(2L).get();
 
-        assertEquals("Player 1 has an id of 1", Long.valueOf(1L), player1.getPlayerId());
-        assertEquals("Player 2 has an id of 2", Long.valueOf(2L), player2.getPlayerId());
+        assertEquals("Player 1 has an id of 1", Long.valueOf(1L), player1.getId());
+        assertEquals("Player 2 has an id of 2", Long.valueOf(2L), player2.getId());
 
         assertEquals("Player 1 is named Bill", "Bill", player1.getName());
         assertEquals("Player 2 is named Rachel", "Rachel", player2.getName());

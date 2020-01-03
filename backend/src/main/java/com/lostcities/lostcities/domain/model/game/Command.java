@@ -54,7 +54,7 @@ public class Command {
                 throw new CardNotInHandCommandException("Hand does not contain card to play: " + playCard);
             }
             player.removeFromHand(playCard);
-            board.addCardInPlay(player.getPlayerId(), playCard);
+            board.addCardInPlay(player.getId(), playCard);
         } else if(discardCard != null) {
             if(!player.getHand().contains(discardCard)) {
                 throw new CardNotInHandCommandException("Hand does not contain card to discard: " + discardCard);

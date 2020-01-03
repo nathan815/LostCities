@@ -2,7 +2,6 @@ package com.lostcities.lostcities.domain.model.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -99,7 +98,7 @@ public class CommandTest {
         assertThat(deck.getCards(), not(contains(green2Card)));
         assertThat(player.getHand(), contains(green2Card));
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getPlayerId()), contains(blue5Card));
+        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getId()), contains(blue5Card));
     }
 
     @Test
@@ -118,7 +117,7 @@ public class CommandTest {
         assertThat(player.getHand(), contains(yellow4Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getPlayerId()), contains(blue5Card));
+        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getId()), contains(blue5Card));
     }
 
     @Test
