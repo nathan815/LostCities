@@ -24,9 +24,6 @@ public class PlayerViewDto {
         playerViewDto.setPlayerId(currentPlayer.getPlayerId());
         playerViewDto.setPlayerPlayedCards(currentPlayer.getInPlay());
 
-        Player opponent = currentPlayer.getOpponent();
-        playerViewDto.setOpponentPlayedCards(opponent.getInPlay());
-
         return playerViewDto;
     }
 

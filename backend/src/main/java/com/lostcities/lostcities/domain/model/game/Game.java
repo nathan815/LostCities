@@ -23,8 +23,6 @@ public class Game {
     private GameBoard board;
 
     public Game(Deck deck, GameBoard board, Player player1, Player player2) {
-        player1.setOpponent(player2);
-        player2.setOpponent(player1);
         this.deck = deck;
         this.board = board;
         this.player1 = player1;

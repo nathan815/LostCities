@@ -11,8 +11,6 @@ public class Player {
 
     private String name;
 
-    private Player opponent;
-
     private Set<Card> hand;
 
     private Map<Color, Deck> inPlay;
@@ -40,14 +38,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public Player getOpponent() {
-        return opponent;
-    }
-
-    public void setOpponent(Player opponent) {
-        this.opponent = opponent;
     }
 
     public Map<Color, Deck> getInPlay() {
