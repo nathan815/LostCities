@@ -53,13 +53,13 @@ public class Game {
         }
     }
 
-    public void runCommands(LinkedHashSet<Command> commands) {
+    public void runCommands(LinkedHashSet<Command> commands) throws CommandException {
         for(Command command : commands) {
             runCommand(command);
         }
     }
 
-    public void runCommand(Command command) {
+    public void runCommand(Command command) throws CommandException {
         command.execute(deck, board);
     }
 

@@ -1,5 +1,7 @@
 package com.lostcities.lostcities.domain.model.game;
 
+import java.util.Optional;
+
 public class Command {
 
     private Player player;
@@ -39,25 +41,39 @@ public class Command {
         return drawCardColor;
     }
 
-    protected void execute(Deck deck, GameBoard board) {
+    protected void execute(Deck deck, GameBoard board) throws CommandException {
         if(deck.isEmpty()) {
-            throw new RuntimeException("Cannot take a turn when deck is empty");
+            throw new EmptyDeckCommandException("Cannot start turn because deck is empty");
+        }
+        if(drawCardColor != null && board.getDiscardForColor(drawCardColor).isEmpty()) {
+            throw new CommandException("Cannot draw because " + drawCardColor + " discard pile contains no cards");
         }
 
         if(playCard != null) {
+            if(!player.getHand().contains(playCard)) {
+                throw new CardNotInHandCommandException("Hand does not contain card to play: " + playCard);
+            }
             player.removeFromHand(playCard);
             board.addCardInPlay(player.getPlayerId(), playCard);
         } else if(discardCard != null) {
+            if(!player.getHand().contains(discardCard)) {
+                throw new CardNotInHandCommandException("Hand does not contain card to discard: " + discardCard);
+            }
             player.removeFromHand(discardCard);
             board.addToDiscard(discardCard);
         }
 
-        if(drawCardColor != null) {
-            Card card = board.drawFromDiscard(drawCardColor)
-                    .orElseThrow(() -> new RuntimeException("No cards in " + drawCardColor + " discard"));
-            player.addToHand(card);
-        } else {
-            deck.draw().ifPresent(card -> player.addToHand(card));
-        }
+        handleDrawCard(deck, board);
     }
+
+    private void handleDrawCard(Deck deck, GameBoard board) {
+        Optional<Card> cardOpt;
+        if(drawCardColor != null) {
+            cardOpt = board.drawFromDiscard(drawCardColor);
+        } else {
+            cardOpt = deck.draw();
+        }
+        cardOpt.ifPresent(card -> player.addToHand(card));
+    }
+
 }

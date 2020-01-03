@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.presentation.web;
 
+import com.lostcities.lostcities.domain.model.game.CommandException;
 import com.lostcities.lostcities.persistence.entity.CommandEntity;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
 import com.lostcities.lostcities.persistence.entity.PlayerEntity;
@@ -78,7 +79,7 @@ public class GameController {
 
 
     @PostMapping("/{gameId}")
-    public Game executeCommand(@RequestBody CommandDto commandDto) {
+    public Game executeCommand(@RequestBody CommandDto commandDto) throws CommandException {
         GameEntity gameEntity = getGameEntity(commandDto.getGameId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
