@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.model.game.card;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

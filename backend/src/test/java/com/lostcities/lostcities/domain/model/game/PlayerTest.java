@@ -1,5 +1,7 @@
 package com.lostcities.lostcities.domain.model.game;
 
+import com.lostcities.lostcities.domain.model.game.card.Card;
+import com.lostcities.lostcities.domain.model.game.card.Color;
 import org.junit.Before;
 import org.junit.Test;
 

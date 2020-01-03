@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.model.game.card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Random;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class DeckTest {
 

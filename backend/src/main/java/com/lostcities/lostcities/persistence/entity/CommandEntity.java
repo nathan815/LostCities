@@ -1,6 +1,6 @@
 package com.lostcities.lostcities.persistence.entity;
 
-import com.lostcities.lostcities.domain.model.game.Color;
+import com.lostcities.lostcities.domain.model.game.card.Color;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;

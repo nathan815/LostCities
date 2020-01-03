@@ -3,6 +3,8 @@ package com.lostcities.lostcities.domain.model.game;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import com.lostcities.lostcities.domain.model.game.card.Card;
+import com.lostcities.lostcities.domain.model.game.card.Color;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

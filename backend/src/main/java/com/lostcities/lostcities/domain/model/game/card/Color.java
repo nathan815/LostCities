@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.model.game.card;
 
 public enum Color {
     YELLOW,

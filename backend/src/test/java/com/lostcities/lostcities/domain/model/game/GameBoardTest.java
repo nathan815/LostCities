@@ -1,6 +1,8 @@
 package com.lostcities.lostcities.domain.model.game;
 
 import com.google.common.collect.Multimap;
+import com.lostcities.lostcities.domain.model.game.card.Card;
+import com.lostcities.lostcities.domain.model.game.card.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
