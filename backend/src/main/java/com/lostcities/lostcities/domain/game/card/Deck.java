@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game.card;
+package com.lostcities.lostcities.domain.game.card;
 
 import java.util.ArrayList;
 import java.util.Collection;

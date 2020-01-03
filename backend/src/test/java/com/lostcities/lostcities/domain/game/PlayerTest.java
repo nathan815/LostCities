@@ -1,7 +1,7 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
-import com.lostcities.lostcities.domain.model.game.card.Card;
-import com.lostcities.lostcities.domain.model.game.card.Color;
+import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.Color;
 import org.junit.Before;
 import org.junit.Test;
 

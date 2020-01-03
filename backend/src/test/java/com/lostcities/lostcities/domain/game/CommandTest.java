@@ -1,8 +1,14 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
-import com.lostcities.lostcities.domain.model.game.card.Card;
-import com.lostcities.lostcities.domain.model.game.card.Color;
-import com.lostcities.lostcities.domain.model.game.card.Deck;
+import com.lostcities.lostcities.domain.game.CardNotInHandCommandException;
+import com.lostcities.lostcities.domain.game.Command;
+import com.lostcities.lostcities.domain.game.CommandException;
+import com.lostcities.lostcities.domain.game.EmptyDeckCommandException;
+import com.lostcities.lostcities.domain.game.GameBoard;
+import com.lostcities.lostcities.domain.game.Player;
+import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.Color;
+import com.lostcities.lostcities.domain.game.card.Deck;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Before;

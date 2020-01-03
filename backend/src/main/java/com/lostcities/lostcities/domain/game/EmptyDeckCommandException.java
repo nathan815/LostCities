@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
 public class EmptyDeckCommandException extends CommandException {
     public EmptyDeckCommandException(String message) {

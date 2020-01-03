@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.model.game.card;
+package com.lostcities.lostcities.domain.game.card;
 
 import org.junit.Test;
 

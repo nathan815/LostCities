@@ -1,6 +1,6 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
-import com.lostcities.lostcities.domain.model.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.Card;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;

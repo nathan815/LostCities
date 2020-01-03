@@ -1,6 +1,6 @@
 package com.lostcities.lostcities.application.dto;
 
-import com.lostcities.lostcities.domain.model.game.card.Color;
+import com.lostcities.lostcities.domain.game.card.Color;
 
 public class CommandDto {
     private Long gameId;

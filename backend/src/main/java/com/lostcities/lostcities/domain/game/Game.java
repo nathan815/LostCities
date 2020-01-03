@@ -1,7 +1,7 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lostcities.lostcities.domain.model.game.card.Deck;
+import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
 import java.util.LinkedHashSet;
 import java.util.Optional;

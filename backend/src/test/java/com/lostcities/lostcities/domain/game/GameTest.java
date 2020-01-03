@@ -1,5 +1,7 @@
-package com.lostcities.lostcities.domain.model.game;
+package com.lostcities.lostcities.domain.game;
 
+import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
 import com.lostcities.lostcities.persistence.entity.PlayerEntity;
 import org.junit.Test;

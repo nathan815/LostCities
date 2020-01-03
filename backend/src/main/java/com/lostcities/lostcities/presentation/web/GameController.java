@@ -1,13 +1,13 @@
 package com.lostcities.lostcities.presentation.web;
 
-import com.lostcities.lostcities.domain.model.game.CommandException;
+import com.lostcities.lostcities.domain.game.CommandException;
 import com.lostcities.lostcities.persistence.entity.CommandEntity;
 import com.lostcities.lostcities.persistence.entity.GameEntity;
 import com.lostcities.lostcities.persistence.entity.PlayerEntity;
-import com.lostcities.lostcities.domain.model.game.card.Card;
-import com.lostcities.lostcities.domain.model.game.Command;
-import com.lostcities.lostcities.domain.model.game.Game;
-import com.lostcities.lostcities.domain.model.game.Player;
+import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.Command;
+import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.persistence.repository.CommandRepository;
 import com.lostcities.lostcities.persistence.repository.GameRepository;
 import com.lostcities.lostcities.persistence.repository.PlayerRepository;

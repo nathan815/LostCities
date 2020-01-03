@@ -1,10 +1,10 @@
 package com.lostcities.lostcities.application.dto;
 
-import com.lostcities.lostcities.domain.model.game.card.Card;
-import com.lostcities.lostcities.domain.model.game.card.Deck;
-import com.lostcities.lostcities.domain.model.game.card.Color;
-import com.lostcities.lostcities.domain.model.game.Game;
-import com.lostcities.lostcities.domain.model.game.Player;
+import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.Deck;
+import com.lostcities.lostcities.domain.game.card.Color;
+import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Player;
 import java.util.Map;
 import java.util.Set;
 
