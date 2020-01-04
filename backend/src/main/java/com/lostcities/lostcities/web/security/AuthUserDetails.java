@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.presentation.web.security;
+package com.lostcities.lostcities.web.security;
 
 
 import com.lostcities.lostcities.domain.user.User;

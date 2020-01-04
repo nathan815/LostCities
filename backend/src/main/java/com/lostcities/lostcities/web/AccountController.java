@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.presentation.web;
+package com.lostcities.lostcities.web;
 
 import com.lostcities.lostcities.application.service.AccountService;
 import com.lostcities.lostcities.application.dto.AccountCredentialsDto;

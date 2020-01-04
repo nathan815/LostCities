@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.presentation.web.security;
+package com.lostcities.lostcities.web.security;
 
 public class SecurityConstants {
     private static final long TEN_DAYS = 864_000_000;

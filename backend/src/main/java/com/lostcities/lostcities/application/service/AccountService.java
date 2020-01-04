@@ -5,7 +5,7 @@ import com.lostcities.lostcities.application.dto.AuthenticationDto;
 import com.lostcities.lostcities.application.dto.UserDto;
 import com.lostcities.lostcities.persistence.entity.UserEntity;
 import com.lostcities.lostcities.persistence.repository.UserRepository;
-import com.lostcities.lostcities.presentation.web.security.JwtTokenHelper;
+import com.lostcities.lostcities.web.security.JwtTokenHelper;
 import java.util.ArrayList;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;

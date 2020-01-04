@@ -1,11 +1,11 @@
-package com.lostcities.lostcities.presentation.web;
+package com.lostcities.lostcities.web;
 
 import com.lostcities.lostcities.application.dto.CommandDto;
 import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.service.GameService;
 import com.lostcities.lostcities.domain.game.CommandException;
 import com.lostcities.lostcities.domain.game.GameInfo;
-import com.lostcities.lostcities.presentation.web.security.AuthUserDetails;
+import com.lostcities.lostcities.web.security.AuthUserDetails;
 import java.util.Collection;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.presentation.web.security;
+package com.lostcities.lostcities.web.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
