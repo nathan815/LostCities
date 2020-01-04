@@ -5,6 +5,7 @@ import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.service.GameService;
 import com.lostcities.lostcities.domain.game.CommandException;
 import com.lostcities.lostcities.domain.game.GameInfo;
+import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.web.security.AuthUser;
 import java.util.Collection;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,7 +53,7 @@ public class GameController {
     public GameDto makeMove(@RequestParam long gameId,
                             @RequestBody CommandDto commandDto,
                             @AuthenticationPrincipal AuthUser authUser) throws CommandException {
-        return gameService.makeMove(gameId, authUser.toUser(), commandDto);
+        return gameService.makeMove(gameId, new User(authUser.getId(), authUser.getUsername()), commandDto);
     }
 
 }

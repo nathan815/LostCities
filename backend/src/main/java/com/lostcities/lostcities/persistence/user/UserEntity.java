@@ -1,13 +1,19 @@
 package com.lostcities.lostcities.persistence.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lostcities.lostcities.application.dto.UserDto;
+import java.util.Objects;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 
 @Entity
@@ -100,5 +106,9 @@ public class UserEntity {
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 "}";
+    }
+
+    public UserDto toUserDto() {
+        return new UserDto(username, email);
     }
 }

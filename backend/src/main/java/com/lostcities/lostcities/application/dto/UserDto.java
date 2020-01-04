@@ -24,6 +24,14 @@ public class UserDto {
     @JsonIgnore
     private String password;
 
+    public UserDto() {
+    }
+
+    public UserDto(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
     public static UserDto fromUserEntity(UserEntity userEntity) {
         UserDto userDto = new UserDto();
         userDto.setUsername(userEntity.getUsername());

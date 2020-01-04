@@ -1,71 +1,30 @@
 package com.lostcities.lostcities.web.security;
 
-
-import com.lostcities.lostcities.domain.user.User;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-public class AuthUser implements UserDetails {
+public class AuthUser extends org.springframework.security.core.userdetails.User {
 
     long id;
-    String username;
-    String hashedPassword;
-    Collection<? extends GrantedAuthority> authorities;
 
-    public AuthUser(long id, String username, String hashedPassword, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(String username, String password, boolean enabled, boolean accountNonExpired,
+                       boolean credentialsNonExpired, boolean accountNonLocked,
+                       Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+    }
+
+    public AuthUser(long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
         this.id = id;
-        this.username = username;
-        this.hashedPassword = hashedPassword;
-        this.authorities = authorities;
     }
 
-    public AuthUser(long id, String username, String hashedPassword) {
-        this(id, username, hashedPassword, Collections.emptyList());
-    }
-
-
-    public User toUser() {
-        return new User(id, false, username);
+    public AuthUser(long id, String username, String password) {
+        this(id, username, password, Collections.emptyList());
     }
 
     public long getId() {
         return id;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return hashedPassword;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

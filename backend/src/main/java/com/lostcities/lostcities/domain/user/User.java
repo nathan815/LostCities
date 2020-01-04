@@ -5,9 +5,9 @@ public class User {
     private boolean isAdmin;
     private String username;
 
-    public User(long id, boolean isAdmin, String username) {
+    public User(long id, String username) {
         this.id = id;
-        this.isAdmin = isAdmin;
+        this.isAdmin = false;
         this.username = username;
     }
 
