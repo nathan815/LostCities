@@ -78,6 +78,12 @@ test {
     }
 }
 
+testlogger {
+    // themes: mocha, standard, plain, mocha-parallel, standard-parallel or plain-parallel
+    theme 'mocha'
+    slowThreshold 500
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true
