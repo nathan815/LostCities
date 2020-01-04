@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.persistence.entity;
+package com.lostcities.lostcities.persistence.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;

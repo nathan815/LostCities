@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.persistence.entity;
+package com.lostcities.lostcities.persistence.command;
 
 import com.lostcities.lostcities.domain.game.card.Color;
 import org.hibernate.annotations.CreationTimestamp;

@@ -1,6 +1,5 @@
-package com.lostcities.lostcities.persistence.repository;
+package com.lostcities.lostcities.persistence.game;
 
-import com.lostcities.lostcities.persistence.entity.GameEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,10 @@
-package com.lostcities.lostcities.persistence.entity;
+package com.lostcities.lostcities.persistence.game;
 
 import javax.persistence.*;
 
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.Player;
+import com.lostcities.lostcities.persistence.user.UserEntity;
 import java.util.Random;
 
 @Entity(name = "GameEntity")

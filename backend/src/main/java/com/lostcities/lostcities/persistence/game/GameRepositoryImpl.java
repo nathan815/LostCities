@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.persistence.repository;
+package com.lostcities.lostcities.persistence.game;
 
 import com.lostcities.lostcities.domain.game.CommandException;
 import com.lostcities.lostcities.domain.game.CommandRepository;
@@ -6,8 +6,7 @@ import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameInfo;
 import com.lostcities.lostcities.domain.game.GameRepository;
 import com.lostcities.lostcities.domain.game.Player;
-import com.lostcities.lostcities.persistence.entity.GameEntity;
-import com.lostcities.lostcities.persistence.entity.UserEntity;
+import com.lostcities.lostcities.persistence.user.UserEntity;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,5 @@
-package com.lostcities.lostcities.persistence.repository;
+package com.lostcities.lostcities.persistence.command;
 
-import com.lostcities.lostcities.persistence.entity.CommandEntity;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 

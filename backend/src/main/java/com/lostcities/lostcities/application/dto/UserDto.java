@@ -2,7 +2,7 @@ package com.lostcities.lostcities.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lostcities.lostcities.persistence.entity.UserEntity;
+import com.lostcities.lostcities.persistence.user.UserEntity;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

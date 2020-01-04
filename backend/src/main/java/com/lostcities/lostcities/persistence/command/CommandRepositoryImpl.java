@@ -1,10 +1,9 @@
-package com.lostcities.lostcities.persistence.repository;
+package com.lostcities.lostcities.persistence.command;
 
 import com.lostcities.lostcities.domain.game.Command;
 import com.lostcities.lostcities.domain.game.CommandRepository;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.card.Card;
-import com.lostcities.lostcities.persistence.entity.CommandEntity;
 import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

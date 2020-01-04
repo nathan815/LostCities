@@ -3,8 +3,8 @@ package com.lostcities.lostcities.application.service;
 import com.lostcities.lostcities.application.dto.AccountCredentialsDto;
 import com.lostcities.lostcities.application.dto.AuthenticationDto;
 import com.lostcities.lostcities.application.dto.UserDto;
-import com.lostcities.lostcities.persistence.entity.UserEntity;
-import com.lostcities.lostcities.persistence.repository.UserRepository;
+import com.lostcities.lostcities.persistence.user.UserEntity;
+import com.lostcities.lostcities.persistence.user.UserDao;
 import com.lostcities.lostcities.web.security.JwtTokenHelper;
 import java.util.ArrayList;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,16 +18,16 @@ import javax.naming.AuthenticationException;
 public class AccountService {
 
     BCryptPasswordEncoder passwordEncoder;
-    UserRepository userRepository;
+    UserDao userDao;
 
-    public AccountService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public AccountService(BCryptPasswordEncoder passwordEncoder, UserDao userDao) {
         this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.userDao = userDao;
     }
 
     public AuthenticationDto authenticateWithCredentials(AccountCredentialsDto accountCredentials)
             throws AuthenticationException {
-        UserEntity userEntity = userRepository.findByUsername(accountCredentials.getUsername())
+        UserEntity userEntity = userDao.findByUsername(accountCredentials.getUsername())
                 .orElseThrow(() -> new AuthenticationException("Incorrect username"));
 
         if(!passwordEncoder.matches(accountCredentials.getPassword(), userEntity.getPassword())) {
@@ -56,7 +56,7 @@ public class AccountService {
         String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
         userEntity.setPassword(encryptedPassword);
 
-        userRepository.save(userEntity);
+        userDao.save(userEntity);
 
         return userDto;
     }
