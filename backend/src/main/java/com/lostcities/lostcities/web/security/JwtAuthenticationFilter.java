@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authManager) {
         super(authManager);
     }
 
@@ -28,8 +28,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        String token = req.getHeader(SecurityConstants.AUTH_HEADER_NAME)
-                .replace(SecurityConstants.TOKEN_PREFIX, "");
+        String token = header.replace(SecurityConstants.TOKEN_PREFIX, "");
 
         Authentication authentication = JwtTokenHelper.getAuthentication(token);
 

@@ -7,21 +7,21 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class AuthUserDetails implements UserDetails {
+public class AuthUser implements UserDetails {
 
     long id;
     String username;
     String hashedPassword;
     Collection<? extends GrantedAuthority> authorities;
 
-    public AuthUserDetails(long id, String username, String hashedPassword, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(long id, String username, String hashedPassword, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.hashedPassword = hashedPassword;
         this.authorities = authorities;
     }
 
-    public AuthUserDetails(long id, String username, String hashedPassword) {
+    public AuthUser(long id, String username, String hashedPassword) {
         this(id, username, hashedPassword, Collections.emptyList());
     }
 
