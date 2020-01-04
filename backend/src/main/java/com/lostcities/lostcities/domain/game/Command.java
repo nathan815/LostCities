@@ -54,13 +54,13 @@ public class Command {
 
         if(playCard != null) {
             if(!player.hasCard(playCard)) {
-                throw new CardNotInHandCommandException("Player does not have card to play: " + playCard);
+                throw new CardNotInHandCommandException(playCard);
             }
             player.removeFromHand(playCard);
             board.addCardInPlay(player.getId(), playCard);
         } else if(discardCard != null) {
             if(!player.hasCard(discardCard)) {
-                throw new CardNotInHandCommandException("Player does not have card to discard: " + discardCard);
+                throw new CardNotInHandCommandException(discardCard);
             }
             player.removeFromHand(discardCard);
             board.addToDiscard(discardCard);
