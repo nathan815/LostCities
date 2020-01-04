@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.web;
+package com.lostcities.lostcities;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
