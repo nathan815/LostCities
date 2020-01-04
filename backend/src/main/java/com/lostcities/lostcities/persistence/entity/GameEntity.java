@@ -1,7 +1,9 @@
 package com.lostcities.lostcities.persistence.entity;
 
 import javax.persistence.*;
-import java.util.Optional;
+
+import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Player;
 import java.util.Random;
 
 @Entity(name = "GameEntity")
@@ -10,15 +12,15 @@ public class GameEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToOne
-    @JoinColumn(name = "player1_id")
-    private PlayerEntity player1;
+    @JoinColumn(name = "user_1_id")
+    private UserEntity user1;
 
     @OneToOne
-    @JoinColumn(name = "player2_id")
-    private PlayerEntity player2;
+    @JoinColumn(name = "user_2_id")
+    private UserEntity user2;
 
     @Column
     private Long seed;
@@ -29,14 +31,7 @@ public class GameEntity {
 
     }
 
-    public static GameEntity createGame(PlayerEntity player1) {
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.setSeed(random.nextLong());
-        gameEntity.setPlayer1(player1);
-        return gameEntity;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -44,20 +39,20 @@ public class GameEntity {
         this.id = id;
     }
 
-    public PlayerEntity getPlayer1() {
-        return player1;
+    public UserEntity getUser1() {
+        return user1;
     }
 
-    public void setPlayer1(PlayerEntity player1) {
-        this.player1 = player1;
+    public void setUser1(UserEntity user1) {
+        this.user1 = user1;
     }
 
-    public PlayerEntity getPlayer2() {
-        return player2;
+    public UserEntity getUser2() {
+        return user2;
     }
 
-    public void setPlayer2(PlayerEntity player2) {
-        this.player2 = player2;
+    public void setUser2(UserEntity user2) {
+        this.user2 = user2;
     }
 
     public Long getSeed() {
@@ -68,12 +63,13 @@ public class GameEntity {
         this.seed = seed;
     }
 
-    public Optional<PlayerEntity> getPlayerEntityById(Long id) {
-        if(player1.getId().equals(id)) {
-            return Optional.of(player1);
-        } else if(player2.getId().equals(id)) {
-            return Optional.of(player2);
-        }
-        return Optional.empty();
+    public Game toGame() {
+        Player user1 = new Player(
+                getUser1().getId(),
+                getUser1().getUsername());
+        Player user2 = new Player(
+                getUser2().getId(),
+                getUser2().getUsername());
+        return Game.create(getId(), getSeed(), user1, user2);
     }
 }

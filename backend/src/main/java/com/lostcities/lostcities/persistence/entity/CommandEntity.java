@@ -11,82 +11,62 @@ import java.util.Date;
 public class CommandEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @OneToOne
-    @JoinColumn(name = "games_id")
-    private GameEntity game;
+    @Column(name = "games_id")
+    private long gameId;
 
-    @OneToOne
-    @JoinColumn(name = "player_id")
-    private PlayerEntity player;
+    private long userId;
 
     @Column(name = "play_card")
-    private String play;
+    private String playCard;
 
     @Column(name = "discard_card")
-    private String discard;
+    private String discardCard;
 
     @Column(name = "draw_card")
-    private Color draw;
+    private Color drawDiscardCardColor;
 
     @Column(name = "created_at")
     @CreationTimestamp
     private Date creationDate;
 
-    public Long getId() {
+    public CommandEntity() {
+    }
+
+    public CommandEntity(long gameId, long userId, String playCard, String drawCard, Color discardCardColor) {
+        this.gameId = gameId;
+        this.userId = userId;
+        this.playCard = playCard;
+        this.discardCard = drawCard;
+        this.drawDiscardCardColor = discardCardColor;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public long getGame() {
+        return gameId;
     }
 
-    public GameEntity getGame() {
-        return game;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setGame(GameEntity game) {
-        this.game = game;
+    public String getPlayCard() {
+        return playCard;
     }
 
-    public PlayerEntity getPlayer() {
-        return player;
+    public String getDiscardCard() {
+        return discardCard;
     }
 
-    public void setPlayer(PlayerEntity player) {
-        this.player = player;
-    }
-
-    public String getPlay() {
-        return play;
-    }
-
-    public void setPlay(String play) {
-        this.play = play;
-    }
-
-    public String getDiscard() {
-        return discard;
-    }
-
-    public void setDiscard(String discard) {
-        this.discard = discard;
-    }
-
-    public Color getDraw() {
-        return draw;
-    }
-
-    public void setDraw(Color draw) {
-        this.draw = draw;
+    public Color getDrawDiscardCardColor() {
+        return drawDiscardCardColor;
     }
 
     public Date getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 }

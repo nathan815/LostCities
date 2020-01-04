@@ -17,7 +17,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @NotNull
     @Column(name = "username", length = 100, unique = true, nullable = false)
@@ -35,7 +35,7 @@ public class UserEntity {
     @Column(length = 100, unique = true)
     private String email;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -86,7 +86,7 @@ public class UserEntity {
         }
 
         UserEntity user = (UserEntity) o;
-        return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
+        return getId() == user.getId();
     }
 
     @Override

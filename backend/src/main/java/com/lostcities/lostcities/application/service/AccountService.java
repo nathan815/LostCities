@@ -1,34 +1,28 @@
 package com.lostcities.lostcities.application.service;
 
-import com.lostcities.lostcities.presentation.web.security.JwtTokenHelper;
-import com.lostcities.lostcities.persistence.entity.PlayerEntity;
-import com.lostcities.lostcities.persistence.entity.UserEntity;
-import com.lostcities.lostcities.persistence.repository.PlayerRepository;
-import com.lostcities.lostcities.persistence.repository.UserRepository;
 import com.lostcities.lostcities.application.dto.AccountCredentialsDto;
 import com.lostcities.lostcities.application.dto.AuthenticationDto;
 import com.lostcities.lostcities.application.dto.UserDto;
+import com.lostcities.lostcities.persistence.entity.UserEntity;
+import com.lostcities.lostcities.persistence.repository.UserRepository;
+import com.lostcities.lostcities.presentation.web.security.JwtTokenHelper;
+import java.util.ArrayList;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
-import java.util.ArrayList;
 
 @Service
 public class AccountService {
 
     BCryptPasswordEncoder passwordEncoder;
     UserRepository userRepository;
-    PlayerRepository playerRepository;
 
-    public AccountService(BCryptPasswordEncoder passwordEncoder,
-                          UserRepository userRepository,
-                          PlayerRepository playerRepository) {
+    public AccountService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.playerRepository = playerRepository;
     }
 
     public AuthenticationDto authenticateWithCredentials(AccountCredentialsDto accountCredentials)
@@ -63,11 +57,6 @@ public class AccountService {
         userEntity.setPassword(encryptedPassword);
 
         userRepository.save(userEntity);
-
-        PlayerEntity player = new PlayerEntity();
-        player.setName(userDto.getUsername());
-        player.setUser(userEntity);
-        playerRepository.save(player);
 
         return userDto;
     }

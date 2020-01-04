@@ -17,11 +17,11 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserEntityDetailsService userDetailsService;
+    private AuthUserDetailsService userDetailsService;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public WebSecurityConfig(BCryptPasswordEncoder passwordEncoder, UserEntityDetailsService userDetailsService) {
+    public WebSecurityConfig(BCryptPasswordEncoder passwordEncoder, AuthUserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
     }

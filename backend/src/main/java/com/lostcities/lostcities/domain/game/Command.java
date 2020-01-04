@@ -32,15 +32,15 @@ public class Command {
         return player;
     }
 
-    protected Card getPlayCard() {
+    public Card getPlayCard() {
         return playCard;
     }
 
-    protected Card getDiscardCard() {
+    public Card getDiscardCard() {
         return discardCard;
     }
 
-    protected Color getDrawCardColor() {
+    public Color getDrawCardColor() {
         return drawCardColor;
     }
 

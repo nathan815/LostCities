@@ -1,129 +1,78 @@
 package com.lostcities.lostcities.presentation.web;
 
-import com.lostcities.lostcities.domain.game.CommandException;
-import com.lostcities.lostcities.persistence.entity.CommandEntity;
-import com.lostcities.lostcities.persistence.entity.GameEntity;
-import com.lostcities.lostcities.persistence.entity.PlayerEntity;
-import com.lostcities.lostcities.domain.game.card.Card;
-import com.lostcities.lostcities.domain.game.Command;
-import com.lostcities.lostcities.domain.game.Game;
-import com.lostcities.lostcities.domain.game.Player;
-import com.lostcities.lostcities.persistence.repository.CommandRepository;
-import com.lostcities.lostcities.persistence.repository.GameRepository;
-import com.lostcities.lostcities.persistence.repository.PlayerRepository;
 import com.lostcities.lostcities.application.dto.CommandDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
+import com.lostcities.lostcities.application.dto.GameDto;
+import com.lostcities.lostcities.application.service.GameService;
+import com.lostcities.lostcities.domain.game.CommandException;
+import com.lostcities.lostcities.domain.game.GameInfo;
+import com.lostcities.lostcities.presentation.web.security.AuthUserDetails;
+import java.util.Collection;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Collection;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/games")
 public class GameController {
 
-    private GameRepository gameRepository;
-    private PlayerRepository playerRepository;
-    private CommandRepository commandRepository;
+    private GameService gameService;
 
-    public GameController(
-            GameRepository gameRepository,
-            PlayerRepository playerRepository,
-            CommandRepository commandRepository) {
-        this.gameRepository = gameRepository;
-        this.playerRepository = playerRepository;
-        this.commandRepository = commandRepository;
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     @GetMapping
-    public Collection<GameEntity> getGames() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return gameRepository.getGamesWithPlayer(auth.getName());
+    public Collection<GameInfo> getUserGames(@AuthenticationPrincipal AuthUserDetails authUser) {
+        return null;
     }
 
     @GetMapping("/{id}")
-    public Game getGame(@PathVariable Long id) {
-        return createGame(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public GameDto getGame(@PathVariable Long id) {
+        //return createGame(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return null;
     }
 
 
     @PostMapping
-    public GameEntity createGame() {
+    public GameDto createGame() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        PlayerEntity playerEntity = getPlayerEntity(user);
+//
+//        GameEntity gameEntity = GameEntity.createGame(playerEntity);
+//
+//        return gameRepository.save(gameEntity);
+        return null;
+    }
+
+    @PatchMapping("/{gameId}/join")
+    public GameDto joinGame(@PathVariable Long gameId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        PlayerEntity playerEntity = getPlayerEntity(user);
-
-        GameEntity gameEntity = GameEntity.createGame(playerEntity);
-
-        return gameRepository.save(gameEntity);
+//        GameEntity gameEntity = getGameEntity(gameId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        PlayerEntity playerEntity = getPlayerEntity(user);
+//
+//        gameEntity.setPlayer2(playerEntity);
+//
+//        return gameRepository.save(gameEntity);
+        return null;
     }
 
-    @PatchMapping("/{gameId}")
-    public GameEntity joinGame(@PathVariable Long gameId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        GameEntity gameEntity = getGameEntity(gameId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        PlayerEntity playerEntity = getPlayerEntity(user);
-
-        gameEntity.setPlayer2(playerEntity);
-
-        return gameRepository.save(gameEntity);
+    @PostMapping("/{gameId}/moves")
+    public GameDto makeMove(@RequestParam long gameId,
+                            @RequestBody CommandDto commandDto,
+                            @AuthenticationPrincipal AuthUserDetails authUser) throws CommandException {
+        return gameService.makeMove(gameId, authUser.toUser(), commandDto);
     }
 
-
-    @PostMapping("/{gameId}")
-    public Game executeCommand(@RequestBody CommandDto commandDto) throws CommandException {
-        GameEntity gameEntity = getGameEntity(commandDto.getGameId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        Game game = Game.fromGameEntity(gameEntity);
-
-        Player player = game.getPlayerById(commandDto.getPlayerId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        PlayerEntity playerEntity = gameEntity.getPlayerEntityById(commandDto.getPlayerId()).get();
-
-        Command command = new Command(
-                player,
-                Card.fromString(commandDto.getPlay()),
-                Card.fromString(commandDto.getDiscard()),
-                commandDto.getDraw()
-        );
-
-        game.runCommand(command);
-
-        CommandEntity commandEntity = new CommandEntity();
-        commandEntity.setPlay(commandDto.getPlay());
-        commandEntity.setDiscard(commandDto.getDiscard());
-        commandEntity.setDraw(commandDto.getDraw());
-        commandEntity.setGame(gameEntity);
-        commandEntity.setPlayer(playerEntity);
-
-
-        commandRepository.save(commandEntity);
-
-        return game;
-    }
-
-    private Optional<Game> createGame(Long id) {
-        Optional<GameEntity> gameEntity = getGameEntity(id);
-        return gameEntity.map(Game::fromGameEntity);
-
-    }
-
-    private Optional<GameEntity> getGameEntity(Long id) {
-        return gameRepository.findById(id);
-    }
-
-    private PlayerEntity getPlayerEntity(User user) {
-        return playerRepository.getPlayerEntityByUserUsername(user.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 }

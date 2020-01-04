@@ -69,6 +69,10 @@ public class Deck {
         return cards.isEmpty() ? Optional.empty() : Optional.of(cards.remove(0));
     }
 
+    public Optional<Card> getTop() {
+        return cards.isEmpty() ? Optional.empty() : Optional.of(cards.get(0));
+    }
+
     public int size() {
         return cards.size();
     }

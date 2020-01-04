@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-public interface GameRepository extends CrudRepository<GameEntity, Long> {
+public interface GameEntityDao extends CrudRepository<GameEntity, Long> {
 
     @Query("SELECT gameEntity FROM GameEntity gameEntity " +
            "WHERE " +

@@ -55,4 +55,12 @@ public class GameBoard {
     protected void addToDiscard(Card card) {
         discardByColor.put(card.getColor(), card);
     }
+
+    public Multimap<Color, Card> getDiscardByColor() {
+        return discardByColor;
+    }
+
+    public Map<Long, Multimap<Color, Card>> getCardsPlayed() {
+        return cardsPlayedByPlayer;
+    }
 }
