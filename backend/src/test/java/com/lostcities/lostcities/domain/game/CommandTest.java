@@ -1,11 +1,5 @@
 package com.lostcities.lostcities.domain.game;
 
-import com.lostcities.lostcities.domain.game.CardNotInHandCommandException;
-import com.lostcities.lostcities.domain.game.Command;
-import com.lostcities.lostcities.domain.game.CommandException;
-import com.lostcities.lostcities.domain.game.EmptyDeckCommandException;
-import com.lostcities.lostcities.domain.game.GameBoard;
-import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
@@ -16,11 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class CommandTest {
 
@@ -72,7 +63,7 @@ public class CommandTest {
         var board = new GameBoard();
         var command = new Command(player, blue5Card, null, Color.RED);
 
-        assertTrue(board.getDiscardForColor(Color.RED).isEmpty());
+        assertTrue(board.getDiscardStack(Color.RED).isEmpty());
 
         thrown.expect(CommandException.class);
 
@@ -107,7 +98,7 @@ public class CommandTest {
         assertThat(deck.getCards(), not(contains(green2Card)));
         assertThat(player.getHand(), contains(green2Card));
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getId()), contains(blue5Card));
+        assertThat(board.getInPlayCardStack(Color.BLUE, player.getId()), contains(blue5Card));
     }
 
     @Test
@@ -122,11 +113,11 @@ public class CommandTest {
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
 
-        assertThat(board.getDiscardForColor(Color.YELLOW), not(contains(yellow4Card)));
+        assertThat(board.getDiscardStack(Color.YELLOW), not(contains(yellow4Card)));
         assertThat(player.getHand(), contains(yellow4Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, player.getId()), contains(blue5Card));
+        assertThat(board.getInPlayCardStack(Color.BLUE, player.getId()), contains(blue5Card));
     }
 
     @Test
@@ -142,7 +133,7 @@ public class CommandTest {
         assertThat(player.getHand(), contains(green2Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getDiscardForColor(Color.BLUE), contains(blue5Card));
+        assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
     }
 
     @Test
@@ -157,11 +148,11 @@ public class CommandTest {
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
 
-        assertThat(board.getDiscardForColor(Color.YELLOW), not(contains(yellow4Card)));
+        assertThat(board.getDiscardStack(Color.YELLOW), not(contains(yellow4Card)));
         assertThat(player.getHand(), contains(yellow4Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getDiscardForColor(Color.BLUE), contains(blue5Card));
+        assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
     }
 
     private Deck makeDeckFromCards(Card ...cards) {

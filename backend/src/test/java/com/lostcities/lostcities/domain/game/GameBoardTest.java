@@ -1,19 +1,17 @@
 package com.lostcities.lostcities.domain.game;
 
-import com.google.common.collect.Multimap;
-import com.lostcities.lostcities.domain.game.GameBoard;
 import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.CardStack;
 import com.lostcities.lostcities.domain.game.card.Color;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class GameBoardTest {
 
@@ -32,8 +30,8 @@ public class GameBoardTest {
         board.addCardInPlay(playerId, blueCard);
         board.addCardInPlay(playerId, redCard);
 
-        assertThat(board.getCardsOfColorPlayedBy(Color.BLUE, playerId), contains(blueCard));
-        assertThat(board.getCardsOfColorPlayedBy(Color.RED, playerId), contains(redCard));
+        assertThat(board.getInPlayCardStack(Color.BLUE, playerId), contains(blueCard));
+        assertThat(board.getInPlayCardStack(Color.RED, playerId), contains(redCard));
     }
 
     @Test
@@ -47,7 +45,7 @@ public class GameBoardTest {
         board.addCardInPlay(playerId, redCard);
         board.addCardInPlay(playerId, yellowCard);
 
-        Multimap<Color, Card> cardsColorMap = board.getCardsPlayedBy(playerId);
+        Map<Color, CardStack> cardsColorMap = board.getInPlayCardStacks(playerId);
         assertThat(cardsColorMap.get(Color.BLUE), contains(blueCard));
         assertThat(cardsColorMap.get(Color.RED), contains(redCard));
         assertThat(cardsColorMap.get(Color.YELLOW), contains(yellowCard));
@@ -101,7 +99,7 @@ public class GameBoardTest {
     }
 
     private void assertAllDiscardCardsSameColor(GameBoard board, Color color) {
-        for(Card card : board.getDiscardForColor(color)) {
+        for(Card card : board.getDiscardStack(color)) {
             assertEquals(color, card.getColor());
         }
     }

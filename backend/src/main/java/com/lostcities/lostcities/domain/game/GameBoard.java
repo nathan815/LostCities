@@ -1,11 +1,8 @@
 package com.lostcities.lostcities.domain.game;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.CardStack;
 import com.lostcities.lostcities.domain.game.card.Color;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,54 +10,52 @@ import java.util.Optional;
 public class GameBoard {
 
     // Cards discarded by color
-    private Multimap<Color, Card> discardByColor;
+    private Map<Color, CardStack> discardStacks;
 
-    // Cards in play by color by each player id
-    private Map<Long, Multimap<Color, Card>> cardsPlayedByPlayer;
+    // Cards in play by color by each player
+    private Map<Long, Map<Color, CardStack>> inPlayCardStacks;
 
-    public GameBoard(Multimap<Color, Card> discard, Map<Long, Multimap<Color, Card>> cardsPlayedByPlayer) {
-        this.discardByColor = discard;
-        this.cardsPlayedByPlayer = cardsPlayedByPlayer;
+    public GameBoard(Map<Color, CardStack> discard, Map<Long, Map<Color, CardStack>> inPlayCardStacks) {
+        this.discardStacks = discard;
+        this.inPlayCardStacks = inPlayCardStacks;
     }
 
     public GameBoard() {
-        this(LinkedHashMultimap.create(), new HashMap<>());
+        this(new HashMap<>(), new HashMap<>());
     }
 
     protected void addCardInPlay(long playerId, Card card) {
-        getCardsPlayedBy(playerId).put(card.getColor(), card);
+        getInPlayCardStack(card.getColor(), playerId).addToTop(card);
     }
 
-    protected Collection<Card> getCardsOfColorPlayedBy(Color color, long playerId) {
-        return getCardsPlayedBy(playerId).get(color);
+    protected CardStack getInPlayCardStack(Color color, long playerId) {
+        getInPlayCardStacks(playerId).putIfAbsent(color, new CardStack());
+        return getInPlayCardStacks(playerId).get(color);
     }
 
-    protected Multimap<Color, Card> getCardsPlayedBy(long playerId) {
-        if(!cardsPlayedByPlayer.containsKey(playerId)) {
-            cardsPlayedByPlayer.put(playerId, LinkedHashMultimap.create());
-        }
-        return cardsPlayedByPlayer.get(playerId);
+    protected Map<Color, CardStack> getInPlayCardStacks(long playerId) {
+        inPlayCardStacks.putIfAbsent(playerId, new HashMap<>());
+        return inPlayCardStacks.get(playerId);
+    }
+
+    public Map<Long, Map<Color, CardStack>> getInPlayCardStacks() {
+        return inPlayCardStacks;
     }
 
     protected Optional<Card> drawFromDiscard(Color color) {
-        var cardOpt = Optional.ofNullable(Iterables.getLast(discardByColor.get(color), null));
-        cardOpt.ifPresent(card -> discardByColor.remove(color, card));
-        return cardOpt;
-    }
-
-    protected Collection<Card> getDiscardForColor(Color color) {
-        return discardByColor.get(color);
+        return getDiscardStack(color).removeTop();
     }
 
     protected void addToDiscard(Card card) {
-        discardByColor.put(card.getColor(), card);
+        getDiscardStack(card.getColor()).addToTop(card);
     }
 
-    public Multimap<Color, Card> getDiscardByColor() {
-        return discardByColor;
+    protected CardStack getDiscardStack(Color color) {
+        discardStacks.putIfAbsent(color, new CardStack());
+        return discardStacks.get(color);
     }
 
-    public Map<Long, Multimap<Color, Card>> getCardsPlayed() {
-        return cardsPlayedByPlayer;
+    public Map<Color, CardStack> getDiscardStacksMap() {
+        return discardStacks;
     }
 }

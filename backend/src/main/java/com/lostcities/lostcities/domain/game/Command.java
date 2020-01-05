@@ -48,7 +48,7 @@ public class Command {
         if(deck.isEmpty()) {
             throw new EmptyDeckCommandException("Cannot start turn because deck is empty");
         }
-        if(drawCardColor != null && board.getDiscardForColor(drawCardColor).isEmpty()) {
+        if(drawCardColor != null && board.getDiscardStack(drawCardColor).isEmpty()) {
             throw new CommandException("Cannot draw because " + drawCardColor + " discard pile contains no cards");
         }
 
