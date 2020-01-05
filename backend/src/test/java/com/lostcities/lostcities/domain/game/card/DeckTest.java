@@ -31,11 +31,13 @@ public class DeckTest {
         assertEquals(Optional.of(cards.get(0)), deck.draw());
         assertEquals(Optional.empty(), deck.draw());
         assertEquals(0, deck.size());
+        assertTrue(deck.isEmpty());
     }
 
     @Test
     public void draw_returnsEmptyOptionalWhenDeckIsEmpty() {
         Deck emptyDeck = new Deck();
+        assertTrue(emptyDeck.isEmpty());
         assertEquals(Optional.empty(), emptyDeck.draw());
     }
 
