@@ -98,9 +98,9 @@ jacocoTestReport {
             def packageDir = "**/com/lostcities/lostcities"
             fileTree(dir: it, exclude: [
                     "${packageDir}/LostCitiesApplication*",
-                    // No need to test web controllers, DB entities, and DTOs
-                    "${packageDir}/presentation/web/**",
-                    "${packageDir}/persistence/entity/**",
+                    // No need to test web controllers, Spring config, DB entities/repos, DTOs
+                    "${packageDir}/web/**",
+                    "${packageDir}/persistence/**",
                     "${packageDir}/application/dto/**"
             ])
         }))

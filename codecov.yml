@@ -1,0 +1,5 @@
+ignore:
+  - "frontend/**/LostCitiesApplication*"
+  - "frontend/**/web/**"
+  - "frontend/**/persistence/**"
+  - "frontend/**/application/dto/**"
