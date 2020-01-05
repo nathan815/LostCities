@@ -3,30 +3,11 @@ package com.lostcities.lostcities.application.dto;
 import com.lostcities.lostcities.domain.game.card.Color;
 
 public class CommandDto {
-    private Long gameId;
-    private Long playerId;
     private String play;
     private String discard;
     private Color draw;
 
     public CommandDto() {
-
-    }
-
-    public Long getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Long gameId) {
-        this.gameId = gameId;
-    }
-
-    public Long getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
     }
 
     public String getPlay() {

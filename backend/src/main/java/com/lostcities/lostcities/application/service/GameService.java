@@ -42,8 +42,10 @@ public class GameService {
 
     public GameDto makeMove(long gameId, User user, CommandDto commandDto) throws CommandException {
         Game game = getGame(gameId);
+        Player player = game.getPlayerById(user.getId())
+                .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
         var command = new Command(
-                game.getPlayerById(commandDto.getPlayerId()).get(),
+                player,
                 Card.fromString(commandDto.getPlay()),
                 Card.fromString(commandDto.getDiscard()),
                 commandDto.getDraw()

@@ -38,13 +38,12 @@ public class GameController {
         return null;
     }
 
-
     @PostMapping
     public GameDto createGame() {
         return null;
     }
 
-    @PatchMapping("/{gameId}/join")
+    @PostMapping("/{gameId}/join")
     public GameDto joinGame(@PathVariable Long gameId) {
         return null;
     }
