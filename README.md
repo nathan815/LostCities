@@ -20,7 +20,7 @@ cd backend
 ```
 
 ### Frontend
-Ensure you have nodejs 14 installed. npm is included with nodejs. 
+Ensure you have nodejs 12 installed. npm is included with nodejs. 
 
 Then install dependencies and start the dev server.
 ```
@@ -39,8 +39,6 @@ Some recent changes include adopting a more domain driven structure/design, impr
 ## Technical Details
 [WIP]
 
-The backend is written with Java and uses Spring Boot as an application server and framework. But, the domain/business logic is completely decoupled from Spring. It's just plain Java code that could be hooked up to any number of interfaces. This is the goal.
+The backend is written with Java and uses Spring Boot. But, the domain/business logic is completely decoupled from Spring. It's just plain Java code that could be hooked up to any number of interfaces. This is the goal.
 
-The frontend is written with Vue, but only authentication is implemented currently. 
-
-Recently I rewrote it with TypeScript and adopted a type safe way to write Vuex store modules using the awesome [vuex-typex](https://github.com/mrcrowl/vuex-typex) wrapper. It basically allows one to easily write actual functions that call vuex actions/mutations/getters to enable compile time type safety via TypeScript, IDE autocompletion, and more. See `frontend/store/modules`.
+The frontend is built with Vue. I recently converted the frontend code from JavaScript to TypeScript and adopted a type safe way to write Vuex store modules using the awesome [vuex-typex](https://github.com/mrcrowl/vuex-typex) wrapper. It allows one to easily write functions that call vuex actions/mutations/getters to enable compile time type safety via TypeScript, IDE autocompletion, and more. See `frontend/store/modules`.
