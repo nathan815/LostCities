@@ -1,10 +1,9 @@
 package com.lostcities.lostcities.domain.game;
 
+import com.google.common.collect.Lists;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -175,6 +174,6 @@ public class CommandTest {
     }
 
     private Deck makeDeckFromCards(Card ...cards) {
-        return new Deck(new ArrayList<>(Arrays.asList(cards)));
+        return Deck.fromList(Lists.newArrayList(cards));
     }
 }

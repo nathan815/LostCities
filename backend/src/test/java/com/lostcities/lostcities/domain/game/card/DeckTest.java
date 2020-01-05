@@ -1,9 +1,6 @@
 package com.lostcities.lostcities.domain.game.card;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.google.common.collect.Lists;
 import java.util.Optional;
 import java.util.Random;
 import org.junit.Test;
@@ -26,19 +23,19 @@ public class DeckTest {
 
     @Test
     public void draw_alwaysReturnsAndRemovesFirstCard() {
-        var cards = Arrays.asList(
+        var cards = Lists.newArrayList(
                 new Card(Color.RED, 2),
                 new Card(Color.BLUE, 3));
-        Deck deck = new Deck(new ArrayList<>(cards));
-        assertEquals(Optional.of(cards.get(0)), deck.draw());
+        Deck deck = Deck.fromList(cards);
         assertEquals(Optional.of(cards.get(1)), deck.draw());
+        assertEquals(Optional.of(cards.get(0)), deck.draw());
         assertEquals(Optional.empty(), deck.draw());
         assertEquals(0, deck.size());
     }
 
     @Test
     public void draw_returnsEmptyOptionalWhenDeckIsEmpty() {
-        Deck emptyDeck = new Deck(Collections.emptyList());
+        Deck emptyDeck = new Deck();
         assertEquals(Optional.empty(), emptyDeck.draw());
     }
 
@@ -46,7 +43,7 @@ public class DeckTest {
     public void draw_givenCard_removesAndReturnsCard() {
         var red2Card = Card.createExpeditionCard(Color.RED, 3);
         var blue2Card = Card.createExpeditionCard(Color.BLUE, 3);
-        Deck deck = new Deck(new ArrayList<>(Arrays.asList(red2Card)));
+        Deck deck = Deck.fromList(Lists.newArrayList((red2Card)));
         assertTrue(deck.draw(red2Card));
         assertFalse(deck.draw(blue2Card));
     }

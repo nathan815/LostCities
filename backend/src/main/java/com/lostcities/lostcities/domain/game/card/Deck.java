@@ -13,26 +13,30 @@ import java.util.stream.IntStream;
 import static java.util.stream.Collectors.joining;
 
 /**
- * A deck of Lost Cities cards for players to draw from
+ * A deck of cards for players to draw from backed by a CardStack
  */
 public class Deck {
 
     private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildStartingCardList());
 
-    private List<Card> cards;
+    private CardStack cards;
 
-    public Deck(List<Card> cards) {
+    public Deck(CardStack cards) {
         this.cards = cards;
     }
 
     public Deck() {
-        this(new ArrayList<>());
+        this(new CardStack());
+    }
+
+    public static Deck fromList(List<Card> cards) {
+        return new Deck(new CardStack(cards));
     }
 
     public static Deck getShuffledDeck(Random randomGenerator) {
         List<Card> cards = new ArrayList<>(STARTING_DECK);
         Collections.shuffle(cards, randomGenerator);
-        return new Deck(cards);
+        return fromList(cards);
     }
 
     private static List<Card> buildStartingCardList() {
@@ -57,7 +61,7 @@ public class Deck {
         return cards;
     }
 
-    public List<Card> getCards() {
+    public CardStack getCards() {
         return cards;
     }
 
@@ -66,11 +70,11 @@ public class Deck {
     }
 
     public Optional<Card> draw() {
-        return cards.isEmpty() ? Optional.empty() : Optional.of(cards.remove(0));
+        return cards.removeTop();
     }
 
     public Optional<Card> getTop() {
-        return cards.isEmpty() ? Optional.empty() : Optional.of(cards.get(0));
+        return cards.getTop();
     }
 
     public int size() {
@@ -83,6 +87,6 @@ public class Deck {
 
     @Override
     public String toString() {
-        return cards.stream().map(Card::toString).collect(joining(","));
+        return cards.toString();
     }
 }

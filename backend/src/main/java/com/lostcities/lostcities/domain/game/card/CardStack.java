@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+import static java.util.stream.Collectors.joining;
+
 public class CardStack implements Iterable<Card> {
 
     // Use a list for the cards so we can insert cards anywhere, as one might with a real stack of cards
@@ -26,6 +28,10 @@ public class CardStack implements Iterable<Card> {
 
     public void insertAt(int index, Card card) {
         cards.add(index, card);
+    }
+
+    public boolean remove(Card card) {
+        return cards.remove(card);
     }
 
     public Optional<Card> removeTop() {
@@ -57,5 +63,10 @@ public class CardStack implements Iterable<Card> {
     @Override
     public Spliterator<Card> spliterator() {
         return cards.spliterator();
+    }
+
+    @Override
+    public String toString() {
+        return cards.stream().map(Card::toString).collect(joining(","));
     }
 }

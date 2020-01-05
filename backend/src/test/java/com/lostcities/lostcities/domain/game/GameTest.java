@@ -18,13 +18,13 @@ public class GameTest {
 
         assertEquals(
                 "Player 1's hand is valid",
-                "[BLUE_1_2, GREEN_5_0, WHITE_7_0, YELLOW_7_0, YELLOW_2_0, BLUE_1_1, RED_4_0, YELLOW_9_0]",
+                "[BLUE_3_0, RED_3_0, RED_2_0, YELLOW_6_0, GREEN_7_0, GREEN_1_1, WHITE_2_0, WHITE_1_0]",
                 game.getPlayer1().getHand().toString()
         );
 
         assertEquals(
                 "Player 2's hand is valid",
-                "[RED_7_0, YELLOW_1_1, WHITE_1_2, YELLOW_1_0, WHITE_1_1, RED_6_0, BLUE_5_0, GREEN_3_0]",
+                "[WHITE_5_0, YELLOW_8_0, YELLOW_3_0, RED_1_2, GREEN_2_0, GREEN_1_0, GREEN_9_0, RED_1_0]",
                 game.getPlayer2().getHand().toString());
     }
 }
