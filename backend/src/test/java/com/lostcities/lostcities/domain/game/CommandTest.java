@@ -87,6 +87,25 @@ public class CommandTest {
     }
 
     @Test
+    public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() throws CommandException {
+        var green4Card = Card.createExpeditionCard(Color.GREEN, 4);
+        var green5Card = Card.createExpeditionCard(Color.GREEN, 5);
+        var deck = makeDeckFromCards(green2Card);
+        var board = new GameBoard();
+
+        board.addCardInPlay(player.getId(), green5Card); // Green5 card is in play
+        player.addToHand(green4Card);
+
+        // User may not play a card with lower value than a card already in play for the card's color
+        // Thus, trying to play Green4 should fail because Green5 is in play
+        var command = new Command(player, green4Card, null, null);
+
+        thrown.expect(CannotPlayLowerValueCardCommandException.class);
+
+        command.execute(deck, board);
+    }
+
+    @Test
     public void execute_playCardAndDrawFromDeck_shouldAddCardToCorrectCardPileAndRemoveCardFromDeck() throws CommandException {
         var deck = makeDeckFromCards(green2Card);
         var board = new GameBoard();

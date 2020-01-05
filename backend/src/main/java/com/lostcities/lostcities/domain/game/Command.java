@@ -53,15 +53,12 @@ public class Command {
         }
 
         if(playCard != null) {
-            if(!player.hasCard(playCard)) {
-                throw new CardNotInHandCommandException(playCard);
-            }
+            validateCardInHand(playCard);
+            validateLegalPlayCard(board);
             player.removeFromHand(playCard);
             board.addCardInPlay(player.getId(), playCard);
         } else if(discardCard != null) {
-            if(!player.hasCard(discardCard)) {
-                throw new CardNotInHandCommandException(discardCard);
-            }
+            validateCardInHand(discardCard);
             player.removeFromHand(discardCard);
             board.addToDiscard(discardCard);
         }
@@ -77,6 +74,22 @@ public class Command {
             cardOpt = deck.draw();
         }
         cardOpt.ifPresent(card -> player.addToHand(card));
+    }
+
+    private void validateLegalPlayCard(GameBoard board) throws CannotPlayLowerValueCardCommandException {
+        var topCardOpt = board.getInPlayCardStack(playCard.getColor(), player.getId()).getTop();
+        if(topCardOpt.isPresent()) {
+            var topCard = topCardOpt.get();
+            if(playCard.getNumber() < topCard.getNumber()) {
+                throw new CannotPlayLowerValueCardCommandException(playCard, topCard);
+            }
+        }
+    }
+
+    private void validateCardInHand(Card card) throws CardNotInHandCommandException {
+        if(!player.hasCard(card)) {
+            throw new CardNotInHandCommandException(card);
+        }
     }
 
 }
