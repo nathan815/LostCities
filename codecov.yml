@@ -1,5 +1,6 @@
 ignore:
-  - "frontend/**/LostCitiesApplication*"
-  - "frontend/**/web/**"
-  - "frontend/**/persistence/**"
-  - "frontend/**/application/dto/**"
+  - "backend/**/LostCitiesApplication*"
+  - "backend/**/web/**"
+  - "backend/**/persistence/**"
+  - "backend/**/application/dto/**"
+  - "frontend/src/main.ts"
