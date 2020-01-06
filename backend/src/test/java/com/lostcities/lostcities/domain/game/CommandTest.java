@@ -30,28 +30,26 @@ public class CommandTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_bothPlayAndDiscardCard_shouldThrowException() {
-        new Command(player,
-                Card.createExpeditionCard(Color.RED, 3),
-                Card.createExpeditionCard(Color.GREEN, 4),
-                Color.BLUE);
+    public void constructor_bothPlayAndDiscardCardSet_shouldThrowException() {
+        Command.builder().player(player).playCard(blue5Card).discardCard(yellow4Card).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_noPlayOrDiscardCard_shouldThrowException() {
-        new Command(player, null, null, Color.BLUE);
+        Command.builder().player(player).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_drawSameColorJustDiscarded_shouldThrowException() {
-        new Command(player, null, blue5Card, Color.BLUE);
+        Command.builder().player(player).discardCard(blue5Card).drawDiscardCardColor(Color.BLUE).build();
     }
 
     @Test
     public void execute_emptyDeck_shouldThrowException() throws CommandException {
-        var command = new Command(player, blue5Card, null, Color.RED);
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.RED).build();
 
         thrown.expect(EmptyDeckCommandException.class);
+
         command.execute(new Deck(), new GameBoard());
     }
 
@@ -60,7 +58,7 @@ public class CommandTest {
         player.addToHand(blue5Card);
         var deck = makeDeckFromCards(yellow4Card);
         var board = new GameBoard();
-        var command = new Command(player, blue5Card, null, Color.RED);
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.RED).build();
 
         assertTrue(board.getDiscardStack(Color.RED).isEmpty());
 
@@ -71,7 +69,7 @@ public class CommandTest {
 
     @Test
     public void execute_playCardNotInHandHand_shouldThrowException() throws CommandException {
-        var command = new Command(player, blue5Card, null, null);
+        var command = Command.builder().player(player).playCard(blue5Card).build();
 
         thrown.expect(CardNotInHandCommandException.class);
         command.execute(makeDeckFromCards(yellow4Card), new GameBoard());
@@ -79,7 +77,7 @@ public class CommandTest {
 
     @Test
     public void execute_discardCardNotInHandHand_shouldThrowException() throws CommandException {
-        var command = new Command(player, null, blue5Card, null);
+        var command = Command.builder().player(player).discardCard(blue5Card).build();
 
         thrown.expect(CardNotInHandCommandException.class);
         command.execute(makeDeckFromCards(yellow4Card), new GameBoard());
@@ -97,7 +95,7 @@ public class CommandTest {
 
         // User may not play a card with lower value than a card already in play for the card's color
         // Thus, trying to play Green4 should fail because Green5 is in play
-        var command = new Command(player, green4Card, null, null);
+        var command = Command.builder().player(player).playCard(green4Card).build();
 
         thrown.expect(CannotPlayLowerValueCardCommandException.class);
 
@@ -110,7 +108,7 @@ public class CommandTest {
         var board = new GameBoard();
         player.addToHand(blue5Card);
 
-        var command = new Command(player, blue5Card, null, null);
+        var command = Command.builder().player(player).playCard(blue5Card).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), not(contains(green2Card)));
@@ -126,7 +124,7 @@ public class CommandTest {
         board.addToDiscard(yellow4Card);
         player.addToHand(blue5Card);
 
-        var command = new Command(player, blue5Card, null, Color.YELLOW);
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.YELLOW).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
@@ -144,7 +142,7 @@ public class CommandTest {
         var board = new GameBoard();
         player.addToHand(blue5Card);
 
-        var command = new Command(player, null, blue5Card, null);
+        var command = Command.builder().player(player).discardCard(blue5Card).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), not(contains(green2Card)));
@@ -161,7 +159,7 @@ public class CommandTest {
         board.addToDiscard(yellow4Card);
         player.addToHand(blue5Card);
 
-        var command = new Command(player, null, blue5Card, Color.YELLOW);
+        var command = Command.builder().player(player).discardCard(blue5Card).drawDiscardCardColor(Color.YELLOW).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there

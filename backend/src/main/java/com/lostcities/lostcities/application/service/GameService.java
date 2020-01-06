@@ -44,12 +44,12 @@ public class GameService {
         Game game = getGame(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
-        var command = new Command(
-                player,
-                Card.fromString(commandDto.getPlay()),
-                Card.fromString(commandDto.getDiscard()),
-                commandDto.getDraw()
-        );
+        var command = Command.builder()
+                .player(player)
+                .playCard(Card.fromString(commandDto.getPlay()))
+                .discardCard(Card.fromString(commandDto.getDiscard()))
+                .drawDiscardCardColor(commandDto.getDraw())
+                .build();
         game.runCommand(command);
         commandRepository.save(game.getId(), command);
         gameRepository.save(game);

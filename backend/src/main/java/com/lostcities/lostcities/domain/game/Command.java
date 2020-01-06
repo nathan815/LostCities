@@ -7,25 +7,60 @@ import java.util.Optional;
 
 public class Command {
 
-    private Player player;
-    private Card playCard;
-    private Card discardCard;
-    private Color drawCardColor;
+    private final Player player;
+    private final Card playCard;
+    private final Card discardCard;
+    private final Color drawDiscardColor;
 
-    public Command(Player player, Card playCard, Card discardCard, Color drawCardColor) {
+    public static class CommandBuilder {
+        private Player player;
+        private Card playCard;
+        private Card discardCard;
+        private Color drawDiscardColor;
+
+        public CommandBuilder player(Player player) {
+            this.player = player;
+            return this;
+        }
+
+        public CommandBuilder playCard(Card playCard) {
+            this.playCard = playCard;
+            return this;
+        }
+
+        public CommandBuilder discardCard(Card discardCard) {
+            this.discardCard = discardCard;
+            return this;
+        }
+
+        public CommandBuilder drawDiscardCardColor(Color drawCardColor) {
+            this.drawDiscardColor = drawCardColor;
+            return this;
+        }
+
+        public Command build() {
+            return new Command(player, playCard, discardCard, drawDiscardColor);
+        }
+    }
+
+    public static CommandBuilder builder() {
+        return new CommandBuilder();
+    }
+
+    private Command(Player player, Card playCard, Card discardCard, Color drawDiscardColor) {
         if(playCard != null && discardCard != null) {
             throw new IllegalArgumentException("Cannot simultaneously play a card and discard a card");
         }
         if(playCard == null && discardCard == null) {
             throw new IllegalArgumentException("Must either play a card or discard a card");
         }
-        if(discardCard != null && discardCard.getColor() == drawCardColor) {
+        if(discardCard != null && discardCard.getColor() == drawDiscardColor) {
             throw new IllegalArgumentException("Cannot draw the card just discarded");
         }
         this.player = player;
         this.playCard = playCard;
         this.discardCard = discardCard;
-        this.drawCardColor = drawCardColor;
+        this.drawDiscardColor = drawDiscardColor;
     }
 
     public Player getPlayer() {
@@ -40,16 +75,17 @@ public class Command {
         return discardCard;
     }
 
-    public Color getDrawCardColor() {
-        return drawCardColor;
+    public Color getDrawDiscardColor() {
+        return drawDiscardColor;
     }
 
     protected void execute(Deck deck, GameBoard board) throws CommandException {
         if(deck.isEmpty()) {
             throw new EmptyDeckCommandException("Cannot start turn because deck is empty");
         }
-        if(drawCardColor != null && board.getDiscardStack(drawCardColor).isEmpty()) {
-            throw new CommandException("Cannot draw because " + drawCardColor + " discard pile contains no cards");
+        if(drawDiscardColor != null && board.getDiscardStack(drawDiscardColor).isEmpty()) {
+            throw new CommandException("Cannot draw from " + drawDiscardColor +
+                    " discard pile because it has no cards");
         }
 
         if(playCard != null) {
@@ -68,8 +104,8 @@ public class Command {
 
     private void handleDrawCard(Deck deck, GameBoard board) {
         Optional<Card> cardOpt;
-        if(drawCardColor != null) {
-            cardOpt = board.drawFromDiscard(drawCardColor);
+        if(drawDiscardColor != null) {
+            cardOpt = board.drawFromDiscard(drawDiscardColor);
         } else {
             cardOpt = deck.draw();
         }

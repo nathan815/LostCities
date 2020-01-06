@@ -27,7 +27,7 @@ public class CommandRepositoryImpl implements CommandRepository {
                 command.getPlayer().getId(),
                 command.getPlayCard().toString(),
                 command.getDiscardCard().toString(),
-                command.getDrawCardColor()
+                command.getDrawDiscardColor()
         );
         commandEntityDao.save(commandEntity);
     }
@@ -39,7 +39,9 @@ public class CommandRepositoryImpl implements CommandRepository {
             var player = game.getPlayerById(commandEntity.getUserId()).get();
             var playCard = Card.fromString(commandEntity.getPlayCard());
             var discardCard = Card.fromString(commandEntity.getDiscardCard());
-            return new Command(player, playCard, discardCard, commandEntity.getDrawDiscardCardColor());
+
+            return Command.builder().player(player).playCard(playCard).discardCard(discardCard)
+                    .drawDiscardCardColor(commandEntity.getDrawDiscardCardColor()).build();
         }).collect(toList());
     }
 }
