@@ -4,6 +4,8 @@ module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
         'src/**/*.{js,ts,vue}',
-        '!src/main.ts', // No need to cover main file
+        '!src/main.ts',
+        '!src/registerServiceWorker.ts',
     ],
+    coverageReporters: ['html', 'text', 'text-summary'],
 };
