@@ -71,14 +71,14 @@ public class Game {
         }
     }
 
-    public void runCommands(List<Command> commands) throws CommandException {
-        for(Command command : commands) {
-            runCommand(command);
+    public void runMoves(List<Move> moves) throws MoveException {
+        for(Move move : moves) {
+            runMove(move);
         }
     }
 
-    public void runCommand(Command command) throws CommandException {
-        command.execute(deck, board);
+    public void runMove(Move move) throws MoveException {
+        move.execute(deck, board);
     }
 
     /**

@@ -1,16 +1,15 @@
 package com.lostcities.lostcities.web;
 
-import com.lostcities.lostcities.application.dto.CommandDto;
+import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.service.GameService;
-import com.lostcities.lostcities.domain.game.CommandException;
+import com.lostcities.lostcities.domain.game.MoveException;
 import com.lostcities.lostcities.domain.game.GameInfo;
 import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.web.security.AuthUser;
 import java.util.Collection;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,9 +49,9 @@ public class GameController {
 
     @PostMapping("/{gameId}/moves")
     public GameDto makeMove(@RequestParam long gameId,
-                            @RequestBody CommandDto commandDto,
-                            @AuthenticationPrincipal AuthUser authUser) throws CommandException {
-        return gameService.makeMove(gameId, new User(authUser.getId(), authUser.getUsername()), commandDto);
+                            @RequestBody MoveDto moveDto,
+                            @AuthenticationPrincipal AuthUser authUser) throws MoveException {
+        return gameService.makeMove(gameId, new User(authUser.getId(), authUser.getUsername()), moveDto);
     }
 
 }

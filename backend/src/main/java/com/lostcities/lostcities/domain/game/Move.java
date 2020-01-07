@@ -5,49 +5,52 @@ import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import java.util.Optional;
 
-public class Command {
+public class Move {
 
     private final Player player;
     private final Card playCard;
     private final Card discardCard;
     private final Color drawDiscardColor;
 
-    public static class CommandBuilder {
+    public static class MoveBuilder {
         private Player player;
         private Card playCard;
         private Card discardCard;
         private Color drawDiscardColor;
 
-        public CommandBuilder player(Player player) {
+        private MoveBuilder() {
+        }
+
+        public MoveBuilder player(Player player) {
             this.player = player;
             return this;
         }
 
-        public CommandBuilder playCard(Card playCard) {
+        public MoveBuilder playCard(Card playCard) {
             this.playCard = playCard;
             return this;
         }
 
-        public CommandBuilder discardCard(Card discardCard) {
+        public MoveBuilder discardCard(Card discardCard) {
             this.discardCard = discardCard;
             return this;
         }
 
-        public CommandBuilder drawDiscardColor(Color drawDiscardColor) {
+        public MoveBuilder drawDiscardColor(Color drawDiscardColor) {
             this.drawDiscardColor = drawDiscardColor;
             return this;
         }
 
-        public Command build() {
-            return new Command(player, playCard, discardCard, drawDiscardColor);
+        public Move build() {
+            return new Move(player, playCard, discardCard, drawDiscardColor);
         }
     }
 
-    public static CommandBuilder builder() {
-        return new CommandBuilder();
+    public static MoveBuilder builder() {
+        return new MoveBuilder();
     }
 
-    private Command(Player player, Card playCard, Card discardCard, Color drawDiscardColor) {
+    private Move(Player player, Card playCard, Card discardCard, Color drawDiscardColor) {
         if(playCard != null && discardCard != null) {
             throw new IllegalArgumentException("Cannot simultaneously play a card and discard a card");
         }
@@ -79,12 +82,12 @@ public class Command {
         return drawDiscardColor;
     }
 
-    protected void execute(Deck deck, GameBoard board) throws CommandException {
+    protected void execute(Deck deck, GameBoard board) throws MoveException {
         if(deck.isEmpty()) {
-            throw new EmptyDeckCommandException("Cannot start turn because deck is empty");
+            throw new EmptyDeckMoveException("Cannot start turn because deck is empty");
         }
         if(drawDiscardColor != null && board.getDiscardStack(drawDiscardColor).isEmpty()) {
-            throw new CommandException("Cannot draw from " + drawDiscardColor +
+            throw new MoveException("Cannot draw from " + drawDiscardColor +
                     " discard pile because it has no cards");
         }
 
@@ -112,19 +115,19 @@ public class Command {
         cardOpt.ifPresent(card -> player.addToHand(card));
     }
 
-    private void validateLegalPlayCard(GameBoard board) throws CannotPlayLowerValueCardCommandException {
+    private void validateLegalPlayCard(GameBoard board) throws CannotPlayLowerValueCardMoveException {
         var topCardOpt = board.getInPlayCardStack(playCard.getColor(), player.getId()).getTop();
         if(topCardOpt.isPresent()) {
             var topCard = topCardOpt.get();
             if(playCard.getNumber() < topCard.getNumber()) {
-                throw new CannotPlayLowerValueCardCommandException(playCard, topCard);
+                throw new CannotPlayLowerValueCardMoveException(playCard, topCard);
             }
         }
     }
 
-    private void validateCardInHand(Card card) throws CardNotInHandCommandException {
+    private void validateCardInHand(Card card) throws CardNotInHandMoveException {
         if(!player.hasCard(card)) {
-            throw new CardNotInHandCommandException(card);
+            throw new CardNotInHandMoveException(card);
         }
     }
 

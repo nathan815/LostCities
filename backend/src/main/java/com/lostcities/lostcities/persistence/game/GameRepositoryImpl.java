@@ -1,7 +1,7 @@
 package com.lostcities.lostcities.persistence.game;
 
-import com.lostcities.lostcities.domain.game.CommandException;
-import com.lostcities.lostcities.domain.game.CommandRepository;
+import com.lostcities.lostcities.domain.game.MoveException;
+import com.lostcities.lostcities.domain.game.MoveRepository;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameInfo;
 import com.lostcities.lostcities.domain.game.GameRepository;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Repository;
 public class GameRepositoryImpl implements GameRepository {
 
     private GameEntityDao gameEntityDao;
-    private CommandRepository commandRepository;
+    private MoveRepository moveRepository;
 
-    public GameRepositoryImpl(GameEntityDao gameEntityDao, CommandRepository commandRepository) {
+    public GameRepositoryImpl(GameEntityDao gameEntityDao, MoveRepository moveRepository) {
         this.gameEntityDao = gameEntityDao;
-        this.commandRepository = commandRepository;
+        this.moveRepository = moveRepository;
     }
 
     public Game createNewGame(UserEntity user, long seed) {
@@ -36,11 +36,11 @@ public class GameRepositoryImpl implements GameRepository {
             var player1 = new Player(gameEntity.getUser1().getId(), gameEntity.getUser1().getUsername());
             var player2 = new Player(gameEntity.getUser2().getId(), gameEntity.getUser2().getUsername());
             var game = Game.create(gameEntity.getId(), gameEntity.getSeed(), player1, player2);
-            var commands = commandRepository.getCommandsForGame(game);
+            var moves = moveRepository.getMovesForGame(game);
             try {
-                game.runCommands(commands);
-            } catch(CommandException e) {
-                // Commands from DB should be valid. Just log an error here if one is invalid.
+                game.runMoves(moves);
+            } catch(MoveException e) {
+                // Moves from DB should be valid. Just log an error here if one is invalid.
                 // TODO log error
             }
             return game;

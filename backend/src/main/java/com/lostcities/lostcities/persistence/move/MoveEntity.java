@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.persistence.command;
+package com.lostcities.lostcities.persistence.move;
 
 import com.lostcities.lostcities.domain.game.card.Color;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "commands")
-public class CommandEntity {
+@Table(name = "moves")
+public class MoveEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,10 +31,10 @@ public class CommandEntity {
     @CreationTimestamp
     private Date creationDate;
 
-    public CommandEntity() {
+    public MoveEntity() {
     }
 
-    public CommandEntity(long gameId, long userId, String playCard, String drawCard, Color discardCardColor) {
+    public MoveEntity(long gameId, long userId, String playCard, String drawCard, Color discardCardColor) {
         this.gameId = gameId;
         this.userId = userId;
         this.playCard = playCard;

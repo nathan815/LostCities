@@ -1,10 +1,10 @@
 package com.lostcities.lostcities.application.service;
 
-import com.lostcities.lostcities.application.dto.CommandDto;
+import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.application.dto.GameDto;
-import com.lostcities.lostcities.domain.game.Command;
-import com.lostcities.lostcities.domain.game.CommandException;
-import com.lostcities.lostcities.domain.game.CommandRepository;
+import com.lostcities.lostcities.domain.game.Move;
+import com.lostcities.lostcities.domain.game.MoveException;
+import com.lostcities.lostcities.domain.game.MoveRepository;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameRepository;
 import com.lostcities.lostcities.domain.game.Player;
@@ -18,11 +18,11 @@ public class GameService {
 
     private Random seedGenerator = new Random();
     private GameRepository gameRepository;
-    private CommandRepository commandRepository;
+    private MoveRepository moveRepository;
 
-    public GameService(GameRepository gameRepository, CommandRepository commandRepository) {
+    public GameService(GameRepository gameRepository, MoveRepository moveRepository) {
         this.gameRepository = gameRepository;
-        this.commandRepository = commandRepository;
+        this.moveRepository = moveRepository;
     }
 
     public GameDto createGame(User user) {
@@ -40,18 +40,18 @@ public class GameService {
         return GameDto.fromGame(game);
     }
 
-    public GameDto makeMove(long gameId, User user, CommandDto commandDto) throws CommandException {
+    public GameDto makeMove(long gameId, User user, MoveDto moveDto) throws MoveException {
         Game game = getGame(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
-        var command = Command.builder()
+        var move = Move.builder()
                 .player(player)
-                .playCard(Card.fromString(commandDto.getPlay()))
-                .discardCard(Card.fromString(commandDto.getDiscard()))
-                .drawDiscardColor(commandDto.getDraw())
+                .playCard(Card.fromString(moveDto.getPlay()))
+                .discardCard(Card.fromString(moveDto.getDiscard()))
+                .drawDiscardColor(moveDto.getDraw())
                 .build();
-        game.runCommand(command);
-        commandRepository.save(game.getId(), command);
+        game.runMove(move);
+        moveRepository.save(game.getId(), move);
         gameRepository.save(game);
         return GameDto.fromGame(game);
     }

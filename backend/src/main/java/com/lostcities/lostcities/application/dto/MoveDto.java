@@ -2,12 +2,12 @@ package com.lostcities.lostcities.application.dto;
 
 import com.lostcities.lostcities.domain.game.card.Color;
 
-public class CommandDto {
+public class MoveDto {
     private String play;
     private String discard;
     private Color draw;
 
-    public CommandDto() {
+    public MoveDto() {
     }
 
     public String getPlay() {
