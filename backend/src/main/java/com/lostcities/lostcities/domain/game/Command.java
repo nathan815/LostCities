@@ -33,8 +33,8 @@ public class Command {
             return this;
         }
 
-        public CommandBuilder drawDiscardCardColor(Color drawCardColor) {
-            this.drawDiscardColor = drawCardColor;
+        public CommandBuilder drawDiscardColor(Color drawDiscardColor) {
+            this.drawDiscardColor = drawDiscardColor;
             return this;
         }
 

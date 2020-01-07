@@ -41,12 +41,12 @@ public class CommandTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_drawSameColorJustDiscarded_shouldThrowException() {
-        Command.builder().player(player).discardCard(blue5Card).drawDiscardCardColor(Color.BLUE).build();
+        Command.builder().player(player).discardCard(blue5Card).drawDiscardColor(Color.BLUE).build();
     }
 
     @Test
     public void execute_emptyDeck_shouldThrowException() throws CommandException {
-        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.RED).build();
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.RED).build();
 
         thrown.expect(EmptyDeckCommandException.class);
 
@@ -58,7 +58,7 @@ public class CommandTest {
         player.addToHand(blue5Card);
         var deck = makeDeckFromCards(yellow4Card);
         var board = new GameBoard();
-        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.RED).build();
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.RED).build();
 
         assertTrue(board.getDiscardStack(Color.RED).isEmpty());
 
@@ -124,7 +124,7 @@ public class CommandTest {
         board.addToDiscard(yellow4Card);
         player.addToHand(blue5Card);
 
-        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardCardColor(Color.YELLOW).build();
+        var command = Command.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.YELLOW).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
@@ -159,7 +159,7 @@ public class CommandTest {
         board.addToDiscard(yellow4Card);
         player.addToHand(blue5Card);
 
-        var command = Command.builder().player(player).discardCard(blue5Card).drawDiscardCardColor(Color.YELLOW).build();
+        var command = Command.builder().player(player).discardCard(blue5Card).drawDiscardColor(Color.YELLOW).build();
         command.execute(deck, board);
 
         assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there

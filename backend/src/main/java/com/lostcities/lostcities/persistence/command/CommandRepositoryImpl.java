@@ -41,7 +41,7 @@ public class CommandRepositoryImpl implements CommandRepository {
             var discardCard = Card.fromString(commandEntity.getDiscardCard());
 
             return Command.builder().player(player).playCard(playCard).discardCard(discardCard)
-                    .drawDiscardCardColor(commandEntity.getDrawDiscardCardColor()).build();
+                    .drawDiscardColor(commandEntity.getDrawDiscardCardColor()).build();
         }).collect(toList());
     }
 }

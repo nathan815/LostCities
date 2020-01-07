@@ -48,7 +48,7 @@ public class GameService {
                 .player(player)
                 .playCard(Card.fromString(commandDto.getPlay()))
                 .discardCard(Card.fromString(commandDto.getDiscard()))
-                .drawDiscardCardColor(commandDto.getDraw())
+                .drawDiscardColor(commandDto.getDraw())
                 .build();
         game.runCommand(command);
         commandRepository.save(game.getId(), command);
