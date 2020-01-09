@@ -2,7 +2,7 @@ import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import './registerServiceWorker';
 
-import App from './App.vue';
+import App from './views/App.vue';
 import router from './router';
 import buildStore from './store';
 

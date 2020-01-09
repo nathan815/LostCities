@@ -1,10 +1,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Navbar from './Navbar.vue';
+import Header from './Header.vue';
 
 @Component({
     components: {
-        Navbar,
+        Header,
     },
 })
 export default class App extends Vue {}
@@ -12,11 +12,11 @@ export default class App extends Vue {}
 
 <template>
     <div>
-        <Navbar />
+        <Header />
         <div class="container main-container">
             <router-view />
         </div>
     </div>
 </template>
 
-<style lang="scss" src="./assets/styles/app.scss" />
+<style lang="scss" src="../assets/styles/app.scss" />
