@@ -2,12 +2,12 @@ package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Card;
 
-public class CardNotInHandMoveException extends MoveException {
-    public CardNotInHandMoveException(String message) {
+public class CardNotInHandException extends RuntimeException {
+    public CardNotInHandException(String message) {
         super(message);
     }
 
-    public CardNotInHandMoveException(Card card) {
+    public CardNotInHandException(Card card) {
         super("Player does not have card " + card + " in hand");
     }
 }

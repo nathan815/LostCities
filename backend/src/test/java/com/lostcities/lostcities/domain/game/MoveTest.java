@@ -71,7 +71,7 @@ public class MoveTest {
     public void execute_playCardNotInHandHand_shouldThrowException() throws MoveException {
         var move = Move.builder().player(player).playCard(blue5Card).build();
 
-        thrown.expect(CardNotInHandMoveException.class);
+        thrown.expect(CardNotInHandException.class);
         move.execute(makeDeckFromCards(yellow4Card), new GameBoard());
     }
 
@@ -79,7 +79,7 @@ public class MoveTest {
     public void execute_discardCardNotInHandHand_shouldThrowException() throws MoveException {
         var move = Move.builder().player(player).discardCard(blue5Card).build();
 
-        thrown.expect(CardNotInHandMoveException.class);
+        thrown.expect(CardNotInHandException.class);
         move.execute(makeDeckFromCards(yellow4Card), new GameBoard());
     }
 
@@ -90,14 +90,15 @@ public class MoveTest {
         var deck = makeDeckFromCards(green2Card);
         var board = new GameBoard();
 
-        board.addCardInPlay(player.getId(), green5Card); // Green5 card is in play
         player.addToHand(green4Card);
+        player.addToHand(green5Card);
+        player.play(green5Card);
 
         // User may not play a card with lower value than a card already in play for the card's color
         // Thus, trying to play Green4 should fail because Green5 is in play
         var move = Move.builder().player(player).playCard(green4Card).build();
 
-        thrown.expect(CannotPlayLowerValueCardMoveException.class);
+        thrown.expect(CannotPlayLowerValueCardException.class);
 
         move.execute(deck, board);
     }
@@ -114,7 +115,7 @@ public class MoveTest {
         assertThat(deck.getCards(), not(contains(green2Card)));
         assertThat(player.getHand(), contains(green2Card));
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getInPlayCardStack(Color.BLUE, player.getId()), contains(blue5Card));
+        assertThat(player.getInPlay(Color.BLUE), contains(blue5Card));
     }
 
     @Test
@@ -133,7 +134,7 @@ public class MoveTest {
         assertThat(player.getHand(), contains(yellow4Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getInPlayCardStack(Color.BLUE, player.getId()), contains(blue5Card));
+        assertThat(player.getInPlay(Color.BLUE), contains(blue5Card));
     }
 
     @Test

@@ -12,34 +12,12 @@ public class GameBoard {
     // Cards discarded by color
     private Map<Color, CardStack> discardStacks;
 
-    // Cards in play by color by each player
-    private Map<Long, Map<Color, CardStack>> inPlayCardStacks;
-
-    public GameBoard(Map<Color, CardStack> discard, Map<Long, Map<Color, CardStack>> inPlayCardStacks) {
+    public GameBoard(Map<Color, CardStack> discard) {
         this.discardStacks = discard;
-        this.inPlayCardStacks = inPlayCardStacks;
     }
 
     public GameBoard() {
-        this(new HashMap<>(), new HashMap<>());
-    }
-
-    protected void addCardInPlay(long playerId, Card card) {
-        getInPlayCardStack(card.getColor(), playerId).addToTop(card);
-    }
-
-    protected CardStack getInPlayCardStack(Color color, long playerId) {
-        getInPlayCardStacks(playerId).putIfAbsent(color, new CardStack());
-        return getInPlayCardStacks(playerId).get(color);
-    }
-
-    protected Map<Color, CardStack> getInPlayCardStacks(long playerId) {
-        inPlayCardStacks.putIfAbsent(playerId, new HashMap<>());
-        return inPlayCardStacks.get(playerId);
-    }
-
-    public Map<Long, Map<Color, CardStack>> getInPlayCardStacks() {
-        return inPlayCardStacks;
+        this(new HashMap<>());
     }
 
     protected Optional<Card> drawFromDiscard(Color color) {

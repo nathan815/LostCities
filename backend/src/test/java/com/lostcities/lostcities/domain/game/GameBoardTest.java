@@ -23,35 +23,6 @@ public class GameBoardTest {
     }
 
     @Test
-    public void addCardInPlay_shouldAddCardToInPlayCardsForPlayer() {
-        long playerId = 1;
-        Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
-        Card redCard = Card.createExpeditionCard(Color.RED, 2);
-        board.addCardInPlay(playerId, blueCard);
-        board.addCardInPlay(playerId, redCard);
-
-        assertThat(board.getInPlayCardStack(Color.BLUE, playerId), contains(blueCard));
-        assertThat(board.getInPlayCardStack(Color.RED, playerId), contains(redCard));
-    }
-
-    @Test
-    public void getCardsPlayedBy_shouldReturnMapOfAllCardsPlayedByGivenPlayer() {
-        long playerId = 1;
-        // play some cards
-        Card blueCard = Card.createExpeditionCard(Color.BLUE, 2);
-        Card redCard = Card.createExpeditionCard(Color.RED, 4);
-        Card yellowCard = Card.createExpeditionCard(Color.YELLOW, 7);
-        board.addCardInPlay(playerId, blueCard);
-        board.addCardInPlay(playerId, redCard);
-        board.addCardInPlay(playerId, yellowCard);
-
-        Map<Color, CardStack> cardsColorMap = board.getInPlayCardStacks(playerId);
-        assertThat(cardsColorMap.get(Color.BLUE), contains(blueCard));
-        assertThat(cardsColorMap.get(Color.RED), contains(redCard));
-        assertThat(cardsColorMap.get(Color.YELLOW), contains(yellowCard));
-    }
-
-    @Test
     public void drawFromDiscard_shouldRemoveAndReturnCardsInLastInFirstOutOrder() {
         List<Card> cards = Arrays.asList(
                 Card.createExpeditionCard(Color.GREEN, 2),

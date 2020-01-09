@@ -1,7 +1,8 @@
 package com.lostcities.lostcities.domain.game;
 
-import com.lostcities.lostcities.domain.game.card.Card;
+import  com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,16 +36,29 @@ public class PlayerTest {
     }
 
     @Test
-    public void removeFromHand_shouldRemoveCardAndReturnTrue() {
+    public void removeFromHand_shouldRemoveCardFromHand() {
         player.addToHand(red2Card);
         assertThat(player.getHand(), contains(red2Card));
-        assertTrue(player.removeFromHand(red2Card));
+        player.removeFromHand(red2Card);
         assertThat(player.getHand(), not(contains(red2Card)));
     }
 
+    @Test(expected = CardNotInHandException.class)
+    public void removeFromHand_shouldThrowException_whenCardIsNotInHand() {
+        player.removeFromHand(red2Card);
+    }
+
+    @Test(expected = CardNotInHandException.class)
+    public void play_shouldThrowException_whenCardIsNotInHand() {
+        player.play(blue4Card);
+    }
+
     @Test
-    public void removeFromHand_shouldReturnFalseIfCardIsNotInHand() {
-        assertFalse(player.removeFromHand(red2Card));
+    public void play_shouldAddCardToInPlayAndRemoveCardFromHand() {
+        player.addToHand(blue4Card);
+        player.play(blue4Card);
+        assertThat(player.getInPlay(Color.BLUE), contains(blue4Card));
+        assertThat(player.getHand(), not(contains(blue4Card)));
     }
 
     @Test

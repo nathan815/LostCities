@@ -13,12 +13,8 @@ public class GameBoardDto {
     @JsonProperty("discard")
     public Map<Color, DiscardSummary> topOfDiscards;
 
-    @JsonProperty("inPlay")
-    public Map<Long, Map<Color, CardStack>> inPlayCardStacks;
-
-    private GameBoardDto(Map<Color, DiscardSummary> topOfDiscards, Map<Long, Map<Color, CardStack>> inPlayCardStacks) {
+    private GameBoardDto(Map<Color, DiscardSummary> topOfDiscards) {
         this.topOfDiscards = topOfDiscards;
-        this.inPlayCardStacks = inPlayCardStacks;
     }
 
     public static GameBoardDto fromGameBoard(GameBoard gameBoard) {
@@ -30,7 +26,7 @@ public class GameBoardDto {
                 topOfDiscards.put(color, new DiscardSummary(cardStack.size(), topCard));
             });
         }
-        return new GameBoardDto(topOfDiscards, gameBoard.getInPlayCardStacks());
+        return new GameBoardDto(topOfDiscards);
     }
 
     private static class DiscardSummary {

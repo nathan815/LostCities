@@ -92,12 +92,8 @@ public class Move {
         }
 
         if(playCard != null) {
-            validateCardInHand(playCard);
-            validateLegalPlayCard(board);
-            player.removeFromHand(playCard);
-            board.addCardInPlay(player.getId(), playCard);
+            player.play(playCard);
         } else if(discardCard != null) {
-            validateCardInHand(discardCard);
             player.removeFromHand(discardCard);
             board.addToDiscard(discardCard);
         }
@@ -112,23 +108,7 @@ public class Move {
         } else {
             cardOpt = deck.draw();
         }
-        cardOpt.ifPresent(card -> player.addToHand(card));
-    }
-
-    private void validateLegalPlayCard(GameBoard board) throws CannotPlayLowerValueCardMoveException {
-        var topCardOpt = board.getInPlayCardStack(playCard.getColor(), player.getId()).getTop();
-        if(topCardOpt.isPresent()) {
-            var topCard = topCardOpt.get();
-            if(playCard.getNumber() < topCard.getNumber()) {
-                throw new CannotPlayLowerValueCardMoveException(playCard, topCard);
-            }
-        }
-    }
-
-    private void validateCardInHand(Card card) throws CardNotInHandMoveException {
-        if(!player.hasCard(card)) {
-            throw new CardNotInHandMoveException(card);
-        }
+        cardOpt.ifPresent(player::addToHand);
     }
 
 }
