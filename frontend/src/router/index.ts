@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
     const { isLoggedIn } = auth.state;
 
     if (to.meta.requiresAuth && !isLoggedIn) {
-        return next('/login');
+        return next(`/login?to=${to.fullPath}`);
     }
 
     if (to.meta.requiresGuest && isLoggedIn) {

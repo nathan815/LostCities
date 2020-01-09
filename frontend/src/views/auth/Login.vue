@@ -17,13 +17,19 @@ export default class Login extends Vue {
     get loading() {
         return auth.state.isLoading;
     }
+    get returnUrl() {
+        return this.$route.query.to as string;
+    }
+    get registerUrl() {
+        return `/register${this.returnUrl ? `?to=${this.returnUrl}` : ''}`;
+    }
     async login() {
         await auth.login({
             username: this.username,
             password: this.password,
         });
         if (!this.error) {
-            this.$router.push('/');
+            this.$router.push(this.returnUrl || '/');
         }
     }
     clearError() {
@@ -74,7 +80,7 @@ export default class Login extends Vue {
 
         <div class="alert alert-secondary text-center mt-4 mb-0">
             Don't have an account yet?
-            <router-link tag="button" to="/register" class="btn btn-secondary btn-sm">
+            <router-link tag="button" :to="registerUrl" class="btn btn-secondary btn-sm">
                 Register
             </router-link>
         </div>

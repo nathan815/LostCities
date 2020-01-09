@@ -13,22 +13,16 @@ export default class Home extends Vue {
 
 <template>
     <div class="home">
+        <div class="banner"></div>
         <div class="jumbotron d-flex justify-content-around align-items-center">
             <div class="text-center">
                 <h1 class="display-4">Lost Cities</h1>
                 <p class="lead">
                     Play
                     <b>Lost Cities</b>
-                    against others!
+                    against others
                 </p>
-                <div v-if="isLoggedIn">
-                    <b-button to="/games/new" variant="primary" size="lg">Start a Game</b-button>
-                    <b-button to="/games" variant="secondary" size="lg">View Games</b-button>
-                </div>
-                <div v-else>
-                    <b-button to="/register" variant="primary" size="lg">Create Account</b-button>
-                    <b-button to="/login" variant="secondary" size="lg">Login</b-button>
-                </div>
+                <b-button to="/games/new" variant="primary" size="lg">Play Now!</b-button>
             </div>
             <div>
                 <img src="../assets/game-setup.png" class="rounded" />
@@ -38,6 +32,9 @@ export default class Home extends Vue {
 </template>
 
 <style lang="scss">
+.banner {
+    background: url('../assets/lostcitiesbanner.jpg');
+}
 .jumbotron .btn {
     margin-right: 10px;
 }
