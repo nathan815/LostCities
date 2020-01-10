@@ -5,6 +5,9 @@ import auth from '@/store/modules/auth';
 
 @Component
 export default class Home extends Vue {
+    randomNum() {
+        return Math.round(Math.random() * 10); // fake stats for now
+    }
     get isLoggedIn() {
         return auth.state.isLoggedIn;
     }
@@ -26,19 +29,19 @@ export default class Home extends Vue {
         <b-row class="stats">
             <b-col>
                 <div class="stat">
-                    <span class="stat-number">0</span>
+                    <span class="stat-number">{{ randomNum() }}</span>
                     total games played
                 </div>
             </b-col>
             <b-col>
                 <div class="stat">
-                    <span class="stat-number">0</span>
+                    <span class="stat-number">{{ randomNum() }}</span>
                     players online
                 </div>
             </b-col>
             <b-col>
                 <div class="stat">
-                    <span class="stat-number">0</span>
+                    <span class="stat-number">{{ randomNum() }}</span>
                     moves played
                 </div>
             </b-col>
@@ -64,6 +67,7 @@ export default class Home extends Vue {
         h1 {
             font-family: Georgia, serif;
         }
+        animation: jumbotron-animation 1s;
     }
     .pyramids {
         position: absolute;
@@ -71,6 +75,14 @@ export default class Home extends Vue {
         left: 0;
         width: 100%;
         z-index: 1;
+    }
+}
+@keyframes jumbotron-animation {
+    0% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 .stats {
@@ -82,13 +94,26 @@ export default class Home extends Vue {
         border-radius: 5px;
         padding: 15px;
 
-        background: #e4af0e;
+        background: #e6b41b;
 
         font-size: 20px;
         text-align: center;
+
+        animation: stats-animation 1s;
+
         .stat-number {
             font-size: 35px;
         }
+    }
+}
+@keyframes stats-animation {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
 </style>
