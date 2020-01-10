@@ -12,24 +12,26 @@ First and foremost, clone the repository `git clone https://github.com/nathan815
 ### Backend
 Ensure you have JDK 13 installed (`java -v`). Either OpenJDK or Oracle JDK should work.
 
-Then compile the backend code and start the application.
-```
-cd backend
-./gradlew build
-./gradlew bootRun
-```
+`cd backend`
+
+🛠Compile: `./gradlew build`
+
+▶️Run: `./gradlew bootRun`
 
 ### Frontend
 Ensure you have nodejs 12 installed. npm is included with nodejs. 
 
 Then install dependencies and start the dev server.
-```
-cd frontend
-npm install
-npm start
-```
 
-Frontend should now be up and running on port 8088. The Webpack Dev Server is configured to automatically proxy requests to `localhost:8088/api/*` to the backend server running on port 8089.
+`cd frontend`
+
+🛠Install dependencies: `npm install`
+
+▶️Run: `npm start`
+
+⚡️Production Build: `npm run build`
+
+After running `start` command, frontend should now be up and running on localhost:8088. The Webpack Dev Server is configured to automatically proxy requests to `localhost:8088/api/*` to the backend server running on port 8089.
 
 ## History
 My summer 2018 internship mentor Derek and I started this back in August 2018 as a side-project, but we only worked on it for a month or so. In December 2019, while reading some articles about software design, I regained interest in this project and decided to apply some things that I've learned since then. 
