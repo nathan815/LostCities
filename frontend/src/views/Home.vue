@@ -94,10 +94,11 @@ export default class Home extends Vue {
         border-radius: 5px;
         padding: 15px;
 
-        background: #e6b41b;
+        background: #e6b41bdd;
 
         font-size: 20px;
         text-align: center;
+        color: theme-color('primary');
 
         animation: stats-animation 1s;
 

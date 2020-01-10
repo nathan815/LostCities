@@ -2,14 +2,14 @@
 
 // Bootstrap Variables
 $theme-colors: (
-      "primary": #ab7915,
+      "primary": #2c3d63,
 );
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
 
 .main-container {
-  margin-top: 20px;
+  margin: 20px auto;
 }
 
 body {
