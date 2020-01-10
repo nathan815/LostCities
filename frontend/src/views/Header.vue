@@ -19,7 +19,7 @@ export default class Navbar extends Vue {
 <template>
     <b-navbar toggleable="md" type="dark" variant="primary" class="navbar">
         <div class="container">
-            <b-navbar-brand to="/">Lost Cities</b-navbar-brand>
+            <b-navbar-brand to="/" class="site-name">Lost Cities</b-navbar-brand>
             <b-navbar-toggle target="nav-collapse" />
 
             <b-collapse id="nav-collapse" is-nav>
@@ -36,7 +36,7 @@ export default class Navbar extends Vue {
 
                 <b-navbar-nav class="ml-auto">
                     <b-form>
-                        <b-button to="/games/new" variant="light" class="my- mr-2">
+                        <b-button v-if="showPlayButton" to="/games/new" variant="light" class="my- mr-2">
                             <i class="fas fa-play" />
                             Play Now
                         </b-button>
@@ -58,5 +58,10 @@ export default class Navbar extends Vue {
 </template>
 <style lang="scss">
 .navbar {
+    .site-name {
+        font-size: 30px;
+        line-height: 1;
+        font-family: Bangers, Arial, sans-serif;
+    }
 }
 </style>
