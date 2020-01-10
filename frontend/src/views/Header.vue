@@ -52,7 +52,8 @@ export default class Navbar extends Vue {
                 </b-navbar-nav>
 
                 <b-navbar-nav v-if="!isLoggedIn">
-                    <b-nav-item to="/login">Login / Register</b-nav-item>
+                    <b-nav-item to="/login">Login</b-nav-item>
+                    <b-nav-item to="/register">Register</b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </div>
