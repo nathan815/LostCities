@@ -11,6 +11,9 @@ export default class Navbar extends Vue {
     get user() {
         return auth.currentUser;
     }
+    get showPlayButton() {
+        return this.$route.fullPath !== '/';
+    }
     logout() {
         auth.logout();
     }
@@ -48,9 +51,8 @@ export default class Navbar extends Vue {
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
-                <b-navbar-nav v-if="!isLoggedIn" class="ml-auto">
-                    <b-nav-item to="/login">Login</b-nav-item>
-                    <b-nav-item to="/register">Register</b-nav-item>
+                <b-navbar-nav v-if="!isLoggedIn">
+                    <b-nav-item to="/login">Login / Register</b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
         </div>
