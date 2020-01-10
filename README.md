@@ -10,7 +10,7 @@ Online version of the Lost Cities game built with Java, Spring Boot, and VueJS.
 First and foremost, clone the repository `git clone https://github.com/nathan815/LostCities`
 
 ### Backend
-Ensure you have JDK 13 installed (`java -v`). Either OpenJDK or Oracle JDK should work.
+Ensure you have JDK 11+ installed (`javac -version`). Either OpenJDK or Oracle JDK should work.
 
 `cd backend`
 
