@@ -17,7 +17,7 @@ export default class Navbar extends Vue {
 }
 </script>
 <template>
-    <b-navbar toggleable="md" type="dark" variant="primary">
+    <b-navbar toggleable="md" type="dark" variant="primary" class="navbar">
         <div class="container">
             <b-navbar-brand to="/">Lost Cities</b-navbar-brand>
             <b-navbar-toggle target="nav-collapse" />
@@ -34,21 +34,21 @@ export default class Navbar extends Vue {
                     </b-nav-item>
                 </b-navbar-nav>
 
-                <b-navbar-nav v-if="isLoggedIn" class="ml-auto">
+                <b-navbar-nav class="ml-auto">
                     <b-form>
                         <b-button to="/games/new" variant="light" class="my- mr-2">
-                            <i class="fas fa-plus-square" />
-                            Start a Game
+                            <i class="fas fa-play" />
+                            Play Now
                         </b-button>
                     </b-form>
 
-                    <b-nav-item-dropdown :text="user.username" right>
+                    <b-nav-item-dropdown v-if="isLoggedIn" :text="user.username" right>
                         <b-dropdown-item to="/settings">Settings</b-dropdown-item>
                         <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
-                <b-navbar-nav v-else class="ml-auto">
+                <b-navbar-nav v-if="!isLoggedIn" class="ml-auto">
                     <b-nav-item to="/login">Login</b-nav-item>
                     <b-nav-item to="/register">Register</b-nav-item>
                 </b-navbar-nav>
@@ -56,3 +56,7 @@ export default class Navbar extends Vue {
         </div>
     </b-navbar>
 </template>
+<style lang="scss">
+.navbar {
+}
+</style>

@@ -18,5 +18,3 @@ export default class App extends Vue {}
         </div>
     </div>
 </template>
-
-<style lang="scss" src="../assets/styles/app.scss" />
