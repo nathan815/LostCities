@@ -11,6 +11,9 @@ export default class Home extends Vue {
     get isLoggedIn() {
         return auth.state.isLoggedIn;
     }
+    get username() {
+        return auth.currentUser && auth.currentUser.username;
+    }
 }
 </script>
 
@@ -19,7 +22,9 @@ export default class Home extends Vue {
         <div class="jumbotron">
             <img src="../assets/pyramids.png" class="pyramids" />
             <div class="content">
-                <h1 class="display-4">Your adventure awaits...</h1>
+                <h1 class="display-4">
+                    {{ isLoggedIn ? `${username}, start an adventure...` : 'Your adventure awaits...' }}
+                </h1>
                 <b-button to="/games/new" variant="primary" size="lg">
                     <i class="fas fa-play" />
                     Play Now
@@ -94,17 +99,28 @@ export default class Home extends Vue {
         border-radius: 5px;
         padding: 15px;
 
-        background: #e6b41bdd;
+        background: #e6b41bdd url(../assets/sand.png) 40% 0%;
 
         font-size: 20px;
         text-align: center;
-        color: theme-color('primary');
+        color: black;
 
         animation: stats-animation 1s;
+        opacity: 0.8;
 
         .stat-number {
             font-size: 35px;
         }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+    .stat:nth-child(2) {
+        background-position-x: 80%;
+    }
+    .stat:nth-child(3) {
+        background-position-x: 75%;
     }
 }
 @keyframes stats-animation {
@@ -114,7 +130,7 @@ export default class Home extends Vue {
     }
     100% {
         transform: translateY(0);
-        opacity: 1;
+        opacity: 0.8;
     }
 }
 </style>
