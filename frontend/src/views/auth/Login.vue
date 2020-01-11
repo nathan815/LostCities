@@ -29,6 +29,11 @@ export default class Login extends Vue {
             password: this.password,
         });
         if (!this.error) {
+            this.$root.$bvToast.toast(`Welcome back, ${this.username}!`, {
+                title: 'Logged In',
+                autoHideDelay: 3000,
+                toaster: 'b-toaster-bottom-left',
+            });
             this.$router.push(this.returnUrl || '/');
         }
     }
