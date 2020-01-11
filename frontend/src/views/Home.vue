@@ -23,7 +23,7 @@ export default class Home extends Vue {
             <img src="../assets/pyramids.png" class="pyramids" />
             <div class="content">
                 <h1 class="display-4">
-                    {{ isLoggedIn ? `${username}, start an adventure...` : 'Your adventure awaits...' }}
+                    {{ isLoggedIn ? `${username}, start an expedition...` : 'Your adventure awaits...' }}
                 </h1>
                 <b-button to="/games/new" variant="primary" size="lg">
                     <i class="fas fa-play" />

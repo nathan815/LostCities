@@ -1,7 +1,8 @@
 import Home from '@/views/Home.vue';
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
-import Game from '@/views/game/Game.vue';
+import GamePlay from '@/views/game/GamePlay.vue';
+import Games from '@/views/game-list/Games.vue';
 
 export default [
     {
@@ -22,8 +23,13 @@ export default [
     },
 
     {
+        path: '/games',
+        component: Games,
+    },
+
+    {
         path: '/games/:id',
-        component: Game,
+        component: GamePlay,
         meta: { requiresAuth: true },
     },
 ];
