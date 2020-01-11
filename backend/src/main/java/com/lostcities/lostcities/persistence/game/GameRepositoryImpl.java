@@ -35,7 +35,7 @@ public class GameRepositoryImpl implements GameRepository {
         return gameEntityDao.findById(id).map(gameEntity -> {
             var player1 = new Player(gameEntity.getUser1().getId(), gameEntity.getUser1().getUsername());
             var player2 = new Player(gameEntity.getUser2().getId(), gameEntity.getUser2().getUsername());
-            var game = Game.create(gameEntity.getId(), gameEntity.getSeed(), player1, player2);
+            var game = Game.create(gameEntity.getId(), gameEntity.getSeed(), gameEntity.getStatus(), player1, player2);
             var moves = moveRepository.getMovesForGame(game);
             try {
                 game.runMoves(moves);

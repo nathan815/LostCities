@@ -1,13 +1,19 @@
 package com.lostcities.lostcities.persistence.game;
 
-import javax.persistence.*;
-
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.persistence.user.UserEntity;
 import java.util.Random;
 
-@Entity(name = "GameEntity")
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
 @Table(name = "games")
 public class GameEntity {
 
@@ -23,13 +29,18 @@ public class GameEntity {
     @JoinColumn(name = "user_2_id")
     private UserEntity user2;
 
-    @Column
     private Long seed;
+
+    private Game.Status status;
 
     private static Random random = new Random();
 
     public GameEntity() {
 
+    }
+
+    public Game.Status getStatus() {
+        return status;
     }
 
     public long getId() {
@@ -71,6 +82,6 @@ public class GameEntity {
         Player user2 = new Player(
                 getUser2().getId(),
                 getUser2().getUsername());
-        return Game.create(getId(), getSeed(), user1, user2);
+        return Game.create(getId(), getSeed(), status, user1, user2);
     }
 }
