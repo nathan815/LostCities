@@ -42,7 +42,7 @@ public class Game {
 
     public void start() {
         drawStartingHands();
-        status = Status.InPlay;
+        status = Status.Started;
         playerTurn = 0;
     }
 
@@ -57,7 +57,7 @@ public class Game {
     }
 
     private boolean didStart() {
-        return status == Status.InPlay || status == Status.Ended;
+        return status == Status.Started || status == Status.Ended;
     }
 
     public long getId() {
@@ -136,7 +136,7 @@ public class Game {
     public enum Status {
         New(0),
         ReadyToStart(1),
-        InPlay(2),
+        Started(2),
         Ended(3);
 
         public int code;
