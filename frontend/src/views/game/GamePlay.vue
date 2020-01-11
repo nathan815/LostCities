@@ -15,7 +15,7 @@ export default class GamePlay extends Vue {
 </script>
 
 <template>
-    <div>
+    <b-container>
         <b-row>
             <b-col sm="12" md="9" lg="9" xl="9">
                 <div class="content">
@@ -39,7 +39,7 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-    </div>
+    </b-container>
 </template>
 
 <style lang="scss">

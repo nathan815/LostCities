@@ -17,8 +17,8 @@ export default class Games extends Vue {
 </script>
 
 <template>
-    <div>
+    <b-container>
         <h1>Games {{ statusFilter }}</h1>
         <GameList :games="games" />
-    </div>
+    </b-container>
 </template>

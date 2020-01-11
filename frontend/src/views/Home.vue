@@ -18,7 +18,7 @@ export default class Home extends Vue {
 </script>
 
 <template>
-    <div class="home">
+    <b-container class="home">
         <div class="jumbotron">
             <img src="../assets/pyramids.png" class="pyramids" />
             <div class="content">
@@ -51,7 +51,7 @@ export default class Home extends Vue {
                 </div>
             </b-col>
         </b-row>
-    </div>
+    </b-container>
 </template>
 
 <style lang="scss">

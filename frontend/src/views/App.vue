@@ -13,7 +13,7 @@ export default class App extends Vue {}
 <template>
     <div>
         <Header />
-        <div class="container main-container">
+        <div class="main-container">
             <router-view />
         </div>
     </div>
