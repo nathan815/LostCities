@@ -3,10 +3,11 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Card, Color } from '@/store/modules/game';
 import CardView from '@/views/game/CardView.vue';
+
 @Component({
     components: { CardView },
 })
-export default class CardsInPlay extends Vue {
+export default class CardsInPlayView extends Vue {
     @Prop({ required: true })
     cards!: { Color: Card[] };
 

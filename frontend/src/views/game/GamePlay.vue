@@ -2,13 +2,13 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import Board from '@/views/game/Board.vue';
-import CardsInPlay from '@/views/game/CardsInPlay.vue';
+import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
 import { Card, Color } from '@/store/modules/game';
 
 @Component({
-    components: { Hand, CardsInPlay, Board, Deck },
+    components: { Hand, CardsInPlayView, Board, Deck },
 })
 export default class GamePlay extends Vue {
     get id() {
@@ -41,7 +41,7 @@ export default class GamePlay extends Vue {
                     </b-col>
 
                     <b-col cols="10">
-                        <CardsInPlay :cards="[]" :is-opponent="true" class="cards-in-play" />
+                        <CardsInPlayView :cards="[]" :is-opponent="true" class="cards-in-play" />
                     </b-col>
                 </b-row>
 
@@ -63,7 +63,7 @@ export default class GamePlay extends Vue {
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <CardsInPlay :cards="[]" class="cards-in-play" />
+                        <CardsInPlayView :cards="[]" class="cards-in-play" />
                     </b-col>
                 </b-row>
             </b-col>
