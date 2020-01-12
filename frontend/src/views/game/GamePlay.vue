@@ -9,8 +9,6 @@ import Deck from '@/views/game/Deck.vue';
     components: { CardsInPlay, Board, Deck },
 })
 export default class GamePlay extends Vue {
-    remaining: number = 60;
-
     get id() {
         return this.$route.params.id;
     }
@@ -35,8 +33,10 @@ export default class GamePlay extends Vue {
                 </b-row>
 
                 <b-row>
-                    <b-col cols="2" class="p-2">
-                        <Deck :top-card="topCard" :num-cards="10" />
+                    <b-col cols="2">
+                        <div class="draw-pile">
+                            <Deck :num-cards="10" />
+                        </div>
                     </b-col>
                     <b-col cols="10">
                         <Board />
@@ -65,9 +65,6 @@ export default class GamePlay extends Vue {
                         </b-card-text>
                         <b-card-text>
                             <b-button variant="primary" size="sm">Nudge</b-button>
-                            <!--<b-progress :max="60" :animated="true" variant="primary">
-                                <b-progress-bar :value="remaining">{{ remaining }}s</b-progress-bar>
-                            </b-progress>-->
                         </b-card-text>
                     </b-card>
                     <b-card header="Moves" class="history">
@@ -109,7 +106,13 @@ export default class GamePlay extends Vue {
         font-size: 13px;
     }
 }
-.container-fluid.game-play-container {
+.draw-pile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .sidebar {
     width: 100%;

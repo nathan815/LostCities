@@ -8,32 +8,26 @@ import CardView from '@/views/game/CardView.vue';
 })
 export default class Deck extends Vue {
     @Prop()
-    topCard!: Card;
-    @Prop()
     numCards!: number;
 }
 </script>
 
 <template>
     <div class="deck">
-        <CardView :card="topCard" />
-        <b>{{ numCards }}</b>
-        cards
+        <CardView class="cards" />
+        <p>
+            <em>{{ numCards }} left</em>
+        </p>
     </div>
 </template>
 
 <style lang="scss">
-.board {
-    position: relative;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    border-radius: 1px;
-    overflow: hidden;
-    img {
-        width: 100%;
-        z-index: 1;
-        pointer-events: none;
+.deck {
+    width: 99%;
+    height: 85%;
+    p {
+        text-align: center;
+        font-size: 13px;
     }
 }
 </style>
