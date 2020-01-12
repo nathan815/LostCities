@@ -5,7 +5,7 @@ import Board from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, Color } from '@/store/modules/game';
+import { Card, CardsInPlay, Color } from '@/store/modules/game';
 
 @Component({
     components: { Hand, CardsInPlayView, Board, Deck },
@@ -25,6 +25,9 @@ export default class GamePlay extends Vue {
             new Card(2, Color.White),
             new Card(4, Color.Red),
         ];
+    }
+    get myInPlay(): CardsInPlay {
+        return {};
     }
 }
 </script>
