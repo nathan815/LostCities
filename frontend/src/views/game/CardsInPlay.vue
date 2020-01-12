@@ -41,7 +41,7 @@ export default class CardsInPlay extends Vue {
 }
 .card-stack {
     width: 100%;
-    height: 150px;
+    height: 170px;
     text-align: center;
     display: flex;
 
@@ -53,7 +53,7 @@ export default class CardsInPlay extends Vue {
         border: 1px dashed #dcdcdc;
         border-radius: 5px;
         width: 85%;
-        height: 80%;
+        height: 70%;
         margin: auto;
         align-self: center;
     }

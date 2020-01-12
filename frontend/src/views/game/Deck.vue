@@ -1,8 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card } from '@/store/modules/game';
 import CardView from '@/views/game/CardView.vue';
+
 @Component({
     components: { CardView },
 })
@@ -14,7 +14,7 @@ export default class Deck extends Vue {
 
 <template>
     <div class="deck">
-        <CardView class="cards" />
+        <CardView class="cards" show-side="back" />
         <p>
             <em>{{ numCards }} left</em>
         </p>
@@ -23,11 +23,12 @@ export default class Deck extends Vue {
 
 <style lang="scss">
 .deck {
-    width: 99%;
-    height: 85%;
+    margin-top: 15px;
+
     p {
         text-align: center;
         font-size: 13px;
+        margin: 0;
     }
 }
 </style>

@@ -4,13 +4,27 @@ import { Component } from 'vue-property-decorator';
 import Board from '@/views/game/Board.vue';
 import CardsInPlay from '@/views/game/CardsInPlay.vue';
 import Deck from '@/views/game/Deck.vue';
+import Hand from '@/views/game/Hand.vue';
+import { Card, Color } from '@/store/modules/game';
 
 @Component({
-    components: { CardsInPlay, Board, Deck },
+    components: { Hand, CardsInPlay, Board, Deck },
 })
 export default class GamePlay extends Vue {
     get id() {
         return this.$route.params.id;
+    }
+    get hand(): Card[] {
+        return [
+            new Card(0, Color.Blue),
+            new Card(3, Color.Red),
+            new Card(10, Color.White),
+            new Card(5, Color.Yellow),
+            new Card(4, Color.Green),
+            new Card(7, Color.Blue),
+            new Card(2, Color.White),
+            new Card(4, Color.Red),
+        ];
     }
 }
 </script>
@@ -22,8 +36,7 @@ export default class GamePlay extends Vue {
                 <b-row>
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
-                            <span class="text">Enemy</span>
-                            <div class="line"></div>
+                            <span class="description">Them</span>
                         </div>
                     </b-col>
 
@@ -45,9 +58,8 @@ export default class GamePlay extends Vue {
 
                 <b-row>
                     <b-col cols="2" class="p-2">
-                        <div class="player-info bottom active">
-                            <span class="text">You</span>
-                            <div class="line"></div>
+                        <div class="player-info bottom">
+                            <span class="description">You</span>
                         </div>
                     </b-col>
                     <b-col cols="10">
@@ -75,6 +87,8 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
+
+        <Hand :cards="hand" />
     </b-container>
 </template>
 
@@ -86,22 +100,7 @@ export default class GamePlay extends Vue {
     justify-content: flex-end;
     align-items: center;
 
-    .line {
-        border: 1px solid #ccc;
-        border-right: none;
-        width: 10px;
-        height: 100%;
-        margin-left: 5px;
-        display: none;
-    }
-    &.top .line {
-        border-top: none;
-    }
-    &.bottom .line {
-        border-bottom: none;
-    }
-
-    .text {
+    .description {
         text-align: center;
         font-size: 13px;
     }
