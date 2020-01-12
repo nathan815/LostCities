@@ -26,32 +26,36 @@ export default class CardsInPlay extends Vue {
 <template>
     <b-row class="card-stacks-container">
         <b-col v-for="color in colors" :key="color" class="card-stack-col" :class="color">
-            <div class="card-stack" :class="{ [color]: true, flipped: isOpponent }">
+            <div class="card-stack" :class="{ flipped: isOpponent }">
                 <CardView v-for="card in cardsOfColor(color)" :key="card" :card="card" />
-                <div v-if="cardsOfColor(color).length === 0" class="placeholder">
-                    {{ color }}
-                </div>
+                <div v-if="cardsOfColor(color).length === 0" class="placeholder"></div>
             </div>
         </b-col>
     </b-row>
 </template>
 
 <style lang="scss">
-$cardGradientFadeTo: #f5f5f5;
-
 .col.card-stack-col {
     margin: 0 12px;
     padding: 0;
-    &.red {
-    }
 }
 .card-stack {
     width: 100%;
     height: 150px;
     text-align: center;
-    background: linear-gradient(#e5e5e5, $cardGradientFadeTo);
+    display: flex;
+
     &.flipped {
         transform: rotate(180deg);
+    }
+    .placeholder {
+        background: #efefef;
+        border: 1px dashed #dcdcdc;
+        border-radius: 5px;
+        width: 85%;
+        height: 80%;
+        margin: auto;
+        align-self: center;
     }
 }
 .row.card-stacks-container {

@@ -1,18 +1,24 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Discard } from '@/store/modules/game';
-
-@Component
-export default class Board extends Vue {
+import { Card } from '@/store/modules/game';
+import CardView from '@/views/game/CardView.vue';
+@Component({
+    components: { CardView },
+})
+export default class Deck extends Vue {
     @Prop()
-    discard!: Discard;
+    topCard!: Card;
+    @Prop()
+    numCards!: number;
 }
 </script>
 
 <template>
-    <div class="board">
-        <img src="../../assets/board.jpg" alt="Lost Cities Board" />
+    <div class="deck">
+        <CardView :card="topCard" />
+        <b>{{ numCards }}</b>
+        cards
     </div>
 </template>
 
@@ -22,9 +28,8 @@ export default class Board extends Vue {
     width: 100%;
     height: auto;
     margin: 0 auto;
-    border-radius: 2px;
+    border-radius: 1px;
     overflow: hidden;
-    box-shadow: 0 0 3px #555;
     img {
         width: 100%;
         z-index: 1;
