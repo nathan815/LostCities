@@ -89,8 +89,8 @@ $cardBack: #6b574b, #83655c;
     user-select: none;
     box-sizing: border-box;
 
-    border: 4px solid #222;
-    box-shadow: 1px 1px 5px #999;
+    border: 4px solid #272525;
+    box-shadow: 0px -3px 5px -3px #000;
 
     .game-card-value {
         display: flex;

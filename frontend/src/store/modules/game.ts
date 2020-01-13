@@ -27,9 +27,9 @@ export class Card {
 }
 
 export type Discard = {
-    Color: Card;
+    [key: string]: Card;
 };
 
 export type CardsInPlay = {
-    Color: Card[];
+    [key: string]: Card[];
 };

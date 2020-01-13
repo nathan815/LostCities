@@ -12,14 +12,27 @@ export default class CardsInPlayView extends Vue {
     cards!: { Color: Card[] };
 
     @Prop({ default: false })
-    isOpponent!: Boolean;
+    isTop!: boolean;
 
     get colors(): Color[] {
         return Object.keys(Color).map(key => Color[key]);
     }
 
-    cardsOfColor(color: Color): Card[] {
-        return [];
+    get cardStackStyle() {
+        const additionalHeight = this.isTop ? 0 : this.maxNumCards * 10;
+        return {
+            height: 170 + additionalHeight + 'px',
+        };
+    }
+
+    get maxNumCards() {
+        return Object.values(this.cards)
+            .map(cards => cards.length)
+            .reduce((max, cur) => Math.max(max, cur), 0);
+    }
+
+    hasCards(color: Color): boolean {
+        return this.cards[color] && this.cards[color].length > 0;
     }
 }
 </script>
@@ -27,9 +40,15 @@ export default class CardsInPlayView extends Vue {
 <template>
     <b-row class="card-stacks-container">
         <b-col v-for="color in colors" :key="color" class="card-stack-col" :class="color">
-            <div class="card-stack" :class="{ flipped: isOpponent }">
-                <CardView v-for="card in cardsOfColor(color)" :key="card" :card="card" />
-                <div v-if="cardsOfColor(color).length === 0" class="placeholder"></div>
+            <div class="card-stack" :class="{ flipped: isTop }" :style="cardStackStyle">
+                <CardView
+                    v-for="(card, index) in cards[color]"
+                    :key="card.toString()"
+                    :card="card"
+                    :style="{ top: `${5 + index * 18}px` }"
+                    class="in-play-card"
+                />
+                <div v-if="!hasCards(color)" class="placeholder"></div>
             </div>
         </b-col>
     </b-row>
@@ -45,6 +64,9 @@ export default class CardsInPlayView extends Vue {
     height: 170px;
     text-align: center;
     display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
 
     &.flipped {
         transform: rotate(180deg);
@@ -55,12 +77,16 @@ export default class CardsInPlayView extends Vue {
         border-radius: 5px;
         width: 85%;
         height: 70%;
+        max-height: 119px;
         margin: auto;
         align-self: center;
     }
 }
 .row.card-stacks-container {
-    margin: 0;
+    margin: 0 0 15px;
     padding: 0;
+}
+.in-play-card {
+    position: absolute;
 }
 </style>
