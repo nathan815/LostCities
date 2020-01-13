@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Card, Color } from '@/store/modules/game';
 import CardView from '@/views/game/CardView.vue';
+import { getColorEnumValues } from '@/utils';
 
 @Component({
     components: { CardView },
@@ -14,9 +15,7 @@ export default class CardsInPlayView extends Vue {
     @Prop({ default: false })
     isTop!: boolean;
 
-    get colors(): Color[] {
-        return Object.keys(Color).map(key => Color[key]);
-    }
+    colors = getColorEnumValues();
 
     get cardStackStyle() {
         const additionalHeight = this.isTop ? 0 : this.maxNumCards * 10;
@@ -54,7 +53,7 @@ export default class CardsInPlayView extends Vue {
     </b-row>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .col.card-stack-col {
     margin: 0 12px;
     padding: 0;
@@ -78,12 +77,11 @@ export default class CardsInPlayView extends Vue {
         width: 85%;
         height: 70%;
         max-height: 119px;
-        margin: auto;
-        align-self: center;
+        margin-top: 20px;
     }
 }
 .row.card-stacks-container {
-    margin: 0 0 15px;
+    margin: 0;
     padding: 0;
 }
 .in-play-card {

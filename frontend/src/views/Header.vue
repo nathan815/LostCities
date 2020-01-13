@@ -61,6 +61,7 @@ export default class Navbar extends Vue {
 </template>
 <style lang="scss">
 .navbar {
+    z-index: 2;
     .site-name {
         font-size: 30px;
         line-height: 1;

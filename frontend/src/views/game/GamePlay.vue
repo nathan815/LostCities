@@ -5,7 +5,7 @@ import Board from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, CardsInPlay, Color } from '@/store/modules/game';
+import { Card, CardsInPlay, Color, Discard } from '@/store/modules/game';
 
 @Component({
     components: { Hand, CardsInPlayView, Board, Deck },
@@ -17,36 +17,63 @@ export default class GamePlay extends Vue {
         return this.$route.params.id;
     }
 
+    get discard(): Discard {
+        return {
+            [Color.Red]: [
+                new Card(2, Color.Red),
+                new Card(3, Color.Red),
+                new Card(7, Color.Red),
+                new Card(5, Color.Red),
+                new Card(7, Color.Red),
+            ],
+            [Color.Yellow]: [new Card(2, Color.Yellow)],
+            [Color.Blue]: [new Card(3, Color.Blue), new Card(10, Color.Blue)],
+            [Color.White]: [new Card(6, Color.White)],
+            [Color.Green]: [new Card(7, Color.Green, 0), new Card(2, Color.Green)],
+        };
+    }
+
     get hand(): Card[] {
         return [
-            new Card(0, Color.Blue),
+            new Card(0, Color.Blue, 0),
             new Card(3, Color.Red),
             new Card(10, Color.White),
             new Card(5, Color.Yellow),
             new Card(4, Color.Green),
-            new Card(7, Color.Blue),
+            new Card(5, Color.Blue),
             new Card(2, Color.White),
             new Card(4, Color.Red),
         ];
     }
 
-    get myInPlay(): CardsInPlay {
+    get bottomInPlay(): CardsInPlay {
         return {
             [Color.Blue]: [
-                new Card(0, Color.Blue),
-                new Card(0, Color.Blue),
+                new Card(0, Color.Blue, 0),
+                new Card(0, Color.Blue, 1),
                 new Card(2, Color.Blue),
                 new Card(4, Color.Blue),
                 new Card(7, Color.Blue),
                 new Card(8, Color.Blue),
                 new Card(9, Color.Blue),
-                new Card(10, Color.Blue),
             ],
-            [Color.Yellow]: [
-                new Card(0, Color.Yellow),
-                new Card(0, Color.Yellow),
-                new Card(0, Color.Yellow),
-                new Card(3, Color.Yellow),
+            [Color.Yellow]: [new Card(0, Color.Yellow, 0), new Card(3, Color.Yellow)],
+            [Color.White]: [new Card(0, Color.White)],
+        };
+    }
+
+    get topInPlay(): CardsInPlay {
+        return {
+            [Color.Green]: [
+                new Card(0, Color.Green, 0),
+                new Card(3, Color.Green),
+                new Card(5, Color.Green),
+            ],
+            [Color.White]: [
+                new Card(2, Color.White),
+                new Card(4, Color.White),
+                new Card(7, Color.White),
+                new Card(10, Color.White),
             ],
         };
     }
@@ -65,7 +92,7 @@ export default class GamePlay extends Vue {
                     </b-col>
 
                     <b-col cols="10">
-                        <CardsInPlayView :cards="[]" :is-top="true" class="cards-in-play" />
+                        <CardsInPlayView :cards="topInPlay" :is-top="true" class="cards-in-play" />
                     </b-col>
                 </b-row>
 
@@ -76,7 +103,7 @@ export default class GamePlay extends Vue {
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <Board />
+                        <Board :discard="discard" />
                     </b-col>
                 </b-row>
 
@@ -87,7 +114,7 @@ export default class GamePlay extends Vue {
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <CardsInPlayView :cards="myInPlay" class="cards-in-play" />
+                        <CardsInPlayView :cards="bottomInPlay" class="cards-in-play" />
                     </b-col>
                 </b-row>
             </b-col>

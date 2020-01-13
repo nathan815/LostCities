@@ -22,14 +22,14 @@ export class Card {
     }
 
     public toString() {
-        return this.color + ' ' + this.value;
+        return this.color + ' ' + (this.isWager ? `wager ${this.instance}` : this.value);
     }
 }
 
 export type Discard = {
-    [key: string]: Card;
+    [color: string]: Card[];
 };
 
 export type CardsInPlay = {
-    [key: string]: Card[];
+    [color: string]: Card[];
 };

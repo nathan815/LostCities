@@ -36,7 +36,7 @@ export default class CardView extends Vue {
 
 <template>
     <div class="game-card" :class="classNames">
-        <div v-if="showFront" class="game-card-value">
+        <div v-if="card && showFront" class="game-card-value">
             <template v-if="card.isWager">
                 <span><i class="fas fa-handshake" /></span>
                 <span><i class="fas fa-handshake" /></span>
@@ -98,7 +98,7 @@ $cardBack: #6b574b, #83655c;
         position: absolute;
         top: -20px;
         width: 100%;
-        padding: 0 1px;
+        padding: 0 2px;
         font-size: 15px;
         font-weight: bold;
     }
