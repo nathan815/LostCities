@@ -12,6 +12,7 @@ import { Card, CardsInPlay, Color, Discard } from '@/store/modules/game';
 })
 export default class GamePlay extends Vue {
     deckNumCards: number = 10;
+    alwaysShowHand: boolean = true;
 
     get id() {
         return this.$route.params.id;
@@ -128,6 +129,15 @@ export default class GamePlay extends Vue {
                         </b-card-text>
                         <b-card-text>
                             <b-button variant="primary" size="sm">Nudge</b-button>
+                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
+                                <template v-slot:button-content>
+                                    <i class="fas fa-cog" />
+                                </template>
+                                <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
+                                    <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
+                                    Keep hand visible when scrolling
+                                </b-dropdown-item>
+                            </b-dropdown>
                         </b-card-text>
                     </b-card>
                     <b-card header="Moves" class="history">
@@ -139,7 +149,7 @@ export default class GamePlay extends Vue {
             </b-col>
         </b-row>
 
-        <Hand :cards="hand" />
+        <Hand :cards="hand" :fixed="alwaysShowHand" />
     </b-container>
 </template>
 
