@@ -18,7 +18,7 @@ export default class CardsInPlayView extends Vue {
     colors = getColorEnumValues();
 
     get cardStackStyle() {
-        const additionalHeight = this.isTop ? 0 : this.maxNumCards * 10;
+        const additionalHeight = this.isTop ? 0 : this.maxNumCards * 15;
         return {
             height: 170 + additionalHeight + 'px',
         };

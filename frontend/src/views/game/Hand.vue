@@ -25,9 +25,9 @@ export default class Hand extends Vue {
     </b-row>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .spacer {
-    height: 250px;
+    height: 185px;
 }
 .hand {
     box-shadow: 0 -5px 5px -5px #ccc;
@@ -42,9 +42,5 @@ export default class Hand extends Vue {
         position: fixed;
         bottom: 0;
     }
-}
-.hand-card {
-    align-items: center;
-    flex-shrink: 0;
 }
 </style>
