@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import './registerServiceWorker';
+import './api/websocket/stompClient';
 
 import App from './views/App.vue';
 import router from './router';
