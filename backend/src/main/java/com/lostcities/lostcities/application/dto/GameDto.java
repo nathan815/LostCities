@@ -26,8 +26,8 @@ public class GameDto {
 
     public static GameDto fromGame(Game game) {
         return new GameDto(game.getId(),
-                PlayerDto.fromPlayer(game.getPlayer1()),
-                PlayerDto.fromPlayer(game.getPlayer2()),
+                game.getPlayer1() == null ? null : PlayerDto.fromPlayer(game.getPlayer1()),
+                game.getPlayer2() == null ? null : PlayerDto.fromPlayer(game.getPlayer2()),
                 game.getDeck().getTop().orElse(null),
                 GameBoardDto.fromGameBoard(game.getBoard())
         );

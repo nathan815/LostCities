@@ -11,10 +11,14 @@ import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
+
+    private Logger logger = LoggerFactory.getLogger(GameService.class);
 
     private Random seedGenerator = new Random();
     private GameRepository gameRepository;
@@ -34,14 +38,14 @@ public class GameService {
 
     public GameDto joinGame(long gameId, User user) {
         Player player = new Player(user.getId(), user.getUsername());
-        Game game = getGame(gameId);
+        Game game = getGameById(gameId);
         game.joinGameAsSecondPlayer(player);
         gameRepository.save(game);
         return GameDto.fromGame(game);
     }
 
     public GameDto makeMove(long gameId, User user, MoveDto moveDto) throws MoveException {
-        Game game = getGame(gameId);
+        Game game = getGameById(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
         var move = Move.builder()
@@ -56,9 +60,16 @@ public class GameService {
         return GameDto.fromGame(game);
     }
 
-    private Game getGame(long gameId) {
+    private Game getGameById(long gameId) {
         return gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game does not exist"));
+    }
+
+    public GameDto getGame(long gameId) {
+        logger.info("Game id: " + gameId);
+        Game game = getGameById(gameId);
+        logger.info("Game: " + game);
+        return GameDto.fromGame(game);
     }
 
 }
