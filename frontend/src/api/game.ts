@@ -2,7 +2,7 @@ import stompClient from '@/api/websocket/stompClient';
 import { toJson } from '@/api/websocket/helpers';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
-import { GameData } from '@/store/modules/game';
+import { GameData } from '@/store/modules/game/model';
 
 export const gameStateObservable = gameId =>
     stompClient.watch(`/topic/game/${gameId}`).pipe(toJson);
@@ -19,8 +19,4 @@ export async function requestInitialGameData(id): Promise<GameData> {
                 subscription.unsubscribe(); // Only need this subscription to initially request game state
             });
     });
-}
-
-export function sendMessage(msg: string) {
-    stompClient.publish({ destination: '/app/upper', body: JSON.stringify({ msg }) });
 }

@@ -2,61 +2,19 @@ import { createModuleBuilder } from '@/store/helpers';
 import { RootState } from '@/store';
 import * as gameApi from '@/api/game';
 import { Subscription } from 'rxjs';
+import { GameData } from '@/store/modules/game/model';
 
-export enum Color {
-    Yellow = 'yellow',
-    Blue = 'blue',
-    White = 'white',
-    Green = 'green',
-    Red = 'red',
-}
-
-export class Card {
-    value: number = 0;
-    color: Color = Color.White;
-    instance?: number;
-
-    constructor(value: number, color: Color, instance?: number) {
-        this.value = value;
-        this.color = color;
-        this.instance = instance;
-    }
-
-    get isWager() {
-        return this.value === 0;
-    }
-
-    public toString() {
-        return this.color + ' ' + (this.isWager ? `wager ${this.instance}` : this.value);
-    }
-}
-
-export type Discard = {
-    [color: string]: Card[];
-};
-
-export type CardsInPlay = {
-    [color: string]: Card[];
-};
-
-export interface GameData {
-    id: number;
-    discard: Discard;
-    player1: any;
-    player2: any;
-}
-
-export interface GameState {
+export interface GameStoreState {
     gameData: any;
     error: string | null;
 }
 
-const initialState: GameState = {
+const initialState: GameStoreState = {
     gameData: {},
     error: null,
 };
 
-const { mutation, action, getter, getState } = createModuleBuilder<GameState, RootState>(
+const { mutation, action, getter, getState } = createModuleBuilder<GameStoreState, RootState>(
     'game',
     initialState
 );
