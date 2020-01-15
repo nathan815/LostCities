@@ -5,7 +5,8 @@ import Board from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, CardsInPlay, Color, Discard } from '@/store/modules/game';
+import { Card, CardsInPlay, Color, Discard, GameState } from '@/store/modules/game';
+import game from '@/store/modules/game';
 
 @Component({
     components: { Hand, CardsInPlayView, Board, Deck },
@@ -14,8 +15,16 @@ export default class GamePlay extends Vue {
     deckNumCards: number = 10;
     alwaysShowHand: boolean = true;
 
-    get id() {
-        return this.$route.params.id;
+    get id(): number {
+        return parseInt(this.$route.params.id);
+    }
+
+    get gameData(): GameState {
+        return game.state;
+    }
+
+    mounted() {
+        game.loadInitialGameData({ id: this.id });
     }
 
     get discard(): Discard {

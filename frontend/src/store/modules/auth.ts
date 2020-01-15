@@ -1,6 +1,7 @@
 import authApi from '@/api/auth';
 import { RootState } from '@/store';
 import { createModuleBuilder } from '@/store/helpers';
+import * as websocket from '@/api/websocket';
 
 const LOCAL_STORAGE_KEY = 'auth';
 
@@ -8,7 +9,7 @@ interface AuthUserInfo {
     username: string;
     email: string;
 }
-interface AuthInfo {
+export interface AuthInfo {
     user: AuthUserInfo;
     token: string;
 }
@@ -17,6 +18,15 @@ export interface AuthState {
     isLoggedIn: boolean;
     error: string | null;
     auth: AuthInfo | null;
+}
+
+function onLogin(authInfo: AuthInfo | null) {
+    websocket.disconnect();
+    websocket.connect(authInfo);
+}
+function onLogout() {
+    websocket.disconnect();
+    websocket.connect();
 }
 
 const authInfo = readAuthFromLocalStorage();
@@ -30,6 +40,12 @@ const { mutation, action, getter, getState } = createModuleBuilder<AuthState, Ro
     'auth',
     initialState
 );
+
+if (initialState.isLoggedIn) {
+    onLogin(authInfo);
+} else {
+    onLogout();
+}
 
 const getters = {
     user: getter(function user(state: AuthState) {
@@ -80,6 +96,7 @@ export default {
             saveAuthToLocalStorage(authInfo);
             mutations.setAuth(authInfo);
             mutations.loginSuccess();
+            onLogin(authInfo);
         } catch (err) {
             let message = 'Sorry, something went wrong.';
             if (err.response.status === 401) {
@@ -92,6 +109,7 @@ export default {
     logout: action(function logout() {
         mutations.logout();
         localStorage.removeItem(LOCAL_STORAGE_KEY);
+        onLogout();
     }),
 
     clearError: mutations.clearError,
