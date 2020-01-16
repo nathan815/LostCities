@@ -18,6 +18,7 @@ import auth from '@/store/modules/auth';
     components: { Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
+    isLoading: boolean = true;
     alwaysShowHand: boolean = true;
     gameState: GameState = new GameState();
     error: string | null = null;
@@ -40,6 +41,7 @@ export default class GamePlay extends Vue {
         const setGameState = (gameState: GameState) => {
             console.log('Received Game State: ', gameState);
             this.gameState = gameState;
+            this.isLoading = false;
         };
         const handleError = error => {
             console.log(error);
@@ -104,81 +106,93 @@ export default class GamePlay extends Vue {
 
 <template>
     <b-container class="game-play-container">
-        <b-row>
-            <b-col sm="12" md="9" lg="9">
-                <b-row class="cards-in-play-top">
-                    <b-col cols="2" class="p-2">
-                        <div class="player-info top">
-                            <span class="description">{{ topPlayerDesc }}</span>
-                        </div>
-                    </b-col>
+        <b-alert :show="error" variant="danger">
+            <b>Error:</b>
+            {{ error }}
+        </b-alert>
+        <template v-if="!isLoading">
+            <b-row>
+                <b-col sm="12" md="9" lg="9">
+                    <b-row class="cards-in-play-top">
+                        <b-col cols="2" class="p-2">
+                            <div class="player-info top">
+                                <span class="description">{{ topPlayerDesc }}</span>
+                            </div>
+                        </b-col>
 
-                    <b-col cols="10">
-                        <CardsInPlayView
-                            :cards="topPlayer ? topPlayer.inPlay : {}"
-                            :is-top="true"
-                            class="cards-in-play"
-                        />
-                    </b-col>
-                </b-row>
+                        <b-col cols="10">
+                            <CardsInPlayView
+                                :cards="topPlayer ? topPlayer.inPlay : {}"
+                                :is-top="true"
+                                class="cards-in-play"
+                            />
+                        </b-col>
+                    </b-row>
 
-                <b-row>
-                    <b-col cols="2">
-                        <div class="draw-pile">
-                            <Deck :size="gameState.deckSize" />
-                        </div>
-                    </b-col>
-                    <b-col cols="10">
-                        <BoardView :board="gameState.board" />
-                    </b-col>
-                </b-row>
+                    <b-row>
+                        <b-col cols="2">
+                            <div class="draw-pile">
+                                <Deck :size="gameState.deckSize" />
+                            </div>
+                        </b-col>
+                        <b-col cols="10">
+                            <BoardView :board="gameState.board" />
+                        </b-col>
+                    </b-row>
 
-                <b-row class="cards-in-play-bottom">
-                    <b-col cols="2" class="p-2">
-                        <div class="player-info bottom">
-                            <span class="description">{{ bottomPlayerDesc }}</span>
-                        </div>
-                    </b-col>
-                    <b-col cols="10">
-                        <CardsInPlayView
-                            :cards="bottomPlayer ? bottomPlayer.inPlay : {}"
-                            class="cards-in-play"
-                        />
-                    </b-col>
-                </b-row>
-            </b-col>
+                    <b-row class="cards-in-play-bottom">
+                        <b-col cols="2" class="p-2">
+                            <div class="player-info bottom">
+                                <span class="description">{{ bottomPlayerDesc }}</span>
+                            </div>
+                        </b-col>
+                        <b-col cols="10">
+                            <CardsInPlayView
+                                :cards="bottomPlayer ? bottomPlayer.inPlay : {}"
+                                class="cards-in-play"
+                            />
+                        </b-col>
+                    </b-row>
+                </b-col>
 
-            <b-col sm="12" md="3" lg="3">
-                <div class="sidebar">
-                    <b-alert :show="error" variant="danger">
-                        <b>Error:</b>
-                        {{ error }}
-                    </b-alert>
-                    <b-card class="status">
-                        <b-card-text class="text-italic">
-                            {{ statusText }}
-                        </b-card-text>
-                        <b-card-text>
-                            <b-button variant="primary" size="sm">Nudge</b-button>
-                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
-                                <template v-slot:button-content>
-                                    <i class="fas fa-cog" />
-                                </template>
-                                <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
-                                    <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
-                                    Keep hand visible when scrolling
-                                </b-dropdown-item>
-                            </b-dropdown>
-                        </b-card-text>
-                    </b-card>
-                    <b-card header="Moves" class="history">
-                        <b-card-text>
-                            <em>No moves have been made yet</em>
-                        </b-card-text>
-                    </b-card>
-                </div>
-            </b-col>
-        </b-row>
+                <b-col sm="12" md="3" lg="3">
+                    <div class="sidebar">
+                        <b-card class="status">
+                            <b-card-text class="text-italic">
+                                {{ statusText }}
+                            </b-card-text>
+                            <b-card-text>
+                                <b-button variant="primary" size="sm">Nudge</b-button>
+                                <b-dropdown
+                                    id="dropdown-1"
+                                    size="sm"
+                                    class="m-md-2"
+                                    variant="light"
+                                >
+                                    <template v-slot:button-content>
+                                        <i class="fas fa-cog" />
+                                    </template>
+                                    <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
+                                        <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
+                                        Keep hand visible when scrolling
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                            </b-card-text>
+                        </b-card>
+                        <b-card header="Moves" class="history">
+                            <b-card-text>
+                                <em>No moves have been made yet</em>
+                            </b-card-text>
+                        </b-card>
+                    </div>
+                </b-col>
+            </b-row>
+        </template>
+
+        <div v-if="isLoading" class="loading">
+            <b-spinner variant="primary" />
+            Loading game...
+        </div>
 
         <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="alwaysShowHand" />
     </b-container>
@@ -207,6 +221,12 @@ export default class GamePlay extends Vue {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .sidebar {
     width: 100%;
