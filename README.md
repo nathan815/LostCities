@@ -27,7 +27,7 @@ Then install dependencies and start the dev server.
 
 🛠Install dependencies: `npm install`
 
-▶️Run: `npm start`
+▶️Run: `npm run serve`
 
 ⚡️Production Build: `npm run build`
 
