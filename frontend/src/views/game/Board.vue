@@ -14,7 +14,7 @@ export default class Board extends Vue {
     colors = getColorEnumValues();
 
     lastThreeDiscardCards(color: Color): Card[] {
-        return this.discard[color] && this.discard[color].slice(-3);
+        return this.discard[color] ? this.discard[color]!.slice(-3) : [];
     }
 
     // Returns some custom style for a card given its index in the pile
