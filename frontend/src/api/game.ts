@@ -4,9 +4,10 @@ import { Move } from '@/store/modules/game/moves';
 
 export const errorObservable = () => stompClient.watch(`/user/queue/game/errors`).pipe(toJson);
 
-export const gameDataObservable = gameId => stompClient.watch(`/topic/game/${gameId}`).pipe(toJson);
+export const gameStateObservable = gameId =>
+    stompClient.watch(`/topic/game/${gameId}`).pipe(toJson);
 
-export const userGameDataObservable = gameId =>
+export const userGameStateObservable = gameId =>
     stompClient.watch(`/user/topic/game/${gameId}`).pipe(toJson);
 
 export async function requestGameState(gameId) {

@@ -43,8 +43,8 @@ export default class GamePlay extends Vue {
         };
         this.subscriptions.push(
             gameApi.errorObservable().subscribe(handleError),
-            gameApi.gameDataObservable(this.id).subscribe(setGameState),
-            gameApi.userGameDataObservable(this.id).subscribe(setGameState)
+            gameApi.gameStateObservable(this.id).subscribe(setGameState),
+            gameApi.userGameStateObservable(this.id).subscribe(setGameState)
         );
     }
 
