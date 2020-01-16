@@ -1,4 +1,4 @@
-import stompClient, { defaultStompConfig } from '@/api/websocket/stompClient';
+import stompClient, { baseStompConfig } from '@/api/websocket/stompClient';
 import { RxStompConfig } from '@stomp/rx-stomp';
 import { AuthInfo } from '@/store/modules/auth';
 
@@ -8,7 +8,7 @@ export function connect(authInfo?: AuthInfo | null) {
         connectHeaders['Authorization'] = `Bearer ${authInfo.token}`;
     }
     const config: RxStompConfig = { connectHeaders };
-    stompClient.configure({ ...defaultStompConfig, ...config });
+    stompClient.configure({ ...baseStompConfig, ...config });
     console.log('Websocket: Connecting to STOMP');
     stompClient.activate();
 }

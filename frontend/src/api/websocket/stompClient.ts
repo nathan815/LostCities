@@ -2,7 +2,7 @@ import { RxStomp, RxStompConfig } from '@stomp/rx-stomp';
 
 const WS_URL = 'ws://localhost:8089/ws';
 
-export const defaultStompConfig: RxStompConfig = {
+export const baseStompConfig: RxStompConfig = {
     connectHeaders: {},
     brokerURL: WS_URL,
     debug: function(str) {
@@ -11,7 +11,7 @@ export const defaultStompConfig: RxStompConfig = {
     reconnectDelay: 1000,
 };
 
-export function createStompClient(config = defaultStompConfig) {
+export function createStompClient(config = baseStompConfig) {
     const stompClient = new RxStomp();
     stompClient.configure(config);
     return stompClient;
