@@ -1,9 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card, Color } from '@/model/game/card';
+import { Card, Color, getColorEnumValues } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
-import { getColorEnumValues } from '@/utils';
 
 @Component({
     components: { CardView },

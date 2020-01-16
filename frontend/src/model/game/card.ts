@@ -6,6 +6,10 @@ export enum Color {
     Red = 'red',
 }
 
+export function getColorEnumValues(): Color[] {
+    return Object.keys(Color).map(key => Color[key]);
+}
+
 export class Card {
     value: number = 0;
     color: Color = Color.White;
