@@ -5,6 +5,7 @@ const BACKEND_URL = `http://localhost:${BACKEND_PORT}/`;
 module.exports = {
     lintOnSave: false,
     devServer: {
+        host: 'localhost',
         port: FRONTEND_PORT,
         proxy: {
             // proxy all requests starting with /api to backend api

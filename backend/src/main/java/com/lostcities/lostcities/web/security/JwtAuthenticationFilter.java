@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         String token = header.replace(SecurityConstants.TOKEN_PREFIX, "");
 
-        Authentication authentication = JwtTokenHelper.getAuthentication(token);
+        Authentication authentication = JwtTokenHelper.parseAuthenticationToken(token);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);

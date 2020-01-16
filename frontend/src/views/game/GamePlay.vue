@@ -5,7 +5,9 @@ import Board from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, CardsInPlay, Color, Discard } from '@/store/modules/game';
+import { Card, CardsInPlay, Color, Discard, GameData } from '@/store/modules/game/model';
+import * as gameApi from '@/api/game';
+import { Subscription } from 'rxjs';
 
 @Component({
     components: { Hand, CardsInPlayView, Board, Deck },
@@ -13,9 +15,37 @@ import { Card, CardsInPlay, Color, Discard } from '@/store/modules/game';
 export default class GamePlay extends Vue {
     deckNumCards: number = 10;
     alwaysShowHand: boolean = true;
+    gameState?: GameData;
+    error: string | null = null;
+    subscriptions: Subscription[] = [];
 
-    get id() {
-        return this.$route.params.id;
+    get id(): number {
+        return parseInt(this.$route.params.id);
+    }
+
+    mounted() {
+        this.setupSubscriptions();
+        gameApi.requestGameState(this.id);
+    }
+
+    beforeDestroy() {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+
+    private setupSubscriptions() {
+        const setGameState = gameState => {
+            console.log('Received Game State: ', gameState);
+            this.gameState = gameState;
+        };
+        const handleError = error => {
+            console.log(error);
+            this.error = error.error;
+        };
+        this.subscriptions.push(
+            gameApi.errorObservable().subscribe(handleError),
+            gameApi.gameStateObservable(this.id).subscribe(setGameState),
+            gameApi.userGameStateObservable(this.id).subscribe(setGameState)
+        );
     }
 
     get discard(): Discard {
@@ -122,6 +152,10 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
+                    <b-alert :show="error" variant="danger">
+                        <b>Error:</b>
+                        {{ error }}
+                    </b-alert>
                     <b-card class="status">
                         <b-card-text class="text-italic">
                             <b>Player 2's</b>

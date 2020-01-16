@@ -29,7 +29,13 @@ export class Card {
 export type Discard = {
     [color: string]: Card[];
 };
-
 export type CardsInPlay = {
     [color: string]: Card[];
 };
+
+export interface GameData {
+    id: number;
+    discard: Discard;
+    player1: any;
+    player2: any;
+}

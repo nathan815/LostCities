@@ -155,4 +155,18 @@ public class Game {
                     .orElseThrow(IllegalArgumentException::new);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", randomSeed=" + randomSeed +
+                ", playerTurn=" + playerTurn +
+                ", player1=" + player1 +
+                ", player2=" + player2 +
+                ", deck=" + deck +
+                ", board=" + board +
+                ", status=" + status +
+                '}';
+    }
 }
