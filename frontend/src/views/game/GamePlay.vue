@@ -5,7 +5,8 @@ import Board from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, CardsInPlay, Color, Discard, GameData } from '@/store/modules/game/model';
+import { Card, CardsInPlay, Color, Discard } from '@/model/game/card';
+import { GameState } from '@/model/game';
 import * as gameApi from '@/api/game';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +16,7 @@ import { Subscription } from 'rxjs';
 export default class GamePlay extends Vue {
     deckNumCards: number = 10;
     alwaysShowHand: boolean = true;
-    gameState?: GameData;
+    gameState?: GameState;
     error: string | null = null;
     subscriptions: Subscription[] = [];
 
@@ -33,7 +34,7 @@ export default class GamePlay extends Vue {
     }
 
     private setupSubscriptions() {
-        const setGameState = gameState => {
+        const setGameState = (gameState: GameState) => {
             console.log('Received Game State: ', gameState);
             this.gameState = gameState;
         };

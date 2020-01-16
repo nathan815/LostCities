@@ -6,6 +6,10 @@ export enum Color {
     Red = 'red',
 }
 
+export function getColorEnumValues(): Color[] {
+    return Object.keys(Color).map(key => Color[key]);
+}
+
 export class Card {
     value: number = 0;
     color: Color = Color.White;
@@ -29,13 +33,7 @@ export class Card {
 export type Discard = {
     [color: string]: Card[];
 };
+
 export type CardsInPlay = {
     [color: string]: Card[];
 };
-
-export interface GameData {
-    id: number;
-    discard: Discard;
-    player1: any;
-    player2: any;
-}

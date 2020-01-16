@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card } from '@/store/modules/game/model';
+import { Card } from '@/model/game/card';
 
 @Component
 export default class CardView extends Vue {

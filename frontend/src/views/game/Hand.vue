@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card } from '@/store/modules/game/model';
+import { Card } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
 
 @Component({
