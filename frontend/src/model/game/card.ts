@@ -31,9 +31,9 @@ export class Card {
 }
 
 export type Discard = {
-    [color: string]: Card[];
+    [key in Color]?: Card[];
 };
 
 export type CardsInPlay = {
-    [color: string]: Card[];
+    [key in Color]?: Card[];
 };

@@ -83,7 +83,7 @@ export default {
         return getState();
     },
 
-    get currentUser() {
+    get currentUser(): AuthUserInfo | null {
         return getters.user();
     },
 

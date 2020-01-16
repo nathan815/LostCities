@@ -14,7 +14,7 @@ export default class App extends Vue {}
     <div>
         <Header />
         <div class="main-container">
-            <router-view />
+            <router-view :key="$route.path" />
         </div>
     </div>
 </template>

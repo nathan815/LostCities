@@ -20,6 +20,9 @@ export default class Hand extends Vue {
     <b-row>
         <b-container class="hand" :class="{ fixed: fixed }">
             <CardView v-for="card in cards" :key="card.toString()" :card="card" class="hand-card" />
+            <div v-if="cards.length === 0">
+                <em>Hmm... your hand is empty</em>
+            </div>
         </b-container>
         <div v-if="fixed" class="spacer"></div>
     </b-row>

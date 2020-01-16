@@ -54,7 +54,7 @@ public class Deck {
         cards.add(Card.createWagerCard(color, 1));
         cards.add(Card.createWagerCard(color, 2));
 
-        cards.addAll(IntStream.range(2, 10)
+        cards.addAll(IntStream.range(2, 11)
                 .mapToObj((i) -> Card.createExpeditionCard(color, i))
                 .collect(Collectors.toList()));
 

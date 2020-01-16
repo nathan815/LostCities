@@ -1,20 +1,25 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card, Color, Discard, getColorEnumValues } from '@/model/game/card';
+import { Card, Color, getColorEnumValues } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
+import { Board } from '@/model/game';
 
 @Component({
     components: { CardView },
 })
-export default class Board extends Vue {
+export default class BoardView extends Vue {
     @Prop({ required: true })
-    discard!: Discard;
+    board!: Board;
 
     colors = getColorEnumValues();
 
+    get discard() {
+        return this.board.discard;
+    }
+
     lastThreeDiscardCards(color: Color): Card[] {
-        return this.discard[color] && this.discard[color].slice(-3);
+        return this.discard[color] ? this.discard[color]!.slice(-3) : [];
     }
 
     // Returns some custom style for a card given its index in the pile

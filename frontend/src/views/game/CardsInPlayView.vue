@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Card, Color, getColorEnumValues } from '@/model/game/card';
+import { CardsInPlay, Color, getColorEnumValues } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
 
 @Component({
@@ -9,7 +9,7 @@ import CardView from '@/views/game/CardView.vue';
 })
 export default class CardsInPlayView extends Vue {
     @Prop({ required: true })
-    cards!: { Color: Card[] };
+    cards!: CardsInPlay;
 
     @Prop({ default: false })
     isTop!: boolean;
@@ -25,12 +25,12 @@ export default class CardsInPlayView extends Vue {
 
     get maxNumCards() {
         return Object.values(this.cards)
-            .map(cards => cards.length)
+            .map(cards => (cards ? cards.length : 0))
             .reduce((max, cur) => Math.max(max, cur), 0);
     }
 
     hasCards(color: Color): boolean {
-        return this.cards[color] && this.cards[color].length > 0;
+        return !!this.cards[color] && this.cards[color]!.length > 0;
     }
 }
 </script>

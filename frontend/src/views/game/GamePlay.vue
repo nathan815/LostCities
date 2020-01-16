@@ -1,22 +1,25 @@
+import { GameStatus } from '@/model/game';
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import Board from '@/views/game/Board.vue';
+import { Subscription } from 'rxjs';
+
+import BoardView from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { Card, CardsInPlay, Color, Discard } from '@/model/game/card';
-import { GameState } from '@/model/game';
+import { GameState, GameStatus } from '@/model/game';
+import { Player } from '@/model/game/player';
+
 import * as gameApi from '@/api/game';
-import { Subscription } from 'rxjs';
+import auth from '@/store/modules/auth';
 
 @Component({
-    components: { Hand, CardsInPlayView, Board, Deck },
+    components: { Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
-    deckNumCards: number = 10;
     alwaysShowHand: boolean = true;
-    gameState?: GameState;
+    gameState: GameState = new GameState();
     error: string | null = null;
     subscriptions: Subscription[] = [];
 
@@ -49,65 +52,52 @@ export default class GamePlay extends Vue {
         );
     }
 
-    get discard(): Discard {
-        return {
-            [Color.Red]: [
-                new Card(2, Color.Red),
-                new Card(3, Color.Red),
-                new Card(7, Color.Red),
-                new Card(5, Color.Red),
-                new Card(7, Color.Red),
-            ],
-            [Color.Yellow]: [new Card(2, Color.Yellow)],
-            [Color.Blue]: [new Card(3, Color.Blue), new Card(10, Color.Blue)],
-            [Color.White]: [new Card(6, Color.White)],
-            [Color.Green]: [new Card(7, Color.Green, 0), new Card(2, Color.Green)],
-        };
+    get isMyGame() {
+        return !!this.player;
     }
 
-    get hand(): Card[] {
-        return [
-            new Card(0, Color.Blue, 0),
-            new Card(3, Color.Red),
-            new Card(10, Color.White),
-            new Card(5, Color.Yellow),
-            new Card(4, Color.Green),
-            new Card(5, Color.Blue),
-            new Card(2, Color.White),
-            new Card(4, Color.Red),
-        ];
+    get player(): Player | undefined {
+        return this.gameState.players.find(
+            player => auth.currentUser && player.name === auth.currentUser.username
+        );
     }
 
-    get bottomInPlay(): CardsInPlay {
-        return {
-            [Color.Blue]: [
-                new Card(0, Color.Blue, 0),
-                new Card(0, Color.Blue, 1),
-                new Card(2, Color.Blue),
-                new Card(4, Color.Blue),
-                new Card(7, Color.Blue),
-                new Card(8, Color.Blue),
-                new Card(9, Color.Blue),
-            ],
-            [Color.Yellow]: [new Card(0, Color.Yellow, 0), new Card(3, Color.Yellow)],
-            [Color.White]: [new Card(0, Color.White)],
-        };
+    get opponent(): Player | undefined {
+        if (!auth.currentUser || !this.player) return undefined;
+        return this.gameState.players.find(
+            player => auth.currentUser && player.name !== auth.currentUser.username
+        );
     }
 
-    get topInPlay(): CardsInPlay {
-        return {
-            [Color.Green]: [
-                new Card(0, Color.Green, 0),
-                new Card(3, Color.Green),
-                new Card(5, Color.Green),
-            ],
-            [Color.White]: [
-                new Card(2, Color.White),
-                new Card(4, Color.White),
-                new Card(7, Color.White),
-                new Card(10, Color.White),
-            ],
-        };
+    get topPlayer(): Player | undefined {
+        return this.isMyGame ? this.opponent : this.gameState.players[0];
+    }
+
+    get topPlayerDesc() {
+        if (this.isMyGame) return 'Them';
+        else if (this.topPlayer) return this.topPlayer.name;
+        else return 'Player 2';
+    }
+
+    get bottomPlayer(): Player | undefined {
+        return this.isMyGame ? this.player : this.gameState.players[1];
+    }
+
+    get bottomPlayerDesc() {
+        if (this.isMyGame) return 'You';
+        else if (this.bottomPlayer) return this.bottomPlayer.name;
+        else return 'Player 1';
+    }
+
+    get statusText() {
+        let text = 'Unknown Status';
+        console.log(this.gameState.status, GameStatus.New);
+        switch (this.gameState.status) {
+            case GameStatus.New:
+                text = 'Waiting for second player...';
+                break;
+        }
+        return text;
     }
 }
 </script>
@@ -119,34 +109,41 @@ export default class GamePlay extends Vue {
                 <b-row class="cards-in-play-top">
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
-                            <span class="description">Them</span>
+                            <span class="description">{{ topPlayerDesc }}</span>
                         </div>
                     </b-col>
 
                     <b-col cols="10">
-                        <CardsInPlayView :cards="topInPlay" :is-top="true" class="cards-in-play" />
+                        <CardsInPlayView
+                            :cards="topPlayer ? topPlayer.inPlay : {}"
+                            :is-top="true"
+                            class="cards-in-play"
+                        />
                     </b-col>
                 </b-row>
 
                 <b-row>
                     <b-col cols="2">
                         <div class="draw-pile">
-                            <Deck :num-cards="deckNumCards" />
+                            <Deck :size="gameState.deckSize" />
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <Board :discard="discard" />
+                        <BoardView :board="gameState.board" />
                     </b-col>
                 </b-row>
 
                 <b-row class="cards-in-play-bottom">
                     <b-col cols="2" class="p-2">
                         <div class="player-info bottom">
-                            <span class="description">You</span>
+                            <span class="description">{{ bottomPlayerDesc }}</span>
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <CardsInPlayView :cards="bottomInPlay" class="cards-in-play" />
+                        <CardsInPlayView
+                            :cards="bottomPlayer ? bottomPlayer.inPlay : {}"
+                            class="cards-in-play"
+                        />
                     </b-col>
                 </b-row>
             </b-col>
@@ -159,8 +156,7 @@ export default class GamePlay extends Vue {
                     </b-alert>
                     <b-card class="status">
                         <b-card-text class="text-italic">
-                            <b>Player 2's</b>
-                            turn
+                            {{ statusText }}
                         </b-card-text>
                         <b-card-text>
                             <b-button variant="primary" size="sm">Nudge</b-button>
@@ -184,7 +180,7 @@ export default class GamePlay extends Vue {
             </b-col>
         </b-row>
 
-        <Hand :cards="hand" :fixed="alwaysShowHand" />
+        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="alwaysShowHand" />
     </b-container>
 </template>
 

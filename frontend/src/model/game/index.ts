@@ -1,8 +1,24 @@
-import { Discard } from './card';
+import { Card, Discard } from './card';
+import { Player } from '@/model/game/player';
+
+export interface Board {
+    discard: Discard;
+}
+
+export enum GameStatus {
+    New = 'New',
+    ReadyToStart = 'ReadyToStart',
+    Started = 'Started',
+    Ended = 'Ended',
+};
 
 export class GameState {
-    id: number | null = null;
-    discard: Discard | null = null;
-    player1: any = null;
-    player2: any = null;
+    id: number = 0;
+    status: GameStatus = GameStatus.New;
+    deckSize: number = 0;
+    board: Board = {
+        discard: {},
+    };
+    players: Player[] = [];
+    hand: Card[] = [];
 }

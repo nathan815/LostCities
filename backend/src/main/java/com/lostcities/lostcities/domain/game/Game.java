@@ -3,6 +3,7 @@ package com.lostcities.lostcities.domain.game;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -64,6 +65,10 @@ public class Game {
         return id;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public Deck getDeck() {
         return deck;
     }
@@ -84,8 +89,12 @@ public class Game {
         return player2;
     }
 
+    public Stream<Player> getPlayersStream() {
+        return Stream.of(player1, player2).filter(Objects::nonNull);
+    }
+
     public Optional<Player> getPlayerById(Long playerId) {
-        return Stream.of(player1, player2)
+        return getPlayersStream()
                 .filter(player -> player.getId() == playerId)
                 .findFirst();
     }
