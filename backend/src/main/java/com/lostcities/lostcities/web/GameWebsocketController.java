@@ -30,8 +30,8 @@ public class GameWebsocketController {
     @MessageMapping("/game/{id}/requestState")
     @SendToUser("/topic/game/{id}")
     public GameDto getInitialGameData(@DestinationVariable String id) {
-        var gameDto = gameService.getGame(parseGameId(id));
-        logger.info("Game: " + gameDto);
+        var gameDto = gameService.getGame(parseGameId(id), 0); // TODO get logged in player ID
+        logger.info("Requested state for game " + id);
         return gameDto;
     }
 
@@ -44,7 +44,7 @@ public class GameWebsocketController {
     @MessageExceptionHandler
     @SendToUser(value = "/queue/game/errors", broadcast = false)
     public Map<String, String> handleException(Throwable exception) {
-        logger.error("Error in game WS controller", exception);
+        logger.error("Error in game socket controller", exception);
         var response = new HashMap<String, String>();
         response.put("error", exception.getMessage());
         return response;

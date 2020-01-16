@@ -10,10 +10,10 @@ const WARN_CARDS_LEFT = 3;
 })
 export default class Deck extends Vue {
     @Prop()
-    numCards!: number;
+    size!: number;
 
     get numCardsBadgeVariant() {
-        return this.numCards <= WARN_CARDS_LEFT ? 'danger' : 'light';
+        return this.size <= WARN_CARDS_LEFT ? 'danger' : 'light';
     }
 }
 </script>
@@ -22,7 +22,7 @@ export default class Deck extends Vue {
     <div class="deck">
         <CardView class="cards" show-side="back" />
         <p>
-            <b-badge :variant="numCardsBadgeVariant">{{ numCards }} left</b-badge>
+            <b-badge :variant="numCardsBadgeVariant">{{ size }} cards</b-badge>
         </p>
     </div>
 </template>
