@@ -25,11 +25,12 @@ public class GameWebsocketController {
     }
 
     /**
-     * When client subscribes to /app/game/{id}, this responds with game data immediately
+     * Sends game state to user on /user/topic/game/{id} channel
      */
-    @SubscribeMapping("/game/{id}")
-    public GameDto getInitialGameData(@DestinationVariable int id) {
-        var gameDto = gameService.getGame(id);
+    @MessageMapping("/game/{id}/requestState")
+    @SendToUser("/topic/game/{id}")
+    public GameDto getInitialGameData(@DestinationVariable String id) {
+        var gameDto = gameService.getGame(parseGameId(id));
         logger.info("Game: " + gameDto);
         return gameDto;
     }

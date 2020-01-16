@@ -1,22 +1,18 @@
 import stompClient from '@/api/websocket/stompClient';
 import { toJson } from '@/api/websocket/helpers';
-import { Observable } from 'rxjs';
-import { IMessage } from '@stomp/stompjs';
-import { GameData } from '@/store/modules/game/model';
+import { Move } from '@/store/modules/game/moves';
 
-export const gameStateObservable = gameId =>
-    stompClient.watch(`/topic/game/${gameId}`).pipe(toJson);
+export const errorObservable = () => stompClient.watch(`/user/queue/game/errors`).pipe(toJson);
 
-export const testObservable: Observable<IMessage> = stompClient.watch('/topic/test').pipe(toJson);
+export const gameDataObservable = gameId => stompClient.watch(`/topic/game/${gameId}`).pipe(toJson);
 
-export async function requestInitialGameData(id): Promise<GameData> {
-    return new Promise(resolve => {
-        const subscription = stompClient
-            .watch(`/app/game/${id}`)
-            .pipe(toJson)
-            .subscribe(data => {
-                resolve(data);
-                subscription.unsubscribe(); // Only need this subscription to initially request game state
-            });
-    });
+export const userGameDataObservable = gameId =>
+    stompClient.watch(`/user/topic/game/${gameId}`).pipe(toJson);
+
+export async function requestGameState(gameId) {
+    stompClient.publish({ destination: `/app/game/${gameId}/requestState`, body: '' });
+}
+
+export function makeMove(gameId: number, move: Move) {
+    stompClient.publish({ destination: `/app/game/${gameId}/move`, body: JSON.stringify(move) });
 }
