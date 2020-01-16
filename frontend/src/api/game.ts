@@ -1,6 +1,6 @@
 import stompClient from '@/api/websocket/stompClient';
 import { toJson } from '@/api/websocket/helpers';
-import { Move } from '@/store/modules/game/moves';
+import { Move } from '@/model/game/moves';
 
 export const errorObservable = () => stompClient.watch(`/user/queue/game/errors`).pipe(toJson);
 

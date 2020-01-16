@@ -1,4 +1,4 @@
-import { Card, Color } from '@/store/modules/game/model';
+import { Card, Color } from '@/model/game/card';
 
 enum MoveType {
     PlayCard,
