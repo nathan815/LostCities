@@ -54,8 +54,8 @@ public class GameWebsocketController {
         try {
             return Long.parseLong(id);
         } catch (NumberFormatException e) {
-            logger.error("Non-number passed as game ID" + id, e);
-            throw new RuntimeException("Game ID must be a number, but a non-number was provided: " + id, e);
+            logger.error("Non-number game ID provided " + id, e);
+            throw new IllegalArgumentException("Game ID must be a number, but a non-number was provided: " + id, e);
         }
     }
 }
