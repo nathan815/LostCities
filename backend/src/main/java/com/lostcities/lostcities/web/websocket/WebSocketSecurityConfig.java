@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.web;
+package com.lostcities.lostcities.web.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;

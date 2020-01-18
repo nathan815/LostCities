@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.web;
+package com.lostcities.lostcities.web.websocket;
 
 import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.dto.MoveDto;
@@ -18,7 +18,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import static com.lostcities.lostcities.web.WebSocketConfig.USER_HEADER;
+import static com.lostcities.lostcities.web.websocket.WebSocketConfig.USER_HEADER;
 
 @Controller
 public class GameWebsocketController {

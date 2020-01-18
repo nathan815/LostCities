@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.web;
+package com.lostcities.lostcities.web.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lostcities.lostcities.domain.user.User;
