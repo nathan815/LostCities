@@ -73,4 +73,8 @@ public class GameService {
         return GameDto.fromGame(game).withHand(hand);
     }
 
+    public GameDto getGame(long gameId) {
+        Game game = getGameById(gameId);
+        return GameDto.fromGame(game);
+    }
 }

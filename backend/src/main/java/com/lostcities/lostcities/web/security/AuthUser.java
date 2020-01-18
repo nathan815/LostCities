@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.web.security;
 
+import com.lostcities.lostcities.domain.user.User;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,14 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public User toDomainUser() {
+        return new User(getId(), getUsername());
     }
 
 }
