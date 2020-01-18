@@ -30,6 +30,5 @@ export default [
     {
         path: '/games/:id',
         component: GamePlay,
-        meta: { requiresAuth: true },
     },
 ];
