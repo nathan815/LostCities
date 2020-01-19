@@ -1,6 +1,4 @@
-package com.lostcities.lostcities.persistence.game;
-
-import com.lostcities.lostcities.domain.game.Game;
+package com.lostcities.lostcities.domain.game;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

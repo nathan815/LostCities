@@ -3,14 +3,52 @@ package com.lostcities.lostcities.domain.game;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
+import com.lostcities.lostcities.domain.user.User;
 import java.util.Optional;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+
+@Entity
 public class Move {
 
-    private final Player player;
-    private final Card playCard;
-    private final Card discardCard;
-    private final Color drawDiscardColor;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+    @OneToOne
+    private User user;
+
+    @Transient
+    private Player player;
+
+    enum Type {
+        PlayCard,
+        DiscardCard,
+        DrawFromDeck,
+        DrawFromDiscard;
+    }
+    private Type type;
+
+    @Transient
+    private Card playCard = null;
+
+    @Transient
+    private Card discardCard = null;
+
+    @Transient
+    private Color drawDiscardColor = null;
 
     public static class MoveBuilder {
         private Player player;
@@ -50,6 +88,9 @@ public class Move {
         return new MoveBuilder();
     }
 
+    public Move() {
+    }
+
     private Move(Player player, Card playCard, Card discardCard, Color drawDiscardColor) {
         if(playCard != null && discardCard != null) {
             throw new IllegalArgumentException("Cannot simultaneously play a card and discard a card");
@@ -80,6 +121,10 @@ public class Move {
 
     public Color getDrawDiscardColor() {
         return drawDiscardColor;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     protected void execute(Deck deck, GameBoard board) throws MoveException {

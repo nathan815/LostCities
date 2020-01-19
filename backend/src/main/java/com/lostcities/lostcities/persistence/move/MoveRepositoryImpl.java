@@ -14,34 +14,19 @@ import static java.util.stream.Collectors.toList;
 @Repository
 public class MoveRepositoryImpl implements MoveRepository {
 
-    private MoveEntityDao moveEntityDao;
+    private MoveDao moveDao;
 
-    public MoveRepositoryImpl(MoveEntityDao moveEntityDao) {
-        this.moveEntityDao = moveEntityDao;
+    public MoveRepositoryImpl(MoveDao moveDao) {
+        this.moveDao = moveDao;
     }
 
     @Override
-    @CacheEvict(value="gameMoves", key="#gameId")
     public void save(long gameId, Move move) {
-        MoveEntity moveEntity = new MoveEntity(gameId,
-                move.getPlayer().getId(),
-                move.getPlayCard().toString(),
-                move.getDiscardCard().toString(),
-                move.getDrawDiscardColor()
-        );
-        moveEntityDao.save(moveEntity);
+        moveDao.save(move);
     }
 
     @Override
-    @Cacheable(value="gameMoves", key="#game.id")
     public List<Move> getMovesForGame(Game game) {
-        return moveEntityDao.findAllByGameId(game.getId()).stream().map(moveEntity -> {
-            var player = game.getPlayerById(moveEntity.getUserId()).get();
-            var playCard = Card.fromString(moveEntity.getPlayCard());
-            var discardCard = Card.fromString(moveEntity.getDiscardCard());
-
-            return Move.builder().player(player).playCard(playCard).discardCard(discardCard)
-                    .drawDiscardColor(moveEntity.getDrawDiscardCardColor()).build();
-        }).collect(toList());
+        return moveDao.findAllByGameId(game.getId());
     }
 }
