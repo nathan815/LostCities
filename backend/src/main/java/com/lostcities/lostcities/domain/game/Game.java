@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 @Entity
@@ -85,9 +86,6 @@ public class Game {
     private void postLoadInit() {
         deck = Deck.getShuffledDeck(new Random(randomSeed));
         board = new GameBoard();
-        if(moves == null) {
-            moves = new ArrayList<>();
-        }
         if(user1 != null) {
             player1 = new Player(user1.getId(), user1.getUsername());
         }
@@ -98,11 +96,12 @@ public class Game {
     }
 
     @PrePersist
-    private void beforePersisting() {
+    @PreUpdate
+    private void beforeSaving() {
         if(user1 == null && player1 != null) {
             user1 = new User(player1.getId(), player1.getName());
         }
-        if(this.user2 == null && player2 != null) {
+        if(user2 == null && player2 != null) {
             user2 = new User(player2.getId(), player2.getName());
         }
     }
