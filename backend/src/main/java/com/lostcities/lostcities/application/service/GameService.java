@@ -67,9 +67,9 @@ public class GameService {
                 .orElseThrow(() -> new RuntimeException("Game does not exist"));
     }
 
-    public GameDto getGame(long gameId, long userId) {
+    public GameDto getGame(long gameId, User user) {
         Game game = getGameById(gameId);
-        Set<Card> hand = game.getPlayerById(userId).map(Player::getHand).orElse(Collections.emptySet());
+        Set<Card> hand = game.getPlayerById(user.getId()).map(Player::getHand).orElse(Collections.emptySet());
         return GameDto.fromGame(game).withHand(hand);
     }
 

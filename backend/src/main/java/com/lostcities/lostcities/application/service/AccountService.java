@@ -5,9 +5,7 @@ import com.lostcities.lostcities.application.dto.AuthenticationDto;
 import com.lostcities.lostcities.application.dto.UserDto;
 import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.persistence.user.UserDao;
-import com.lostcities.lostcities.web.security.AuthUser;
 import com.lostcities.lostcities.web.security.JwtTokenHelper;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +31,7 @@ public class AccountService {
             throw new AuthenticationException("Incorrect password");
         }
 
-        AuthUser authUser = new AuthUser(user.getId(), user.getUsername(), user.getPassword());
-
-        String token = JwtTokenHelper.generateToken(
-                new UsernamePasswordAuthenticationToken(authUser, null)
-        );
+        String token = JwtTokenHelper.generateToken(user);
 
         return new AuthenticationDto(token, UserDto.fromUser(user));
     }

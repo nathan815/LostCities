@@ -39,24 +39,11 @@ public class GameWebsocketController {
         logger.info("getInitialGameData - user: {}", optUser.orElse(null));
         long gameId = parseGameId(id);
         GameDto gameDto = optUser
-                .map(user -> gameService.getGame(gameId, user.getId()))
+                .map(user -> gameService.getGame(gameId, user))
                 .orElseGet(() -> gameService.getGame(gameId));
         logger.info("Requested state for game {}", id);
         return gameDto;
     }
-
-    /**
-     * Join game and broadcast state to the game's topic
-     */
-    @MessageMapping("/game/{id}/join")
-    @SendTo("/topic/game/{id}")
-    public GameDto join(@DestinationVariable String id, @Header(USER_HEADER) Optional<User> optUser) {
-        User user = optUser.orElseThrow(() -> new IllegalStateException("Must be logged in to join a game"));
-        logger.info("join - user: " + user);
-        GameDto game = gameService.getGame(parseGameId(id), user.getId());
-        return game;
-    }
-
 
     /**
      * Execute a move and broadcast state to the game's topic
@@ -66,7 +53,6 @@ public class GameWebsocketController {
     public GameDto makeMove(@DestinationVariable long id, MoveDto move) throws MoveException {
         return gameService.makeMove(id, null, move);
     }
-
 
     /**
      * Handles any exceptions occurring here; sends the error message to the originating client

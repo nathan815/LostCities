@@ -1,6 +1,5 @@
 package com.lostcities.lostcities.web.websocket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.web.security.JwtTokenHelper;
 import com.lostcities.lostcities.web.security.SecurityConstants;
@@ -21,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import static com.lostcities.lostcities.web.security.AuthUtils.getPrincipalFromAuthentication;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -83,14 +84,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             Optional<User> optUser = Optional.empty();
             if(accessor.getUser() instanceof Authentication) {
                 Authentication auth = (Authentication) accessor.getUser();
-                ObjectMapper mapper = new ObjectMapper();
-                optUser = Optional.of(mapper.convertValue(auth.getPrincipal(), User.class));
+                optUser = getPrincipalFromAuthentication(auth);
             }
             logger.debug("Setting user header to: {}", optUser);
             accessor.setHeader(USER_HEADER, optUser);
         }
     }
-
-
-
 }
