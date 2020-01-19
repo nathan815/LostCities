@@ -13,9 +13,10 @@ import { Player } from '@/model/game/player';
 import * as gameApi from '@/api/game';
 import auth from '@/store/modules/auth';
 import { AxiosError } from 'axios';
+import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 
 @Component({
-    components: { Hand, CardsInPlayView, BoardView, Deck },
+    components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
@@ -60,6 +61,7 @@ export default class GamePlay extends Vue {
 
     async join() {
         if (this.status === GameStatus.New) {
+            this.error = null;
             this.isJoinInProgress = true;
             await gameApi.join(this.id).catch((err: AxiosError) => {
                 if (err.response && err.response.status === 403) {
@@ -137,26 +139,14 @@ export default class GamePlay extends Vue {
 
         <b-row v-if="isLoaded">
             <b-col sm="12" md="9" lg="9">
-                <b-alert :show="isWaitingForPlayer" variant="dark" class="pre-start-status-box">
-                    <span>
-                        <i class="fas fa-clock" />
-                        Waiting for second player to join
-                    </span>
-                    <b-button
-                        v-if="!isMyGame"
-                        :disabled="isJoinInProgress"
-                        variant="success"
-                        size="md"
-                        @click="join"
-                    >
-                        <i class="fas fa-plus-circle" />
-                        {{ isJoinInProgress ? 'Joining...' : 'Join' }}
-                    </b-button>
-                </b-alert>
-                <b-alert :show="isReadyToStart" variant="dark" class="pre-start-status-box">
-                    Ready to start?
-                    <b-button v-if="isMyGame" variant="primary">Start</b-button>
-                </b-alert>
+                <GamePreStartBox
+                    :is-waiting-for-player="isWaitingForPlayer"
+                    :is-join-in-progress="isJoinInProgress"
+                    :is-my-game="isMyGame"
+                    :is-ready-to-start="isReadyToStart"
+                    @join="join"
+                />
+
                 <b-row class="cards-in-play-top">
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
@@ -266,11 +256,5 @@ export default class GamePlay extends Vue {
         margin-bottom: 15px;
         font-size: 95%;
     }
-}
-.pre-start-status-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
 }
 </style>
