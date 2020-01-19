@@ -7,9 +7,12 @@ import com.lostcities.lostcities.domain.user.User;
 import java.util.Optional;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -19,6 +22,10 @@ public class Move {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @OneToOne
     private User user;
@@ -114,6 +121,10 @@ public class Move {
 
     public Color getDrawDiscardColor() {
         return drawDiscardColor;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     protected void execute(Deck deck, GameBoard board) throws MoveException {

@@ -2,6 +2,7 @@ package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.user.User;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -10,12 +11,14 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -39,6 +42,9 @@ public class Game {
      */
     @Transient
     private int playerTurn;
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<Move> moves;
 
     @OneToOne
     @JoinColumn(name = "user_1_id")
@@ -71,6 +77,7 @@ public class Game {
         this.player2 = player2;
         this.randomSeed = randomSeed;
         this.status = status;
+        this.moves = new ArrayList<>();
         restoreState();
     }
 
@@ -78,6 +85,9 @@ public class Game {
     private void postLoadInit() {
         deck = Deck.getShuffledDeck(new Random(randomSeed));
         board = new GameBoard();
+        if(moves == null) {
+            moves = new ArrayList<>();
+        }
         if(user1 != null) {
             player1 = new Player(user1.getId(), user1.getUsername());
         }
@@ -114,6 +124,13 @@ public class Game {
     private void restoreState() {
         if(didStart()) {
             start();
+        }
+        for(Move move : moves) {
+            try {
+                makeMove(move);
+            } catch(MoveException e) {
+                // assume move is valid
+            }
         }
     }
 
@@ -169,14 +186,10 @@ public class Game {
         }
     }
 
-    public void runMoves(List<Move> moves) throws MoveException {
-        for(Move move : moves) {
-            runMove(move);
-        }
-    }
-
-    public void runMove(Move move) throws MoveException {
+    public void makeMove(Move move) throws MoveException {
+        move.setGame(this);
         move.execute(deck, board);
+        moves.add(move);
         // If deck is now empty, game is over
         if(deck.isEmpty()) {
             gameOver();

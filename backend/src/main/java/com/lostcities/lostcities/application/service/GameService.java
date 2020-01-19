@@ -56,7 +56,7 @@ public class GameService {
                 .discardCard(Card.fromString(moveDto.getDiscard()))
                 .drawDiscardColor(moveDto.getDraw())
                 .build();
-        game.runMove(move);
+        game.makeMove(move);
         moveRepository.save(game.getId(), move);
         gameRepository.save(game);
         return GameDto.fromGame(game).withHand(player.getHand());

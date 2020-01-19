@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class LostCitiesApplication {
 
     public static void main(String[] args) {
+        System.setProperty("h2.identifiersToUpper", "false");
         SpringApplication.run(LostCitiesApplication.class, args);
     }
 
