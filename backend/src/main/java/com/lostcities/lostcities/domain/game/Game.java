@@ -1,6 +1,7 @@
 package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Deck;
+import com.lostcities.lostcities.domain.user.User;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -8,23 +9,59 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
+@Entity
+@Cacheable
 public class Game {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Convert(converter = GameStatusEnumConverter.class)
+    private Status status;
+
     private long randomSeed;
 
     /**
      * Player # turn - 1 or 2
      */
+    @Transient
     private int playerTurn;
+
+    @OneToOne
+    @JoinColumn(name = "user_1_id")
+    private User user1;
+
+    @OneToOne
+    @JoinColumn(name = "user_2_id")
+    private User user2;
+
+    @Transient
     private Player player1;
+
+    @Transient
     private Player player2;
+
+    @Transient
     private Deck deck;
 
+    @Transient
     private GameBoard board;
 
-    private Status status;
+    public Game() {
+    }
 
     public Game(long id, long randomSeed, Status status, Deck deck, GameBoard board, Player player1, Player player2) {
         this.id = id;
@@ -35,6 +72,29 @@ public class Game {
         this.randomSeed = randomSeed;
         this.status = status;
         restoreState();
+    }
+
+    @PostLoad
+    private void postLoadInit() {
+        deck = Deck.getShuffledDeck(new Random(randomSeed));
+        board = new GameBoard();
+        if(user1 != null) {
+            player1 = new Player(user1.getId(), user1.getUsername());
+        }
+        if(user2 != null) {
+            player2 = new Player(user2.getId(), user2.getUsername());
+        }
+        restoreState();
+    }
+
+    @PrePersist
+    private void beforePersisting() {
+        if(user1 == null && player1 != null) {
+            user1 = new User(player1.getId(), player1.getName());
+        }
+        if(this.user2 == null && this.player2 != null) {
+            user2 = new User(player2.getId(), player2.getName());
+        }
     }
 
     public void joinGameAsSecondPlayer(Player player2) {
@@ -149,6 +209,7 @@ public class Game {
         Ended(3);
 
         public int code;
+
         Status(int code) {
             this.code = code;
         }
