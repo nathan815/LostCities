@@ -12,6 +12,7 @@ import { Player } from '@/model/game/player';
 
 import * as gameApi from '@/api/game';
 import auth from '@/store/modules/auth';
+import { AxiosError } from 'axios';
 
 @Component({
     components: { Hand, CardsInPlayView, BoardView, Deck },
@@ -57,10 +58,17 @@ export default class GamePlay extends Vue {
         );
     }
 
-    join() {
+    async join() {
         if (this.status === GameStatus.New) {
             this.isJoinInProgress = true;
-            gameApi.join(this.id);
+            await gameApi.join(this.id).catch((err: AxiosError) => {
+                if (err.response && err.response.status === 403) {
+                    this.error = 'You must login to join a game';
+                } else {
+                    this.error = err.message;
+                }
+            });
+            this.isJoinInProgress = false;
         }
     }
 
