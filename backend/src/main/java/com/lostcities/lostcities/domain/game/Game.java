@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.domain.game;
 
+import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.ArrayList;
@@ -183,10 +184,19 @@ public class Game {
         if(player1 == null || player2 == null) {
             throw new IllegalStateException("Cannot draw starting hands because player 1 or 2 is missing");
         }
-        for(int i = 0; i < 8; i++) {
-            deck.draw().ifPresent(card -> player1.addToHand(card));
-            deck.draw().ifPresent(card -> player2.addToHand(card));
+
+        var player1Hand = new ArrayList<Card>();
+        var player2Hand = new ArrayList<Card>();
+
+        // First draw all the cards, then actually "give" them to the players.
+        // This way, if the is deck too small (shouldn't be), we can fail and players aren't left with partial hands.
+        for(int i = 0; i < Player.HAND_SIZE; i++) {
+            player1Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
+            player2Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
         }
+
+        player1Hand.forEach(card -> player1.addToHand(card));
+        player2Hand.forEach(card -> player2.addToHand(card));
     }
 
     public void makeMove(Move move) throws MoveException {

@@ -11,6 +11,8 @@ import java.util.Set;
 
 public class Player {
 
+    public static final int HAND_SIZE = 8;
+
     private long id;
     private String name;
     private Set<Card> hand;
