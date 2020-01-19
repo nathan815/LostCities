@@ -33,7 +33,7 @@ public class GameService {
 
     public GameDto createGame(User user) {
         Player player = new Player(user.getId(), user.getUsername());
-        Game game = Game.create(player, seedGenerator.nextLong());
+        Game game = Game.create(seedGenerator.nextLong(), player);
         gameRepository.save(game);
         return GameDto.fromGame(game);
     }

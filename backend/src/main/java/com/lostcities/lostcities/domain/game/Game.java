@@ -69,14 +69,13 @@ public class Game {
     public Game() {
     }
 
-    public Game(long id, long randomSeed, Status status, Deck deck, GameBoard board, Player player1, Player player2) {
-        this.id = id;
+    public Game(long randomSeed, Deck deck, GameBoard board, Player player1, Player player2) {
         this.deck = deck;
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
         this.randomSeed = randomSeed;
-        this.status = status;
+        this.status = Status.New;
         this.moves = new ArrayList<>();
         restoreState();
     }
@@ -102,13 +101,14 @@ public class Game {
         if(user1 == null && player1 != null) {
             user1 = new User(player1.getId(), player1.getName());
         }
-        if(this.user2 == null && this.player2 != null) {
+        if(this.user2 == null && player2 != null) {
             user2 = new User(player2.getId(), player2.getName());
         }
     }
 
     public void joinGameAsSecondPlayer(Player player2) {
         this.player2 = player2;
+        status = Status.ReadyToStart;
     }
 
     public void start() {
@@ -122,6 +122,9 @@ public class Game {
     }
 
     private void restoreState() {
+        if(player2 != null) {
+            joinGameAsSecondPlayer(player2);
+        }
         if(didStart()) {
             start();
         }
@@ -199,20 +202,20 @@ public class Game {
     /**
      * Create instance of existing Game with two players joined
      */
-    public static Game create(long id, long randomSeed, Status status, Player player1, Player player2) {
+    public static Game create(long randomSeed, Player player1, Player player2) {
         Deck deck = Deck.getShuffledDeck(new Random(randomSeed));
-        return new Game(id, randomSeed, status, deck, new GameBoard(), player1, player2);
+        return new Game(randomSeed, deck, new GameBoard(), player1, player2);
     }
 
     /**
      * Create the initial Game instance with only one starting player
      *
-     * @param player1    The starting user
      * @param randomSeed Seed for shuffling deck
+     * @param player1    The starting user
      * @return Game
      */
-    public static Game create(Player player1, long randomSeed) {
-        return create(0, randomSeed, Status.New, player1, null);
+    public static Game create(long randomSeed, Player player1) {
+        return create(randomSeed, player1, null);
     }
 
     public enum Status {
