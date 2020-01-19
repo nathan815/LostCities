@@ -2,7 +2,7 @@ package com.lostcities.lostcities.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lostcities.lostcities.persistence.user.UserEntity;
+import com.lostcities.lostcities.domain.user.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,10 +32,10 @@ public class UserDto {
         this.email = email;
     }
 
-    public static UserDto fromUserEntity(UserEntity userEntity) {
+    public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
-        userDto.setUsername(userEntity.getUsername());
-        userDto.setEmail(userEntity.getEmail());
+        userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
         return userDto;
     }
 

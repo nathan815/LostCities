@@ -1,6 +1,6 @@
 package com.lostcities.lostcities.web.security;
 
-import com.lostcities.lostcities.persistence.user.UserEntity;
+import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.persistence.user.UserDao;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,8 +17,8 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userDao.findByUsername(username)
+        User user = userDao.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        return new AuthUser(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword());
+        return new AuthUser(user.getId(), user.getUsername(), user.getPassword());
     }
 }

@@ -36,6 +36,10 @@ public class User {
     public User() {
     }
 
+    public User(String username) {
+        this.username = username;
+    }
+
     public User(long id, String username) {
         this.id = id;
         this.username = username;
@@ -63,6 +67,10 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {

@@ -3,8 +3,8 @@ package com.lostcities.lostcities.application.service;
 import com.lostcities.lostcities.application.dto.AccountCredentialsDto;
 import com.lostcities.lostcities.application.dto.AuthenticationDto;
 import com.lostcities.lostcities.application.dto.UserDto;
+import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.persistence.user.UserDao;
-import com.lostcities.lostcities.persistence.user.UserEntity;
 import com.lostcities.lostcities.web.security.AuthUser;
 import com.lostcities.lostcities.web.security.JwtTokenHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,31 +26,30 @@ public class AccountService {
 
     public AuthenticationDto authenticateWithCredentials(AccountCredentialsDto accountCredentials)
             throws AuthenticationException {
-        UserEntity userEntity = userDao.findByUsername(accountCredentials.getUsername())
+        User user = userDao.findByUsername(accountCredentials.getUsername())
                 .orElseThrow(() -> new AuthenticationException("Incorrect username"));
 
-        if(!passwordEncoder.matches(accountCredentials.getPassword(), userEntity.getPassword())) {
+        if(!passwordEncoder.matches(accountCredentials.getPassword(), user.getPassword())) {
             throw new AuthenticationException("Incorrect password");
         }
 
-        AuthUser user = new AuthUser(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword());
+        AuthUser authUser = new AuthUser(user.getId(), user.getUsername(), user.getPassword());
 
         String token = JwtTokenHelper.generateToken(
-                new UsernamePasswordAuthenticationToken(user, null)
+                new UsernamePasswordAuthenticationToken(authUser, null)
         );
 
-        return new AuthenticationDto(token, userEntity.toUserDto());
+        return new AuthenticationDto(token, UserDto.fromUser(user));
     }
 
     public UserDto createAccount(UserDto userDto) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userDto.getUsername());
-        userEntity.setEmail(userDto.getEmail());
+        User user = new User(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
 
         String hashedPassword = passwordEncoder.encode(userDto.getPassword());
-        userEntity.setPassword(hashedPassword);
+        user.setPassword(hashedPassword);
 
-        userDao.save(userEntity);
+        userDao.save(user);
 
         return userDto;
     }
