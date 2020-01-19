@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 public class AuthUserDetails extends org.springframework.security.core.userdetails.User {
 
-    long id;
+    private long id;
 
     public AuthUserDetails(String username, String password, boolean enabled, boolean accountNonExpired,
                            boolean credentialsNonExpired, boolean accountNonLocked,

@@ -52,12 +52,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         public Message<?> preSend(Message<?> message, MessageChannel channel) {
             StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
             if(accessor != null && accessor.getCommand() != null) {
+                logger.debug("Auth Interceptor - STOMP Command: {}", accessor.getCommand());
                 switch(accessor.getCommand()) {
                     case CONNECT:
                         onConnectSetupAuthentication(accessor);
                         break;
                     case SEND:
-                        addUserHeader(accessor);
+                        addUserHeaderToIncomingMessage(accessor);
+                        break;
                 }
             }
             return message;
@@ -80,7 +82,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         /**
          * Add user object to header to enable accessing it from websocket controllers via @Header param annotation
          */
-        private void addUserHeader(StompHeaderAccessor accessor) {
+        private void addUserHeaderToIncomingMessage(StompHeaderAccessor accessor) {
             Optional<User> optUser = Optional.empty();
             if(accessor.getUser() instanceof Authentication) {
                 Authentication auth = (Authentication) accessor.getUser();
