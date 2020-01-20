@@ -34,10 +34,11 @@ public class Move {
     private Player player;
 
     enum Type {
+        ReadyToStart,
         PlayCard,
         DiscardCard,
-        DrawFromDeck,
-        DrawFromDiscard;
+        DrawDeck,
+        DrawDiscard;
     }
     private Type type;
 

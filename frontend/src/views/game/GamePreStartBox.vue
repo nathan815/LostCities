@@ -14,6 +14,9 @@ export default class GamePreStartBox extends Vue {
     @Prop({ required: true })
     private isJoinInProgress!: boolean;
 
+    @Prop({ required: true })
+    private isStartInProgress!: boolean;
+
     private join() {
         this.$emit('join');
     }
@@ -48,13 +51,18 @@ export default class GamePreStartBox extends Vue {
                 <small
                     v-for="player in game.players"
                     :key="player.id"
-                    :class="{ ready: player.readyToStart }"
+                    :class="{ 'text-success': player.readyToStart }"
                 >
                     <i :class="`fa ${player.readyToStart ? 'fa-check-circle' : 'fa-ellipsis-h'}`" />
                     {{ player.name }}
                 </small>
             </div>
-            <b-button v-if="isMyGame" variant="success" @click="start">
+            <b-button
+                v-if="isMyGame"
+                :disabled="isStartInProgress"
+                variant="success"
+                @click="start"
+            >
                 <i class="fas fa-play-circle" />
                 Start
             </b-button>
@@ -83,10 +91,6 @@ export default class GamePreStartBox extends Vue {
         font-size: 85%;
         padding-right: 15px;
         color: #777;
-    }
-
-    small.ready {
-        color: green;
     }
 }
 </style>

@@ -10,6 +10,7 @@ import java.util.Map;
 public class PlayerDto {
     private long id;
     private String name;
+    private boolean readyToStart;
     private Map<Color, List<Card>> inPlay;
 
     public PlayerDto(long id, String name, Map<Color, List<Card>> inPlay) {
@@ -24,6 +25,10 @@ public class PlayerDto {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isReadyToStart() {
+        return readyToStart;
     }
 
     public Map<Color, List<Card>> getInPlay() {

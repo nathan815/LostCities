@@ -22,6 +22,7 @@ export default class GamePlay extends Vue {
     isLoading: boolean = true;
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
+    isStartInProgress: boolean = false;
     alwaysShowHand: boolean = true;
     gameState: GameState = new GameState();
     error: string | null = null;
@@ -72,6 +73,10 @@ export default class GamePlay extends Vue {
             });
             this.isJoinInProgress = false;
         }
+    }
+
+    async start() {
+        if (this.player) this.player.readyToStart = true;
     }
 
     get status() {
@@ -143,7 +148,9 @@ export default class GamePlay extends Vue {
                     :game="gameState"
                     :is-my-game="isMyGame"
                     :is-join-in-progress="isJoinInProgress"
+                    :is-start-in-progress="isStartInProgress"
                     @join="join"
+                    @start="start"
                 />
 
                 <b-row class="cards-in-play-top">
