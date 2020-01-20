@@ -1,20 +1,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import { GameState } from '@/model/game';
 
 @Component
 export default class GamePreStartBox extends Vue {
     @Prop({ required: true })
-    private isWaitingForPlayer!: boolean;
+    private game!: GameState;
 
     @Prop({ required: true })
     private isMyGame!: boolean;
 
     @Prop({ required: true })
     private isJoinInProgress!: boolean;
-
-    @Prop({ required: true })
-    private isReadyToStart!: boolean;
 
     private join() {
         this.$emit('join');
@@ -27,13 +25,7 @@ export default class GamePreStartBox extends Vue {
 </script>
 <template>
     <transition name="fade" mode="out-in">
-        <b-alert
-            v-if="isWaitingForPlayer"
-            key="1"
-            show="true"
-            variant="dark"
-            class="pre-start-alert"
-        >
+        <b-card v-if="game.isNew" key="1" class="pre-start-card">
             <span>
                 <i class="fas fa-clock" />
                 Waiting for second player to join
@@ -42,24 +34,59 @@ export default class GamePreStartBox extends Vue {
                 v-if="!isMyGame"
                 :disabled="isJoinInProgress"
                 variant="success"
-                size="md"
+                size="sm"
                 @click="join"
             >
                 <i class="fas fa-plus-circle" />
                 {{ isJoinInProgress ? 'Joining...' : 'Join' }}
             </b-button>
-        </b-alert>
-        <b-alert v-if="isReadyToStart" key="2" show="true" variant="dark" class="pre-start-alert">
-            Ready to start!
-            <b-button v-if="isMyGame" variant="primary" @click="start">Start</b-button>
-        </b-alert>
+        </b-card>
+
+        <b-card v-if="game.isReadyToStart" key="2" class="pre-start-card">
+            <div class="waiting-players-start">
+                <p>Waiting for players to start</p>
+                <small
+                    v-for="player in game.players"
+                    :key="player.id"
+                    :class="{ ready: player.readyToStart }"
+                >
+                    <i :class="`fa ${player.readyToStart ? 'fa-check-circle' : 'fa-ellipsis-h'}`" />
+                    {{ player.name }}
+                </small>
+            </div>
+            <b-button v-if="isMyGame" variant="success" @click="start">
+                <i class="fas fa-play-circle" />
+                Start
+            </b-button>
+        </b-card>
     </transition>
 </template>
-<style scoped>
-.pre-start-alert {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+<style scoped lang="scss">
+.pre-start-card {
+    margin-bottom: 15px;
+
+    .card-body {
+        padding: 15px 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.waiting-players-start {
+    p {
+        margin: 0;
+    }
+
+    small {
+        font-size: 85%;
+        padding-right: 15px;
+        color: #777;
+    }
+
+    small.ready {
+        color: green;
+    }
 }
 </style>

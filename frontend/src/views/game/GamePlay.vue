@@ -134,16 +134,15 @@ export default class GamePlay extends Vue {
 
         <div v-if="isLoading" class="loading">
             <b-spinner variant="primary" />
-            Fetching game...
+            Loading game...
         </div>
 
         <b-row v-if="isLoaded">
             <b-col sm="12" md="9" lg="9">
                 <GamePreStartBox
-                    :is-waiting-for-player="isWaitingForPlayer"
-                    :is-join-in-progress="isJoinInProgress"
+                    :game="gameState"
                     :is-my-game="isMyGame"
-                    :is-ready-to-start="isReadyToStart"
+                    :is-join-in-progress="isJoinInProgress"
                     @join="join"
                 />
 
