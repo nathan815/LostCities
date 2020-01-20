@@ -150,6 +150,9 @@ export default class GamePlay extends Vue {
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
                             <span class="description">{{ topPlayerDesc }}</span>
+                            <small v-if="topPlayer && isMyGame" class="description">
+                                {{ topPlayer.name }}
+                            </small>
                         </div>
                     </b-col>
 
@@ -219,17 +222,21 @@ export default class GamePlay extends Vue {
     </b-container>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .player-info {
     height: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 
     .description {
         text-align: center;
         font-size: 13px;
+    }
+    small.description {
+        font-size: 11px;
+        color: #555;
     }
 }
 .cards-in-play-top {
