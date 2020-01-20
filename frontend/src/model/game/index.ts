@@ -10,7 +10,7 @@ export enum GameStatus {
     ReadyToStart = 'ReadyToStart',
     Started = 'Started',
     Ended = 'Ended',
-};
+}
 
 export class GameState {
     id: number = 0;
@@ -21,4 +21,16 @@ export class GameState {
     };
     players: Player[] = [];
     hand: Card[] = [];
+
+    constructor(state?: any) {
+        Object.assign(this, state);
+    }
+
+    get isNew() {
+        return this.status === GameStatus.New;
+    }
+
+    get isReadyToStart() {
+        return this.status === GameStatus.ReadyToStart;
+    }
 }
