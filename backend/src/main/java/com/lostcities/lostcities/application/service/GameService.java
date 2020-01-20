@@ -33,7 +33,7 @@ public class GameService {
 
     public GameDto createGame(User user) {
         Player player = new Player(user.getId(), user.getUsername());
-        Game game = Game.create(player, seedGenerator.nextLong());
+        Game game = Game.create(seedGenerator.nextLong(), player);
         gameRepository.save(game);
         return GameDto.fromGame(game);
     }
@@ -67,10 +67,14 @@ public class GameService {
                 .orElseThrow(() -> new RuntimeException("Game does not exist"));
     }
 
-    public GameDto getGame(long gameId, long userId) {
+    public GameDto getGame(long gameId, User user) {
         Game game = getGameById(gameId);
-        Set<Card> hand = game.getPlayerById(userId).map(Player::getHand).orElse(Collections.emptySet());
+        Set<Card> hand = game.getPlayerById(user.getId()).map(Player::getHand).orElse(Collections.emptySet());
         return GameDto.fromGame(game).withHand(hand);
     }
 
+    public GameDto getGame(long gameId) {
+        Game game = getGameById(gameId);
+        return GameDto.fromGame(game);
+    }
 }

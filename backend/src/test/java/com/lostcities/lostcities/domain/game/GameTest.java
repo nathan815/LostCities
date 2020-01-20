@@ -1,6 +1,9 @@
 package com.lostcities.lostcities.domain.game;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static com.lostcities.lostcities.domain.game.card.CardTestUtils.cardSetFromStrings;
 import static org.hamcrest.Matchers.*;
@@ -8,17 +11,54 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    private Player player1;
+    private Player player2;
+
+    @Before
+    public void before() {
+        player1 = new Player(1L, "Player1 Name");
+        player2 = new Player(2L, "Player2 Name");
+    }
+
     @Test
-    public void constructGameWith2Players_shouldDrawPlayersStartingHands() {
-        Player player1 = new Player(1L, "Player1");
-        Player player2 = new Player(2L, "Player2");
-        Game game = Game.create(123L, 1L, Game.Status.Started, player1, player2);
+    public void start_shouldDrawPlayersStartingHandsAndChangeStatus() {
+        Game game = Game.create(1L, player1, player2);
+
+        game.start();
+
+        assertEquals(Game.Status.Started, game.getStatus());
 
         assertThat(game.getPlayer1().getHand(), is(cardSetFromStrings("GREEN_8_0", "YELLOW_6_0", "YELLOW_5_0",
                 "WHITE_7_0", "BLUE_9_0", "BLUE_6_0", "RED_1_2", "BLUE_7_0")));
 
         assertThat(game.getPlayer2().getHand(), is(cardSetFromStrings("RED_5_0", "BLUE_8_0", "WHITE_1_0", "YELLOW_2_0",
                 "BLUE_1_1", "RED_1_1", "RED_2_0", "WHITE_9_0")));
+    }
+
+    @Test
+    public void start_player1NotSet_shouldThrowException() {
+        Game game = Game.create(1L, null, player2);
+        thrown.expect(IllegalStateException.class);
+        game.start();
+    }
+
+    @Test
+    public void start_player2NotSet_shouldThrowException() {
+        Game game = Game.create(1L, player1);
+        thrown.expect(IllegalStateException.class);
+        game.start();
+    }
+
+    @Test
+    public void joinGameAsSecondPlayer_shouldUpdatePlayer2AndChangeStatus() {
+        Game game = Game.create(1L, player1);
+        game.joinGameAsSecondPlayer(player2);
+
+        assertEquals(player2, game.getPlayer2());
+        assertEquals(Game.Status.ReadyToStart, game.getStatus());
     }
 
 }

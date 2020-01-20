@@ -1,4 +1,3 @@
-import { GameStatus } from '@/model/game';
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
@@ -13,11 +12,16 @@ import { Player } from '@/model/game/player';
 
 import * as gameApi from '@/api/game';
 import auth from '@/store/modules/auth';
+import { AxiosError } from 'axios';
+import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 
 @Component({
-    components: { Hand, CardsInPlayView, BoardView, Deck },
+    components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
+    isLoading: boolean = true;
+    isLoaded: boolean = false;
+    isJoinInProgress: boolean = false;
     alwaysShowHand: boolean = true;
     gameState: GameState = new GameState();
     error: string | null = null;
@@ -40,16 +44,46 @@ export default class GamePlay extends Vue {
         const setGameState = (gameState: GameState) => {
             console.log('Received Game State: ', gameState);
             this.gameState = gameState;
+            this.isLoading = false;
+            this.isLoaded = true;
         };
         const handleError = error => {
             console.log(error);
             this.error = error.error;
+            this.isLoading = false;
         };
         this.subscriptions.push(
             gameApi.errorObservable().subscribe(handleError),
             gameApi.gameStateObservable(this.id).subscribe(setGameState),
             gameApi.userGameStateObservable(this.id).subscribe(setGameState)
         );
+    }
+
+    async join() {
+        if (this.status === GameStatus.New) {
+            this.error = null;
+            this.isJoinInProgress = true;
+            await gameApi.join(this.id).catch((err: AxiosError) => {
+                if (err.response && err.response.status === 403) {
+                    this.error = 'You must login to join a game';
+                } else {
+                    this.error = err.message;
+                }
+            });
+            this.isJoinInProgress = false;
+        }
+    }
+
+    get status() {
+        return this.gameState.status;
+    }
+
+    get isReadyToStart() {
+        return this.status === GameStatus.ReadyToStart;
+    }
+
+    get isWaitingForPlayer() {
+        return this.status === GameStatus.New;
     }
 
     get isMyGame() {
@@ -76,7 +110,7 @@ export default class GamePlay extends Vue {
     get topPlayerDesc() {
         if (this.isMyGame) return 'Them';
         else if (this.topPlayer) return this.topPlayer.name;
-        else return 'Player 2';
+        else return 'Player 1';
     }
 
     get bottomPlayer(): Player | undefined {
@@ -86,26 +120,33 @@ export default class GamePlay extends Vue {
     get bottomPlayerDesc() {
         if (this.isMyGame) return 'You';
         else if (this.bottomPlayer) return this.bottomPlayer.name;
-        else return 'Player 1';
-    }
-
-    get statusText() {
-        let text = 'Unknown Status';
-        console.log(this.gameState.status, GameStatus.New);
-        switch (this.gameState.status) {
-            case GameStatus.New:
-                text = 'Waiting for second player...';
-                break;
-        }
-        return text;
+        else return 'Player 2';
     }
 }
 </script>
 
 <template>
     <b-container class="game-play-container">
-        <b-row>
+        <b-alert :show="error" variant="warning">
+            <b>Error:</b>
+            {{ error }}
+        </b-alert>
+
+        <div v-if="isLoading" class="loading">
+            <b-spinner variant="primary" />
+            Fetching game...
+        </div>
+
+        <b-row v-if="isLoaded">
             <b-col sm="12" md="9" lg="9">
+                <GamePreStartBox
+                    :is-waiting-for-player="isWaitingForPlayer"
+                    :is-join-in-progress="isJoinInProgress"
+                    :is-my-game="isMyGame"
+                    :is-ready-to-start="isReadyToStart"
+                    @join="join"
+                />
+
                 <b-row class="cards-in-play-top">
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
@@ -150,13 +191,9 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <b-alert :show="error" variant="danger">
-                        <b>Error:</b>
-                        {{ error }}
-                    </b-alert>
                     <b-card class="status">
                         <b-card-text class="text-italic">
-                            {{ statusText }}
+                            Player 2's turn
                         </b-card-text>
                         <b-card-text>
                             <b-button variant="primary" size="sm">Nudge</b-button>
@@ -179,7 +216,6 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-
         <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="alwaysShowHand" />
     </b-container>
 </template>
@@ -207,6 +243,12 @@ export default class GamePlay extends Vue {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .sidebar {
     width: 100%;

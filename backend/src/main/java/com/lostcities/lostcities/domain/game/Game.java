@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.domain.game;
 
+import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 @Entity
@@ -69,14 +71,13 @@ public class Game {
     public Game() {
     }
 
-    public Game(long id, long randomSeed, Status status, Deck deck, GameBoard board, Player player1, Player player2) {
-        this.id = id;
+    public Game(long randomSeed, Deck deck, GameBoard board, Player player1, Player player2) {
         this.deck = deck;
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
         this.randomSeed = randomSeed;
-        this.status = status;
+        this.status = Status.New;
         this.moves = new ArrayList<>();
         restoreState();
     }
@@ -85,9 +86,6 @@ public class Game {
     private void postLoadInit() {
         deck = Deck.getShuffledDeck(new Random(randomSeed));
         board = new GameBoard();
-        if(moves == null) {
-            moves = new ArrayList<>();
-        }
         if(user1 != null) {
             player1 = new Player(user1.getId(), user1.getUsername());
         }
@@ -98,17 +96,19 @@ public class Game {
     }
 
     @PrePersist
-    private void beforePersisting() {
+    @PreUpdate
+    private void beforeSaving() {
         if(user1 == null && player1 != null) {
             user1 = new User(player1.getId(), player1.getName());
         }
-        if(this.user2 == null && this.player2 != null) {
+        if(user2 == null && player2 != null) {
             user2 = new User(player2.getId(), player2.getName());
         }
     }
 
     public void joinGameAsSecondPlayer(Player player2) {
         this.player2 = player2;
+        status = Status.ReadyToStart;
     }
 
     public void start() {
@@ -122,6 +122,9 @@ public class Game {
     }
 
     private void restoreState() {
+        if(player2 != null) {
+            joinGameAsSecondPlayer(player2);
+        }
         if(didStart()) {
             start();
         }
@@ -180,10 +183,19 @@ public class Game {
         if(player1 == null || player2 == null) {
             throw new IllegalStateException("Cannot draw starting hands because player 1 or 2 is missing");
         }
-        for(int i = 0; i < 8; i++) {
-            deck.draw().ifPresent(card -> player1.addToHand(card));
-            deck.draw().ifPresent(card -> player2.addToHand(card));
+
+        var player1Hand = new ArrayList<Card>();
+        var player2Hand = new ArrayList<Card>();
+
+        // First draw all the cards, then actually "give" them to the players.
+        // This way, if the is deck too small (shouldn't be), we can fail and players aren't left with partial hands.
+        for(int i = 0; i < Player.HAND_SIZE; i++) {
+            player1Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
+            player2Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
         }
+
+        player1Hand.forEach(card -> player1.addToHand(card));
+        player2Hand.forEach(card -> player2.addToHand(card));
     }
 
     public void makeMove(Move move) throws MoveException {
@@ -199,20 +211,20 @@ public class Game {
     /**
      * Create instance of existing Game with two players joined
      */
-    public static Game create(long id, long randomSeed, Status status, Player player1, Player player2) {
+    public static Game create(long randomSeed, Player player1, Player player2) {
         Deck deck = Deck.getShuffledDeck(new Random(randomSeed));
-        return new Game(id, randomSeed, status, deck, new GameBoard(), player1, player2);
+        return new Game(randomSeed, deck, new GameBoard(), player1, player2);
     }
 
     /**
      * Create the initial Game instance with only one starting player
      *
-     * @param player1    The starting user
      * @param randomSeed Seed for shuffling deck
+     * @param player1    The starting user
      * @return Game
      */
-    public static Game create(Player player1, long randomSeed) {
-        return create(0, randomSeed, Status.New, player1, null);
+    public static Game create(long randomSeed, Player player1) {
+        return create(randomSeed, player1, null);
     }
 
     public enum Status {

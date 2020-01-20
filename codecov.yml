@@ -4,3 +4,6 @@ ignore:
   - "backend/**/persistence/**"
   - "backend/**/application/dto/**"
   - "frontend/src/main.ts"
+coverage:
+  status:
+    patch: off

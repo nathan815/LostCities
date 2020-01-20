@@ -1,19 +1,24 @@
-package com.lostcities.lostcities.web;
+package com.lostcities.lostcities.web.websocket;
 
 import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.application.service.GameService;
 import com.lostcities.lostcities.domain.game.MoveException;
+import com.lostcities.lostcities.domain.user.User;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+
+import static com.lostcities.lostcities.web.websocket.WebSocketConfig.USER_HEADER;
 
 @Controller
 public class GameWebsocketController {
@@ -29,18 +34,29 @@ public class GameWebsocketController {
      */
     @MessageMapping("/game/{id}/requestState")
     @SendToUser("/topic/game/{id}")
-    public GameDto getInitialGameData(@DestinationVariable String id) {
-        var gameDto = gameService.getGame(parseGameId(id), 0); // TODO get logged in player ID
-        logger.info("Requested state for game " + id);
+    public GameDto getInitialGameData(@DestinationVariable String id,
+                                      @Header(USER_HEADER) Optional<User> optUser) {
+        logger.info("getInitialGameData - user: {}", optUser.orElse(null));
+        long gameId = parseGameId(id);
+        GameDto gameDto = optUser
+                .map(user -> gameService.getGame(gameId, user))
+                .orElseGet(() -> gameService.getGame(gameId));
+        logger.info("Requested state for game {}", id);
         return gameDto;
     }
 
+    /**
+     * Execute a move and broadcast state to the game's topic
+     */
     @MessageMapping("/game/{id}/move")
     @SendTo("/topic/game/{id}")
-    public GameDto gameCommand(@DestinationVariable long id, MoveDto move) throws MoveException {
+    public GameDto makeMove(@DestinationVariable long id, MoveDto move) throws MoveException {
         return gameService.makeMove(id, null, move);
     }
 
+    /**
+     * Handles any exceptions occurring here; sends the error message to the originating client
+     */
     @MessageExceptionHandler
     @SendToUser(value = "/queue/game/errors", broadcast = false)
     public Map<String, String> handleException(Throwable exception) {
@@ -55,7 +71,7 @@ public class GameWebsocketController {
             return Long.parseLong(id);
         } catch (NumberFormatException e) {
             logger.error("Non-number game ID provided " + id, e);
-            throw new IllegalArgumentException("Game ID must be a number, but a non-number was provided: " + id, e);
+            throw new IllegalArgumentException("Invalid game ID (must be a number)", e);
         }
     }
 }
