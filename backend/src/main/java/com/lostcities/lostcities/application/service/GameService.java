@@ -5,7 +5,6 @@ import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameRepository;
 import com.lostcities.lostcities.domain.game.Move;
-import com.lostcities.lostcities.domain.game.MoveRepository;
 import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.user.User;
@@ -23,11 +22,9 @@ public class GameService {
 
     private Random seedGenerator = new Random();
     private GameRepository gameRepository;
-    private MoveRepository moveRepository;
 
-    public GameService(GameRepository gameRepository, MoveRepository moveRepository) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        this.moveRepository = moveRepository;
     }
 
     public GameDto createGame(User user) {
@@ -49,9 +46,8 @@ public class GameService {
         Game game = getGameById(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
-        var move = Move.create(player, Move.Type.ReadyToStart);
+        Move move = new Move(player, moveDto.getType(), Card.fromString(moveDto.getCard()), moveDto.getColor());
         game.makeMove(move);
-        moveRepository.save(game.getId(), move);
         gameRepository.save(game);
         return GameDto.fromGame(game).withHand(player.getHand());
     }

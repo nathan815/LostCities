@@ -51,7 +51,7 @@ public class Move {
     public Move() {
     }
 
-    private Move(Player player, Type type, Card card, Color color) {
+    public Move(Player player, Type type, Card card, Color color) {
         this.player = player;
         this.type = type;
         this.card = card;
@@ -65,10 +65,6 @@ public class Move {
 
     public Type getType() {
         return type;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public Player getPlayer() {
