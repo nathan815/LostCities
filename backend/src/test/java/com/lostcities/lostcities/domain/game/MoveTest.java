@@ -29,26 +29,11 @@ public class MoveTest {
         player = new Player(1L, "test player");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_bothPlayAndDiscardCardSet_shouldThrowException() {
-        Move.builder().player(player).playCard(blue5Card).discardCard(yellow4Card).build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_noPlayOrDiscardCard_shouldThrowException() {
-        Move.builder().player(player).build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void constructor_drawSameColorJustDiscarded_shouldThrowException() {
-        Move.builder().player(player).discardCard(blue5Card).drawDiscardColor(Color.BLUE).build();
-    }
-
     @Test
-    public void execute_emptyDeck_shouldThrowException() throws MoveException {
-        var move = Move.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.RED).build();
+    public void execute_deckIsEmpty_shouldThrowException() throws MoveException {
+        var move = Move.create(player, Move.Type.DrawDeck);
 
-        thrown.expect(EmptyDeckMoveException.class);
+        thrown.expect(IllegalStateException.class);
 
         move.execute(new Deck(), new GameBoard());
     }
@@ -56,123 +41,89 @@ public class MoveTest {
     @Test
     public void execute_drawFromEmptyRedDiscard_shouldThrowException() throws MoveException {
         player.addToHand(blue5Card);
-        var deck = makeDeckFromCards(yellow4Card);
+        var deck = Deck.of(yellow4Card);
         var board = new GameBoard();
-        var move = Move.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.RED).build();
+        var move = Move.create(player, Move.Type.DrawDiscard, Color.RED);
 
         assertTrue(board.getDiscardStack(Color.RED).isEmpty());
 
-        thrown.expect(MoveException.class);
+        thrown.expect(IllegalStateException.class);
 
         move.execute(deck, board);
     }
 
     @Test
     public void execute_playCardNotInHandHand_shouldThrowException() throws MoveException {
-        var move = Move.builder().player(player).playCard(blue5Card).build();
+        var move = Move.create(player, Move.Type.PlayCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
-        move.execute(makeDeckFromCards(yellow4Card), new GameBoard());
+        move.execute(Deck.of(yellow4Card), new GameBoard());
     }
 
     @Test
     public void execute_discardCardNotInHandHand_shouldThrowException() throws MoveException {
-        var move = Move.builder().player(player).discardCard(blue5Card).build();
+        var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
-        move.execute(makeDeckFromCards(yellow4Card), new GameBoard());
+        move.execute(Deck.of(yellow4Card), new GameBoard());
     }
 
     @Test
     public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() throws MoveException {
         var green4Card = Card.createExpeditionCard(Color.GREEN, 4);
         var green5Card = Card.createExpeditionCard(Color.GREEN, 5);
-        var deck = makeDeckFromCards(green2Card);
+        var deck = new Deck();
         var board = new GameBoard();
 
         player.addToHand(green4Card);
         player.addToHand(green5Card);
-        player.play(green5Card);
 
-        // User may not play a card with lower value than a card already in play for the card's color
-        // Thus, trying to play Green4 should fail because Green5 is in play
-        var move = Move.builder().player(player).playCard(green4Card).build();
+        var move1 = Move.create(player, Move.Type.PlayCard, green5Card);
+        move1.execute(deck, board);
+
+        // Playing Green4 isn't allowed because Green5 is in play
+        var move2 = Move.create(player, Move.Type.PlayCard, green4Card);
 
         thrown.expect(CannotPlayLowerValueCardException.class);
-
-        move.execute(deck, board);
+        move2.execute(deck, board);
     }
 
     @Test
-    public void execute_playCardAndDrawFromDeck_shouldAddCardToCorrectCardPileAndRemoveCardFromDeck() throws MoveException {
-        var deck = makeDeckFromCards(green2Card);
-        var board = new GameBoard();
+    public void execute_playCard_shouldAddCardToCorrectCardPile() throws MoveException {
         player.addToHand(blue5Card);
 
-        var move = Move.builder().player(player).playCard(blue5Card).build();
-        move.execute(deck, board);
-
-        assertThat(deck.getCards(), not(contains(green2Card)));
-        assertThat(player.getHand(), contains(green2Card));
-        assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(player.getInPlay(Color.BLUE), contains(blue5Card));
-    }
-
-    @Test
-    public void execute_playCardAndDrawFromDiscard_shouldAddCardToCorrectCardPileAndRemoveCardFromDiscard() throws MoveException {
-        var deck = makeDeckFromCards(green2Card);
-        var board = new GameBoard();
-        board.addToDiscard(yellow4Card);
-        player.addToHand(blue5Card);
-
-        var move = Move.builder().player(player).playCard(blue5Card).drawDiscardColor(Color.YELLOW).build();
-        move.execute(deck, board);
-
-        assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
-
-        assertThat(board.getDiscardStack(Color.YELLOW), not(contains(yellow4Card)));
-        assertThat(player.getHand(), contains(yellow4Card));
+        var move = Move.create(player, Move.Type.PlayCard, blue5Card);
+        move.execute(new Deck(), new GameBoard());
 
         assertThat(player.getHand(), not(contains(blue5Card)));
         assertThat(player.getInPlay(Color.BLUE), contains(blue5Card));
     }
 
-    @Test
-    public void execute_discardCardAndDrawFromDeck_shouldAddCardToCorrectDiscardCardPileAndRemoveCardFromDeck() throws MoveException {
-        var deck = makeDeckFromCards(green2Card);
-        var board = new GameBoard();
-        player.addToHand(blue5Card);
 
-        var move = Move.builder().player(player).discardCard(blue5Card).build();
+    @Test
+    public void execute_drawFromDeck_shouldRemoveCardFromDeckAndAddToPlayerHand() {
+        var deck = Deck.of(blueWagerCard, yellow4Card, green2Card);
+        var board = new GameBoard();
+        var move = Move.create(player, Move.Type.DrawDeck);
+
         move.execute(deck, board);
 
+        assertThat(deck.getCards(), contains(blueWagerCard, yellow4Card));
         assertThat(deck.getCards(), not(contains(green2Card)));
         assertThat(player.getHand(), contains(green2Card));
-
-        assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
     }
 
     @Test
-    public void execute_discardCardAndDrawFromDiscard_shouldAddCardToCorrectDiscardCardPileAndRemoveCardFromDiscard() throws MoveException {
-        var deck = makeDeckFromCards(green2Card);
+    public void execute_discardCard_shouldAddToDiscardCardPileAndRemoveFromPlayerHand() {
+        var deck = Deck.of(green2Card);
         var board = new GameBoard();
-        board.addToDiscard(yellow4Card);
         player.addToHand(blue5Card);
 
-        var move = Move.builder().player(player).discardCard(blue5Card).drawDiscardColor(Color.YELLOW).build();
+        var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
         move.execute(deck, board);
-
-        assertThat(deck.getCards(), contains(green2Card)); // did not draw from deck, so green 2 should still be there
-
-        assertThat(board.getDiscardStack(Color.YELLOW), not(contains(yellow4Card)));
-        assertThat(player.getHand(), contains(yellow4Card));
 
         assertThat(player.getHand(), not(contains(blue5Card)));
         assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
     }
 
-    private Deck makeDeckFromCards(Card ...cards) {
-        return Deck.fromList(Lists.newArrayList(cards));
-    }
 }

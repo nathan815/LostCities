@@ -15,6 +15,7 @@ public class Player {
 
     private long id;
     private String name;
+    private boolean isReadyToStart;
     private Set<Card> hand;
     private Map<Color, CardStack> inPlay;
 
@@ -34,6 +35,14 @@ public class Player {
 
     public long getId() {
         return id;
+    }
+
+    public boolean isReadyToStart() {
+        return isReadyToStart;
+    }
+
+    public void setReadyToStart(boolean readyToStart) {
+        isReadyToStart = readyToStart;
     }
 
     public Set<Card> getHand() {

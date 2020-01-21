@@ -46,16 +46,11 @@ public class GameService {
         return GameDto.fromGame(game);
     }
 
-    public GameDto makeMove(long gameId, User user, MoveDto moveDto) throws MoveException {
+    public GameDto makeMove(long gameId, User user, MoveDto moveDto) {
         Game game = getGameById(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
-        var move = Move.builder()
-                .player(player)
-                .playCard(Card.fromString(moveDto.getPlay()))
-                .discardCard(Card.fromString(moveDto.getDiscard()))
-                .drawDiscardColor(moveDto.getDraw())
-                .build();
+        var move = Move.create(player, Move.Type.ReadyToStart);
         game.makeMove(move);
         moveRepository.save(game.getId(), move);
         gameRepository.save(game);
