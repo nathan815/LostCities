@@ -3,7 +3,6 @@ package com.lostcities.lostcities.web.websocket;
 import com.lostcities.lostcities.application.dto.GameDto;
 import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.application.service.GameService;
-import com.lostcities.lostcities.domain.game.MoveException;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class GameWebsocketController {
      */
     @MessageMapping("/game/{id}/move")
     @SendTo("/topic/game/{id}")
-    public GameDto makeMove(@DestinationVariable long id, MoveDto move) throws MoveException {
+    public GameDto makeMove(@DestinationVariable long id, MoveDto move) {
         return gameService.makeMove(id, null, move);
     }
 

@@ -129,11 +129,7 @@ public class Game {
             start();
         }
         for(Move move : moves) {
-            try {
-                makeMove(move);
-            } catch(MoveException e) {
-                // assume move is valid
-            }
+            makeMove(move);
         }
     }
 
@@ -198,11 +194,15 @@ public class Game {
         player2Hand.forEach(card -> player2.addToHand(card));
     }
 
-    public void makeMove(Move move) throws MoveException {
+    public void makeMove(Move move) {
+        if(deck.isEmpty()) {
+            throw new EmptyDeckException("Cannot make move because deck is empty");
+        }
+
         move.setGame(this);
         move.execute(deck, board);
         moves.add(move);
-        // If deck is now empty, game is over
+
         if(deck.isEmpty()) {
             gameOver();
         }

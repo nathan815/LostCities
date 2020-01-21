@@ -5,8 +5,6 @@ import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameRepository;
 import com.lostcities.lostcities.domain.game.Move;
-import com.lostcities.lostcities.domain.game.MoveException;
-import com.lostcities.lostcities.domain.game.MoveRepository;
 import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.user.User;
@@ -24,11 +22,9 @@ public class GameService {
 
     private Random seedGenerator = new Random();
     private GameRepository gameRepository;
-    private MoveRepository moveRepository;
 
-    public GameService(GameRepository gameRepository, MoveRepository moveRepository) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        this.moveRepository = moveRepository;
     }
 
     public GameDto createGame(User user) {
@@ -46,18 +42,12 @@ public class GameService {
         return GameDto.fromGame(game);
     }
 
-    public GameDto makeMove(long gameId, User user, MoveDto moveDto) throws MoveException {
+    public GameDto makeMove(long gameId, User user, MoveDto moveDto) {
         Game game = getGameById(gameId);
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
-        var move = Move.builder()
-                .player(player)
-                .playCard(Card.fromString(moveDto.getPlay()))
-                .discardCard(Card.fromString(moveDto.getDiscard()))
-                .drawDiscardColor(moveDto.getDraw())
-                .build();
+        Move move = new Move(player, moveDto.getType(), Card.fromString(moveDto.getCard()), moveDto.getColor());
         game.makeMove(move);
-        moveRepository.save(game.getId(), move);
         gameRepository.save(game);
         return GameDto.fromGame(game).withHand(player.getHand());
     }

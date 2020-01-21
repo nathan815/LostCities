@@ -2,7 +2,7 @@ package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Card;
 
-public class CardNotInHandException extends RuntimeException {
+public class CardNotInHandException extends IllegalStateException {
     public CardNotInHandException(String message) {
         super(message);
     }
