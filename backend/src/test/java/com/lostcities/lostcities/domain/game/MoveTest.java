@@ -29,6 +29,13 @@ public class MoveTest {
     }
 
     @Test
+    public void execute_readyToStart_shouldSetPlayerReadyToStart() {
+        var move = Move.create(player, Move.Type.ReadyToStart);
+        move.execute(new Deck(), new GameBoard());
+        assertTrue(player.isReadyToStart());
+    }
+
+    @Test
     public void execute_deckIsEmpty_shouldThrowException() {
         var move = Move.create(player, Move.Type.DrawDeck);
 
@@ -98,7 +105,6 @@ public class MoveTest {
         assertThat(player.getInPlay(Color.BLUE), contains(blue5Card));
     }
 
-
     @Test
     public void execute_drawFromDeck_shouldRemoveCardFromDeckAndAddToPlayerHand() {
         var deck = Deck.of(blueWagerCard, yellow4Card, green2Card);
@@ -110,6 +116,20 @@ public class MoveTest {
         assertThat(deck.getCards(), contains(blueWagerCard, yellow4Card));
         assertThat(deck.getCards(), not(contains(green2Card)));
         assertThat(player.getHand(), contains(green2Card));
+    }
+
+    @Test
+    public void execute_drawFromDiscard_shouldRemoveCardFromDiscardAndAddToPlayerHand() {
+        var deck = new Deck();
+        var board = new GameBoard();
+        board.addToDiscard(blue5Card);
+
+        var move = Move.create(player, Move.Type.DrawDiscard, Color.BLUE);
+
+        move.execute(deck, board);
+
+        assertThat(board.getDiscardStack(Color.BLUE), not(contains(blue5Card)));
+        assertThat(player.getHand(), contains(blue5Card));
     }
 
     @Test
