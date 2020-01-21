@@ -79,7 +79,7 @@ public class Player {
         if(topCardOpt.isPresent()) {
             var topCard = topCardOpt.get();
             if(card.getNumber() < topCard.getNumber()) {
-                throw new CannotPlayLowerValueCardException(card, topCard);
+                throw new CardLowerValueException(card, topCard);
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.lostcities.lostcities.domain.game;
 
-import com.google.common.collect.Lists;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
@@ -33,7 +32,7 @@ public class MoveTest {
     public void execute_deckIsEmpty_shouldThrowException() throws MoveException {
         var move = Move.create(player, Move.Type.DrawDeck);
 
-        thrown.expect(IllegalStateException.class);
+        thrown.expect(EmptyDeckException.class);
 
         move.execute(new Deck(), new GameBoard());
     }
@@ -47,7 +46,7 @@ public class MoveTest {
 
         assertTrue(board.getDiscardStack(Color.RED).isEmpty());
 
-        thrown.expect(IllegalStateException.class);
+        thrown.expect(EmptyDiscardException.class);
 
         move.execute(deck, board);
     }
@@ -84,7 +83,7 @@ public class MoveTest {
         // Playing Green4 isn't allowed because Green5 is in play
         var move2 = Move.create(player, Move.Type.PlayCard, green4Card);
 
-        thrown.expect(CannotPlayLowerValueCardException.class);
+        thrown.expect(CardLowerValueException.class);
         move2.execute(deck, board);
     }
 

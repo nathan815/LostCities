@@ -100,13 +100,12 @@ public class Move {
                 board.addToDiscard(card);
                 break;
             case DrawDiscard:
-                Card drawnDiscardCard = board.drawFromDiscard(color).orElseThrow(() ->
-                        new IllegalStateException("Cannot draw from " + color +
-                                " discard pile because it has no cards"));
+                Card drawnDiscardCard = board.drawFromDiscard(color)
+                        .orElseThrow(() -> new EmptyDiscardException(color));
                 player.addToHand(drawnDiscardCard);
                 break;
             case DrawDeck:
-                Card drawnDeckCard = deck.draw().orElseThrow(IllegalStateException::new);
+                Card drawnDeckCard = deck.draw().orElseThrow(EmptyDeckException::new);
                 player.addToHand(drawnDeckCard);
                 break;
         }

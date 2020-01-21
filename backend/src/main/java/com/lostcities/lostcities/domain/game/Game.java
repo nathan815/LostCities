@@ -196,7 +196,7 @@ public class Game {
 
     public void makeMove(Move move) {
         if(deck.isEmpty()) {
-            throw new IllegalStateException("Cannot start turn because deck is empty");
+            throw new EmptyDeckException("Cannot start turn because deck is empty");
         }
 
         move.setGame(this);

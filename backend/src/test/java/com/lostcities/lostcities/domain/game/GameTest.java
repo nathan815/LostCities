@@ -80,7 +80,7 @@ public class GameTest {
         Game game = new Game(1L, new Deck(), new GameBoard(), player1, player2);
         Move move = Move.create(player1, Move.Type.PlayCard, red3);
 
-        thrown.expect(IllegalStateException.class);
+        thrown.expect(EmptyDeckException.class);
 
         game.makeMove(move);
     }
