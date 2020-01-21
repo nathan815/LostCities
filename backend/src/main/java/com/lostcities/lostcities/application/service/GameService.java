@@ -5,7 +5,6 @@ import com.lostcities.lostcities.application.dto.MoveDto;
 import com.lostcities.lostcities.domain.game.Game;
 import com.lostcities.lostcities.domain.game.GameRepository;
 import com.lostcities.lostcities.domain.game.Move;
-import com.lostcities.lostcities.domain.game.MoveException;
 import com.lostcities.lostcities.domain.game.MoveRepository;
 import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;

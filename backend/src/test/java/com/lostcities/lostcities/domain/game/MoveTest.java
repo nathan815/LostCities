@@ -29,7 +29,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_deckIsEmpty_shouldThrowException() throws MoveException {
+    public void execute_deckIsEmpty_shouldThrowException() {
         var move = Move.create(player, Move.Type.DrawDeck);
 
         thrown.expect(EmptyDeckException.class);
@@ -38,7 +38,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_drawFromEmptyRedDiscard_shouldThrowException() throws MoveException {
+    public void execute_drawFromEmptyRedDiscard_shouldThrowException() {
         player.addToHand(blue5Card);
         var deck = Deck.of(yellow4Card);
         var board = new GameBoard();
@@ -52,7 +52,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCardNotInHandHand_shouldThrowException() throws MoveException {
+    public void execute_playCardNotInHandHand_shouldThrowException() {
         var move = Move.create(player, Move.Type.PlayCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
@@ -60,7 +60,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_discardCardNotInHandHand_shouldThrowException() throws MoveException {
+    public void execute_discardCardNotInHandHand_shouldThrowException() {
         var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
@@ -68,7 +68,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() throws MoveException {
+    public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() {
         var green4Card = Card.createExpeditionCard(Color.GREEN, 4);
         var green5Card = Card.createExpeditionCard(Color.GREEN, 5);
         var deck = new Deck();
@@ -88,7 +88,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCard_shouldAddCardToCorrectCardPile() throws MoveException {
+    public void execute_playCard_shouldAddCardToCorrectCardPile() {
         player.addToHand(blue5Card);
 
         var move = Move.create(player, Move.Type.PlayCard, blue5Card);
