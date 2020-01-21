@@ -29,6 +29,15 @@ public class MoveTest {
     }
 
     @Test
+    public void execute_moveWithNullType_shouldThrowException() {
+        var move = Move.create(player, null, Color.BLUE);
+
+        thrown.expect(NullPointerException.class);
+
+        move.execute(new Deck(), new GameBoard());
+    }
+
+    @Test
     public void execute_readyToStart_shouldSetPlayerReadyToStart() {
         var move = Move.create(player, Move.Type.ReadyToStart);
         move.execute(new Deck(), new GameBoard());
@@ -106,6 +115,19 @@ public class MoveTest {
     }
 
     @Test
+    public void execute_discardCard_shouldAddToDiscardCardPileAndRemoveFromPlayerHand() {
+        var deck = Deck.of(green2Card);
+        var board = new GameBoard();
+        player.addToHand(blue5Card);
+
+        var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
+        move.execute(deck, board);
+
+        assertThat(player.getHand(), not(contains(blue5Card)));
+        assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
+    }
+
+    @Test
     public void execute_drawFromDeck_shouldRemoveCardFromDeckAndAddToPlayerHand() {
         var deck = Deck.of(blueWagerCard, yellow4Card, green2Card);
         var board = new GameBoard();
@@ -130,19 +152,6 @@ public class MoveTest {
 
         assertThat(board.getDiscardStack(Color.BLUE), not(contains(blue5Card)));
         assertThat(player.getHand(), contains(blue5Card));
-    }
-
-    @Test
-    public void execute_discardCard_shouldAddToDiscardCardPileAndRemoveFromPlayerHand() {
-        var deck = Deck.of(green2Card);
-        var board = new GameBoard();
-        player.addToHand(blue5Card);
-
-        var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
-        move.execute(deck, board);
-
-        assertThat(player.getHand(), not(contains(blue5Card)));
-        assertThat(board.getDiscardStack(Color.BLUE), contains(blue5Card));
     }
 
 }

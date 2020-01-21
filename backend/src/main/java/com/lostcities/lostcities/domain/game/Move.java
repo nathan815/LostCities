@@ -104,6 +104,8 @@ public class Move {
                 Card drawnDeckCard = deck.draw().orElseThrow(EmptyDeckException::new);
                 player.addToHand(drawnDeckCard);
                 break;
+            default:
+                throw new IllegalStateException("Unhandled move type");
         }
     }
 
