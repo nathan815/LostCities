@@ -1,16 +1,23 @@
 import { Card, Color } from '@/model/game/card';
 
 enum MoveType {
+    ReadyToStart,
     PlayCard,
     DiscardCard,
-    DrawFromDiscard,
-    DrawFromDeck,
+    DrawDeck,
+    DrawDiscard,
 }
 
 export abstract class Move {
     type: MoveType;
     protected constructor(type: MoveType) {
         this.type = type;
+    }
+}
+
+export class ReadyToStart extends Move {
+    constructor() {
+        super(MoveType.ReadyToStart);
     }
 }
 
@@ -28,15 +35,15 @@ export class DiscardCard extends Move {
         this.card = card;
     }
 }
-export class DrawFromDiscard extends Move {
+export class DrawDiscard extends Move {
     color: Color;
     constructor(color: Color) {
-        super(MoveType.DrawFromDiscard);
+        super(MoveType.DrawDiscard);
         this.color = color;
     }
 }
-export class DrawFromDeck extends Move {
-    constructor(color: Color) {
-        super(MoveType.DrawFromDeck);
+export class DrawDeck extends Move {
+    constructor() {
+        super(MoveType.DrawDeck);
     }
 }

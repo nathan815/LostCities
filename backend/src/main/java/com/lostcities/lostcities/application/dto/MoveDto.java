@@ -1,36 +1,37 @@
 package com.lostcities.lostcities.application.dto;
 
+import com.lostcities.lostcities.domain.game.Move;
 import com.lostcities.lostcities.domain.game.card.Color;
 
 public class MoveDto {
-    private String play;
-    private String discard;
-    private Color draw;
+    private Move.Type type;
+    private String card;
+    private Color color;
 
     public MoveDto() {
     }
 
-    public String getPlay() {
-        return play;
+    public String getCard() {
+        return card;
     }
 
-    public void setPlay(String play) {
-        this.play = play;
+    public Move.Type getType() {
+        return type;
     }
 
-    public String getDiscard() {
-        return discard;
+    public void setType(Move.Type type) {
+        this.type = type;
     }
 
-    public void setDiscard(String discard) {
-        this.discard = discard;
+    public void setCard(String card) {
+        this.card = card;
     }
 
-    public Color getDraw() {
-        return draw;
+    public Color getColor() {
+        return color;
     }
 
-    public void setDraw(Color draw) {
-        this.draw = draw;
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

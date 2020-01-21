@@ -1,5 +1,6 @@
 package com.lostcities.lostcities.domain.game.card;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -88,5 +89,10 @@ public class Deck {
     @Override
     public String toString() {
         return cards.toString();
+    }
+
+
+    public static Deck of(Card ...cards) {
+        return Deck.fromList(Lists.newArrayList(cards));
     }
 }

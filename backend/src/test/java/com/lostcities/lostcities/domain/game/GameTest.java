@@ -1,5 +1,8 @@
 package com.lostcities.lostcities.domain.game;
 
+import com.lostcities.lostcities.domain.game.card.Card;
+import com.lostcities.lostcities.domain.game.card.Color;
+import com.lostcities.lostcities.domain.game.card.Deck;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,6 +62,38 @@ public class GameTest {
 
         assertEquals(player2, game.getPlayer2());
         assertEquals(Game.Status.ReadyToStart, game.getStatus());
+    }
+
+    @Test
+    public void gameWith2Players_shouldHaveReadyToStartStatus() {
+        Game game = Game.create(1L, player1, player2);
+        assertEquals(player1, game.getPlayer1());
+        assertEquals(player2, game.getPlayer2());
+        assertEquals(Game.Status.ReadyToStart, game.getStatus());
+    }
+
+    @Test
+    public void makeMove_emptyDeck_shouldThrowException() {
+        Card red3 = Card.createExpeditionCard(Color.RED, 3);
+        player1.addToHand(red3);
+
+        Game game = new Game(1L, new Deck(), new GameBoard(), player1, player2);
+        Move move = Move.create(player1, Move.Type.PlayCard, red3);
+
+        thrown.expect(EmptyDeckException.class);
+
+        game.makeMove(move);
+    }
+
+    @Test
+    public void makeMove_drawLastCardInDeck_shouldEndGame() {
+        Card red3 = Card.createExpeditionCard(Color.RED, 3);
+        Game game = new Game(1L, Deck.of(red3), new GameBoard(), player1, player2);
+
+        game.makeMove(Move.create(player1, Move.Type.DrawDeck));
+
+        assertTrue(game.getDeck().isEmpty());
+        assertEquals(Game.Status.Ended, game.getStatus());
     }
 
 }
