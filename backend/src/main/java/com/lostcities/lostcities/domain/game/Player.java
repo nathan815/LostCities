@@ -75,13 +75,12 @@ public class Player {
     }
 
     private void validatePlayCard(Card card) {
-        var topCardOpt = getInPlay(card.getColor()).getTop();
-        if(topCardOpt.isPresent()) {
-            var topCard = topCardOpt.get();
-            if(card.getNumber() < topCard.getNumber()) {
-                throw new CardLowerValueException(card, topCard);
-            }
-        }
+        getInPlay(card.getColor())
+                .getTop()
+                .filter(topCard -> card.getNumber() < topCard.getNumber())
+                .ifPresent(topCard -> {
+                    throw new CardLowerValueException(card, topCard);
+                });
     }
 
     public CardStack getInPlay(Color color) {
