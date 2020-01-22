@@ -83,25 +83,21 @@ public class Game {
     }
 
     @PostLoad
-    private void postLoadInit() {
+    private void postLoad() {
         deck = Deck.getShuffledDeck(new Random(randomSeed));
         board = new GameBoard();
-        if(user1 != null) {
-            player1 = new Player(user1.getId(), user1.getUsername());
-        }
-        if(user2 != null) {
-            player2 = new Player(user2.getId(), user2.getUsername());
-        }
+        player1 = new Player(user1.getId(), user1.getUsername());
+        player2 = new Player(user2.getId(), user2.getUsername());
         restoreState();
     }
 
     @PrePersist
     @PreUpdate
     private void beforeSaving() {
-        if(user1 == null && player1 != null) {
+        if(user1 == null) {
             user1 = new User(player1.getId(), player1.getName());
         }
-        if(user2 == null && player2 != null) {
+        if(user2 == null) {
             user2 = new User(player2.getId(), player2.getName());
         }
     }
@@ -128,9 +124,7 @@ public class Game {
         if(didStart()) {
             start();
         }
-        for(Move move : moves) {
-            makeMove(move);
-        }
+        reRunMoves();
     }
 
     private boolean didStart() {
@@ -169,6 +163,10 @@ public class Game {
         return Stream.of(player1, player2).filter(Objects::nonNull);
     }
 
+    private boolean allPlayersReady() {
+        return getPlayersStream().allMatch(Player::isReadyToStart);
+    }
+
     public Optional<Player> getPlayerById(Long playerId) {
         return getPlayersStream()
                 .filter(player -> player.getId() == playerId)
@@ -195,14 +193,32 @@ public class Game {
     }
 
     public void makeMove(Move move) {
+        move.setGame(this);
+        runMove(move);
+        if(!deck.isEmpty()) {
+            moves.add(move);
+        }
+    }
+
+    private void reRunMoves() {
+        for(Move move : moves) {
+            move.setPlayer(getPlayerById(move.getUser().getId()).orElse(null));
+            runMove(move);
+        }
+    }
+
+    private void runMove(Move move) {
         if(deck.isEmpty()) {
             throw new EmptyDeckException("Cannot make move because deck is empty");
         }
-
-        move.setGame(this);
         move.execute(deck, board);
-        moves.add(move);
+        postMoveStateUpdate();
+    }
 
+    private void postMoveStateUpdate() {
+        if(!didStart() && allPlayersReady()) {
+            start();
+        }
         if(deck.isEmpty()) {
             gameOver();
         }

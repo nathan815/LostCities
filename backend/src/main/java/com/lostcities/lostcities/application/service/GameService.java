@@ -47,6 +47,7 @@ public class GameService {
         Player player = game.getPlayerById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Invalid player for this game!"));
         Move move = new Move(player, moveDto.getType(), Card.fromString(moveDto.getCard()), moveDto.getColor());
+        move.setUser(user);
         game.makeMove(move);
         gameRepository.save(game);
         return GameDto.fromGame(game).withHand(player.getHand());
@@ -59,6 +60,7 @@ public class GameService {
 
     public GameDto getGame(long gameId, User user) {
         Game game = getGameById(gameId);
+        gameRepository.save(game);
         Set<Card> hand = game.getPlayerById(user.getId()).map(Player::getHand).orElse(Collections.emptySet());
         return GameDto.fromGame(game).withHand(hand);
     }

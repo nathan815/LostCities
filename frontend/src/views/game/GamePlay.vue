@@ -14,6 +14,7 @@ import * as gameApi from '@/api/game';
 import auth from '@/store/modules/auth';
 import { AxiosError } from 'axios';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
+import { ReadyToStart } from '@/model/game/moves';
 
 @Component({
     components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
@@ -76,7 +77,9 @@ export default class GamePlay extends Vue {
     }
 
     async start() {
-        if (this.player) this.player.readyToStart = true;
+        this.error = null;
+        this.isStartInProgress = true;
+        gameApi.makeMove(this.id, new ReadyToStart());
     }
 
     get status() {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
@@ -16,6 +17,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static com.lostcities.lostcities.web.websocket.WebSocketConfig.USER_HEADER;
 
@@ -49,8 +51,10 @@ public class GameWebsocketController {
      */
     @MessageMapping("/game/{id}/move")
     @SendTo("/topic/game/{id}")
-    public GameDto makeMove(@DestinationVariable long id, MoveDto move) {
-        return gameService.makeMove(id, null, move);
+    public GameDto makeMove(@DestinationVariable long id, MoveDto move,
+                            @Header(USER_HEADER) Optional<User> optUser) {
+        User user = optUser.orElseThrow(() -> new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
+        return gameService.makeMove(id, user, move);
     }
 
     /**
