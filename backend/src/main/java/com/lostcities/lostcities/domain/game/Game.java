@@ -4,7 +4,6 @@ import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,8 +12,9 @@ import java.util.stream.Stream;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +34,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Convert(converter = GameStatusEnumConverter.class)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private long randomSeed;
@@ -77,26 +77,6 @@ public class Game {
         this.status = Status.New;
         this.moves = new ArrayList<>();
         restoreState();
-    }
-
-    @PostLoad
-    private void postLoad() {
-        deck = Deck.createShuffled(new Random(randomSeed));
-        board = new GameBoard();
-        player1 = new Player(user1.getId(), user1.getUsername());
-        player2 = new Player(user2.getId(), user2.getUsername());
-        restoreState();
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void beforeSaving() {
-        if(user1 == null) {
-            user1 = new User(player1.getId(), player1.getName());
-        }
-        if(user2 == null) {
-            user2 = new User(player2.getId(), player2.getName());
-        }
     }
 
     public void joinGameAsSecondPlayer(Player player2) {
@@ -267,27 +247,10 @@ public class Game {
     }
 
     public enum Status {
-        New(0),
-        ReadyToStart(1),
-        Started(2),
-        Ended(3);
-
-        public int code;
-
-        Status(int code) {
-            this.code = code;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public static Status fromCode(int code) {
-            return Arrays.stream(Status.values())
-                    .filter(status -> status.code == code)
-                    .findAny()
-                    .orElseThrow(IllegalArgumentException::new);
-        }
+        New,
+        ReadyToStart,
+        Started,
+        Ended
     }
 
     @Override
@@ -301,5 +264,25 @@ public class Game {
                 ", board=" + board +
                 ", status=" + status +
                 '}';
+    }
+
+    @PostLoad
+    private void postLoad() {
+        deck = Deck.createShuffled(new Random(randomSeed));
+        board = new GameBoard();
+        player1 = new Player(user1.getId(), user1.getUsername());
+        player2 = new Player(user2.getId(), user2.getUsername());
+        restoreState();
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void beforeSaving() {
+        if(user1 == null) {
+            user1 = new User(player1.getId(), player1.getName());
+        }
+        if(user2 == null) {
+            user2 = new User(player2.getId(), player2.getName());
+        }
     }
 }

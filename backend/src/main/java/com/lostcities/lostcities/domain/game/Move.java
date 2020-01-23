@@ -7,6 +7,8 @@ import com.lostcities.lostcities.domain.user.User;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,21 +34,7 @@ public class Move {
     @Transient
     private Player player;
 
-    public enum Type {
-        ReadyToStart(0, false),
-        PlayCard(1, false),
-        DiscardCard(1, false),
-        DrawDeck(2, true),
-        DrawDiscard(2, true);
-
-        protected int order;
-        protected boolean endsTurn;
-
-        Type(int order, boolean endsTurn) {
-            this.order = order;
-            this.endsTurn = endsTurn;
-        }
-    }
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @Transient
@@ -163,5 +151,21 @@ public class Move {
 
     public static Move create(Player player, Type type, Color color) {
         return new Move(player, type, null, color);
+    }
+
+    public enum Type {
+        ReadyToStart(0, false),
+        PlayCard(1, false),
+        DiscardCard(1, false),
+        DrawDeck(2, true),
+        DrawDiscard(2, true);
+
+        protected int order;
+        protected boolean endsTurn;
+
+        Type(int order, boolean endsTurn) {
+            this.order = order;
+            this.endsTurn = endsTurn;
+        }
     }
 }
