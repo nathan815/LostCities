@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.joining;
 public class Deck {
 
     private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildStartingCardList());
+    public static final int STARTING_SIZE = STARTING_DECK.size();
 
     private CardStack cards;
 
@@ -28,16 +29,6 @@ public class Deck {
 
     public Deck() {
         this(new CardStack());
-    }
-
-    public static Deck fromList(List<Card> cards) {
-        return new Deck(new CardStack(cards));
-    }
-
-    public static Deck getShuffledDeck(Random randomGenerator) {
-        List<Card> cards = new ArrayList<>(STARTING_DECK);
-        Collections.shuffle(cards, randomGenerator);
-        return fromList(cards);
     }
 
     private static List<Card> buildStartingCardList() {
@@ -91,8 +82,21 @@ public class Deck {
         return cards.toString();
     }
 
+    public static Deck createShuffled(Random randomGenerator) {
+        List<Card> cards = new ArrayList<>(STARTING_DECK);
+        Collections.shuffle(cards, randomGenerator);
+        return fromList(cards);
+    }
+
+    public static Deck create() {
+        return fromList(new ArrayList<>(STARTING_DECK));
+    }
 
     public static Deck of(Card ...cards) {
         return Deck.fromList(Lists.newArrayList(cards));
+    }
+
+    public static Deck fromList(List<Card> cards) {
+        return new Deck(new CardStack(cards));
     }
 }
