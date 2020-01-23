@@ -82,14 +82,14 @@ public class GameTest {
     }
 
     @Test
-    public void makeMove_gameNotStarted_shouldThrowException() {
+    public void makeMove_ifGameNotStarted_shouldThrowException() {
         Game game = Game.create(RANDOM_SEED, player1, player2);
         thrown.expect(GameNotStartedException.class);
         game.makeMove(Move.create(player1, Move.Type.DrawDeck));
     }
 
     @Test
-    public void makeMove_emptyDeck_shouldThrowException() {
+    public void makeMove_ifEmptyDeck_shouldThrowException() {
         Card red3 = Card.createExpeditionCard(Color.RED, 3);
         player1.addToHand(red3);
 
@@ -102,7 +102,7 @@ public class GameTest {
     }
 
     @Test
-    public void makeMove_notPlayersTurn_shouldThrowException() {
+    public void makeMove_ifNotPlayersTurn_shouldThrowException() {
         Card red2Card = Card.createExpeditionCard(Color.RED, 2);
         Game game = createGameAndStart();
 

@@ -201,8 +201,8 @@ public class Game {
             throw new GameNotStartedException();
         }
         if(!move.canPlayAfter(previousMove)) {
-            throw new IllegalMoveException("Move " + move.getType() + " cannot be played " +
-                    (previousMove == null ? "" : "directly after move " + previousMove.getType()));
+            throw new IllegalMoveException("Move " + move.getType() + " cannot be played after previously played move " +
+                    (previousMove == null ? "" : previousMove.getType()));
         }
         if(move.doesTurnMatter() && !currentTurnPlayer.equals(move.getPlayer())) {
             throw new NotPlayersTurnException(currentTurnPlayer.getName());
@@ -271,7 +271,9 @@ public class Game {
         deck = Deck.createShuffled(new Random(randomSeed));
         board = new GameBoard();
         player1 = new Player(user1.getId(), user1.getUsername());
-        player2 = new Player(user2.getId(), user2.getUsername());
+        if(user2 != null) {
+            player2 = new Player(user2.getId(), user2.getUsername());
+        }
         restoreState();
     }
 
