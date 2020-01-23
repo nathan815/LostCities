@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
 
 public class GameTest {
 
+    private static final long RANDOM_SEED = 1L;
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -28,7 +30,7 @@ public class GameTest {
 
     @Test
     public void start_shouldDrawPlayersStartingHandsAndChangeStatus() {
-        Game game = Game.create(1L, player1, player2);
+        Game game = Game.create(RANDOM_SEED, player1, player2);
 
         game.start();
 
@@ -43,21 +45,21 @@ public class GameTest {
 
     @Test
     public void start_player1NotSet_shouldThrowException() {
-        Game game = Game.create(1L, null, player2);
+        Game game = Game.create(RANDOM_SEED, null, player2);
         thrown.expect(IllegalStateException.class);
         game.start();
     }
 
     @Test
     public void start_player2NotSet_shouldThrowException() {
-        Game game = Game.create(1L, player1);
+        Game game = Game.create(RANDOM_SEED, player1);
         thrown.expect(IllegalStateException.class);
         game.start();
     }
 
     @Test
     public void joinGameAsSecondPlayer_shouldUpdatePlayer2AndChangeStatus() {
-        Game game = Game.create(1L, player1);
+        Game game = Game.create(RANDOM_SEED, player1);
         game.joinGameAsSecondPlayer(player2);
 
         assertEquals(player2, game.getPlayer2());
@@ -66,7 +68,7 @@ public class GameTest {
 
     @Test
     public void gameWith2Players_shouldHaveReadyToStartStatus() {
-        Game game = Game.create(1L, player1, player2);
+        Game game = Game.create(RANDOM_SEED, player1, player2);
         assertEquals(player1, game.getPlayer1());
         assertEquals(player2, game.getPlayer2());
         assertEquals(Game.Status.ReadyToStart, game.getStatus());
