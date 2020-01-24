@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.game;
+package com.lostcities.lostcities.domain.game.exception;
 
 public class NotPlayersTurnException extends IllegalStateException {
     public NotPlayersTurnException(String playerName) {

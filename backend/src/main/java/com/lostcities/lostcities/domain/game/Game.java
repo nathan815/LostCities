@@ -2,6 +2,10 @@ package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Deck;
+import com.lostcities.lostcities.domain.game.exception.EmptyDeckException;
+import com.lostcities.lostcities.domain.game.exception.GameNotStartedException;
+import com.lostcities.lostcities.domain.game.exception.IllegalMoveException;
+import com.lostcities.lostcities.domain.game.exception.NotPlayersTurnException;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;

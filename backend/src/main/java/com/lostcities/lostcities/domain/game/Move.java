@@ -3,6 +3,8 @@ package com.lostcities.lostcities.domain.game;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Color;
 import com.lostcities.lostcities.domain.game.card.Deck;
+import com.lostcities.lostcities.domain.game.exception.EmptyDeckException;
+import com.lostcities.lostcities.domain.game.exception.EmptyDiscardException;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.game;
+package com.lostcities.lostcities.domain.game.exception;
 
 public class EmptyDeckException extends IllegalStateException {
     public EmptyDeckException(String message) {

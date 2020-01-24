@@ -1,4 +1,4 @@
-package com.lostcities.lostcities.domain.game;
+package com.lostcities.lostcities.domain.game.exception;
 
 import com.lostcities.lostcities.domain.game.card.Color;
 
