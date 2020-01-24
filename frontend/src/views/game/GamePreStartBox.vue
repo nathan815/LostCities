@@ -10,7 +10,7 @@ export default class GamePreStartBox extends Vue {
     private game!: GameState;
 
     @Prop({ required: true })
-    private currentPlayer!: Player;
+    private myPlayer!: Player;
 
     @Prop({ required: true })
     private isMyGame!: boolean;

@@ -95,24 +95,24 @@ export default class GamePlay extends Vue {
     }
 
     get isMyGame() {
-        return !!this.currentPlayer;
+        return !!this.myPlayer;
     }
 
-    get currentPlayer(): Player | undefined {
+    get myPlayer(): Player | undefined {
         return this.gameState.players.find(
             player => auth.currentUser && player.name === auth.currentUser.username
         );
     }
 
-    get opponent(): Player | undefined {
-        if (!auth.currentUser || !this.currentPlayer) return undefined;
+    get myOpponent(): Player | undefined {
+        if (!auth.currentUser || !this.myPlayer) return undefined;
         return this.gameState.players.find(
             player => auth.currentUser && player.name !== auth.currentUser.username
         );
     }
 
     get topPlayer(): Player | undefined {
-        return this.isMyGame ? this.opponent : this.gameState.players[0];
+        return this.isMyGame ? this.myOpponent : this.gameState.players[0];
     }
 
     get topPlayerDesc() {
@@ -122,7 +122,7 @@ export default class GamePlay extends Vue {
     }
 
     get bottomPlayer(): Player | undefined {
-        return this.isMyGame ? this.currentPlayer : this.gameState.players[1];
+        return this.isMyGame ? this.myPlayer : this.gameState.players[1];
     }
 
     get bottomPlayerDesc() {
@@ -149,7 +149,7 @@ export default class GamePlay extends Vue {
             <b-col sm="12" md="9" lg="9">
                 <GamePreStartBox
                     :game="gameState"
-                    :current-player="currentPlayer"
+                    :my-player="myPlayer"
                     :is-my-game="isMyGame"
                     :is-join-in-progress="isJoinInProgress"
                     :is-start-in-progress="isStartInProgress"
