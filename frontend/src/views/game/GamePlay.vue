@@ -201,12 +201,19 @@ export default class GamePlay extends Vue {
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
                     <b-card class="status text-center">
-                        <b-card-text v-if="gameState.currentTurnPlayer" class="status-text">
-                            It is
-                            <b>
-                                {{ isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s` }}
-                            </b>
-                            turn
+                        <b-card-text class="status-text">
+                            <template v-if="gameState.isStarted">
+                                It is
+                                <b>
+                                    {{
+                                        isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s`
+                                    }}
+                                </b>
+                                turn
+                            </template>
+                            <template v-if="!gameState.isStarted">
+                                <em>Game has not yet started</em>
+                            </template>
                         </b-card-text>
                         <b-card-text v-if="isMyGame">
                             <b-button
@@ -217,7 +224,7 @@ export default class GamePlay extends Vue {
                             >
                                 Nudge
                             </b-button>
-                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
+                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light" right="true">
                                 <template v-slot:button-content>
                                     <i class="fas fa-cog" />
                                 </template>
