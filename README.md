@@ -6,11 +6,11 @@
 
 Online version of the Lost Cities game built with Java, Spring Boot, and VueJS.
 
-## Run Locally
-First and foremost, clone the repository `git clone https://github.com/nathan815/LostCities`
+## Set Up
+First, clone the repository: `git clone https://github.com/nathan815/LostCities`
 
 ### Backend
-Ensure you have JDK 11+ installed (`javac -version`). Either OpenJDK or Oracle JDK should work.
+Requires JDK 11+ (`javac -version`). Either OpenJDK or Oracle JDK.
 
 `cd backend`
 
@@ -19,9 +19,7 @@ Ensure you have JDK 11+ installed (`javac -version`). Either OpenJDK or Oracle J
 ▶️Run: `./gradlew bootRun`
 
 ### Frontend
-Ensure you have nodejs 12 installed. npm is included with nodejs. 
-
-Then install dependencies and start the dev server.
+Requires [NodeJS 12+](https://nodejs.org/en/download/) and npm (node package manager, included with NodeJS).
 
 `cd frontend`
 
@@ -31,16 +29,45 @@ Then install dependencies and start the dev server.
 
 ⚡️Production Build: `npm run build`
 
-After running `start` command, frontend should now be up and running on localhost:8088. The Webpack Dev Server is configured to automatically proxy requests to `localhost:8088/api/*` to the backend server running on port 8089.
+After running the serve command, frontend Webpack Dev Server should be up and running on http://localhost:8088. It is configured to automatically proxy API requests to `localhost:8088/api/*` to the backend server running on port 8089.
 
 ## History
-My summer 2018 internship mentor Derek and I started this back in August 2018 as a side-project, but we only worked on it for a month or so. In December 2019, while reading some articles about software design, I regained interest in this project and decided to apply some things that I've learned since then. 
+My summer 2018 internship mentor Derek and I started this back in August 2018 as a side-project, but we only worked on it for a few weeks. In December 2019, while reading some articles about software design, I regained interest in this project and decided to apply some things that I've learned since then. 
 
-Some recent changes include adopting a more domain driven structure/design, improving or redesigning various classes and components, adding many more unit tests, adding JaCoCo code coverage reports, setting up Codacy and Codecov, and rewriting the frontend with TypeScript.
+Some recent changes include adopting a domain driven structure/design, improving or redesigning various classes and components, adding a bunch of unit tests, adding JaCoCo code coverage reports, setting up Codacy and Codecov, and rewriting the frontend with TypeScript 🚀
 
 ## Technical Details
-[WIP]
 
-The backend is written with Java and uses Spring Boot. But, the domain/business logic is completely decoupled from Spring. It's just plain Java code that could be hooked up to any number of interfaces. This is the goal.
+### Backend
+The backend is written in Java, utilizing Spring Boot for the REST API and websocket connections. The domain/business logic is decoupled from Spring &mdash; my goal with this was to learn how to write more testable code decoupled from framework code. The overall structure is inspired by my basic understanding of Domain Driven Design, but it's lacking a lot of the principles. Improvements will be made over time. Feel free to submit an issue or PR if you see something to be improved!
 
-The frontend is built with Vue. I recently converted the frontend code from JavaScript to TypeScript and adopted a type safe way to write Vuex store modules using the awesome [vuex-typex](https://github.com/mrcrowl/vuex-typex) wrapper. It allows one to easily write functions that call vuex actions/mutations/getters to enable compile time type safety via TypeScript, IDE autocompletion, and more. See `frontend/store/modules`.
+#### High Level Overview
+
+```
++----------------------+     +---------------------+     +----------------+
+|                      |     |                     |     |                |
+|  Presentation Layer  +---->|  Application Layer  +---->|  Domain Layer  |
+|                      |     |                     |     |                |
++----------------------+     +---------------------+     +----------------+
+                                                                 ^
+                                                                 |
+                                                    +------------+--------+
+                                                    |                     |
+                                                    |  Persistence Layer  |
+                                                    |                     |
+                                                    +---------------------+
+```
+*In the above graph, an arrow denotes a dependency. A layer may only reference objects from the layer(s) it depends on.*
+
+- **Presentation Layer** (web package): This is where all the web API and websocket controllers are. The "presentation" is in the form of JSON returned from the API, and STOMP messages sent to subscribed websocket clients via Spring Messaging. Controllers in the presentation layer interact with services in the application layer to complete their tasks.
+
+- **Application Layer** (application package): Application services live here. Application services primarily take in as input and return updated Data Transfer Objects (DTOs) - representations of the domain objects appropriate for 'public' consumption. Application services interact with the persistence and domain layers. Typically, a service will call a method from a repository (interface).
+
+- **Domain Layer** (domain package): This is where the core game logic lives. It is pure Java code with no dependencies on other layers. It is modeled after the "domain" (Lost Cities game) and the behavior is encapsulated in domain entities. The majority of the unit tests test the code here, given that it is the bulk of the logic. Repository interfaces are also defined here to allow depending layers to call repositories. (Generally, only application services call the repositories.)
+    - <sub><sup>Some entities contain JPA (Java Persistence API) annotations to enable the persistence layer to persist them. Additionally, in some domain entities, there are private methods annotated with 'PostLoad', 'PrePersist' and 'PreUpdate' JPA lifecycle annotations to enable restoration of their state.</sup></sub>
+
+- **Persistence Layer** (persistence package): Implementations of repositories are here, where actual interactions with the database or other persistent data stores happen. (The repository interfaces are defined in the domain layer.) This is considered "infrastructure". No other layers depend on this layer.
+
+### Frontend
+
+The frontend is written in TypeScript and unitizes the Vue.js library. The Vuex stores are written using the vuex wrapper [vuex-typex](https://github.com/mrcrowl/vuex-typex) to enable TypeScript compile-time type safety. Some state is stored in the Vuex store, but the game state of the game currently being viewed is stored in the `GamePlay` component. No other pages need access to the entire game state, so Vuex would be overkill for storing it.
