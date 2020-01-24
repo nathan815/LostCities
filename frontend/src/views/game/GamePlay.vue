@@ -200,14 +200,21 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <b-card class="status">
-                        <b-card-text class="text-italic">
+                    <b-card class="status text-center">
+                        <b-card-text v-if="gameState.currentTurnPlayer" class="status-text">
                             It is
-                            <b>{{ isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s` }}</b>
+                            <b>
+                                {{ isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s` }}
+                            </b>
                             turn
                         </b-card-text>
-                        <b-card-text>
-                            <b-button variant="primary" size="sm" :disabled="isMyTurn">
+                        <b-card-text v-if="isMyGame">
+                            <b-button
+                                v-if="gameState.isStarted"
+                                variant="primary"
+                                size="sm"
+                                :disabled="isMyTurn"
+                            >
                                 Nudge
                             </b-button>
                             <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
@@ -216,7 +223,7 @@ export default class GamePlay extends Vue {
                                 </template>
                                 <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
                                     <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
-                                    Keep hand visible when scrolling
+                                    Keep hand fixed at bottom
                                 </b-dropdown-item>
                             </b-dropdown>
                         </b-card-text>
@@ -272,6 +279,9 @@ export default class GamePlay extends Vue {
     .card {
         margin-bottom: 15px;
         font-size: 95%;
+    }
+    .status-text {
+        font-size: 110%;
     }
 }
 </style>
