@@ -27,6 +27,7 @@ export class GameState {
         discard: {},
     };
     players: Player[] = [];
+    currentTurnPlayerId: number = 0;
     hand: Card[] = [];
 
     constructor(state?: any) {

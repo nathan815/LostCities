@@ -18,15 +18,18 @@ public class GameDto {
     public long id;
     public int deckSize;
     public Game.Status status;
+    public long currentTurnPlayerId;
     public List<PlayerDto> players;
     public GameBoardDto board;
     public Set<Card> hand;
 
-    private GameDto(long id, Game.Status status, List<PlayerDto> players, int deckSize, GameBoardDto board) {
+    public GameDto(long id, int deckSize, Game.Status status, long currentTurnPlayerId, List<PlayerDto> players,
+                   GameBoardDto board) {
         this.id = id;
-        this.status = status;
-        this.players = players;
         this.deckSize = deckSize;
+        this.status = status;
+        this.currentTurnPlayerId = currentTurnPlayerId;
+        this.players = players;
         this.board = board;
         this.hand = Collections.emptySet();
     }
@@ -39,9 +42,10 @@ public class GameDto {
     public static GameDto fromGame(Game game) {
         return new GameDto(
                 game.getId(),
-                game.getStatus(),
-                game.getPlayersStream().map(PlayerDto::fromPlayer).collect(Collectors.toList()),
                 game.getDeck().size(),
+                game.getStatus(),
+                game.getCurrentTurnPlayer().getId(),
+                game.getPlayersStream().map(PlayerDto::fromPlayer).collect(Collectors.toList()),
                 GameBoardDto.fromGameBoard(game.getBoard())
         );
     }

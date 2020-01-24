@@ -140,6 +140,10 @@ public class Game {
         return player2;
     }
 
+    public Player getCurrentTurnPlayer() {
+        return currentTurnPlayer;
+    }
+
     public Stream<Player> getPlayersStream() {
         return Stream.of(player1, player2).filter(Objects::nonNull);
     }
