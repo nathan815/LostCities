@@ -35,7 +35,7 @@ public class CardTest {
     }
 
     @Test(expected = UnableToParseCardException.class)
-    public void fromString_shouldThrowForInvalidStringWithNonIntegerCardNumber() {
+    public void fromString_shouldThrowForInvalidStringWithNonIntegerCardValue() {
         Card.fromString("RED_HELLO_0");
     }
 
@@ -66,20 +66,20 @@ public class CardTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createExpeditionCard_shouldThrowExceptionForNumberLessThan2() {
+    public void createExpeditionCard_shouldThrowExceptionForValueLessThan2() {
         Card.createExpeditionCard(Color.GREEN, 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createExpeditionCard_shouldThrowExceptionForNumberGreatThan10() {
+    public void createExpeditionCard_shouldThrowExceptionForValueGreatThan10() {
         Card.createExpeditionCard(Color.GREEN, 11);
     }
 
     @Test
-    public void createWagerCard_shouldConstructCardWithNumber1() {
-        assertEquals(1, Card.createWagerCard(Color.RED, 0).getValue());
-        assertEquals(1, Card.createWagerCard(Color.RED, 1).getValue());
-        assertEquals(1, Card.createWagerCard(Color.RED, 2).getValue());
+    public void createWagerCard_shouldConstructCardWithCorrectValue() {
+        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 0).getValue());
+        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 1).getValue());
+        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 2).getValue());
     }
 
     @Test

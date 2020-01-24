@@ -1,12 +1,11 @@
 package com.lostcities.lostcities.domain.game.card;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 
 public class Card {
 
-    private static final int WAGER_CARD_VALUE = 0;
+    public static final int WAGER_CARD_VALUE = 0;
 
     private int instance;
 

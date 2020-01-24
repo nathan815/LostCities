@@ -39,10 +39,10 @@ public class GameTest {
         assertEquals(Game.Status.Started, game.getStatus());
 
         assertThat(game.getPlayer1().getHand(), is(cardSetFromStrings("GREEN_8_0", "YELLOW_6_0", "YELLOW_5_0",
-                "WHITE_7_0", "BLUE_9_0", "BLUE_6_0", "RED_1_2", "BLUE_7_0")));
+                "WHITE_7_0", "BLUE_9_0", "BLUE_6_0", "RED_0_2", "BLUE_7_0")));
 
-        assertThat(game.getPlayer2().getHand(), is(cardSetFromStrings("RED_5_0", "BLUE_8_0", "WHITE_1_0", "YELLOW_2_0",
-                "BLUE_1_1", "RED_1_1", "RED_2_0", "WHITE_9_0")));
+        assertThat(game.getPlayer2().getHand(), is(cardSetFromStrings("RED_5_0", "BLUE_8_0", "WHITE_0_0", "YELLOW_2_0",
+                "BLUE_0_1", "RED_0_1", "RED_2_0", "WHITE_9_0")));
     }
 
     @Test
