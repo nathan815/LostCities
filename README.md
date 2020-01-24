@@ -57,7 +57,7 @@ The backend is written in Java, utilizing Spring Boot for the REST API and webso
                                                     |                     |
                                                     +---------------------+
 ```
-*In the above graph, an arrow denotes a dependency. A layer may only reference objects from the layer(s) it depends on.*
+*An arrow denotes a dependency: a layer may only reference objects from the layer(s) it depends on. Diagram created with [asciiflow](http://asciiflow.com/).*
 
 - **Presentation Layer** (web package): This is where all the web API and websocket controllers are. The "presentation" is in the form of JSON returned from the API, and STOMP messages sent to subscribed websocket clients via Spring Messaging. Controllers in the presentation layer interact with services in the application layer to complete their tasks.
 
