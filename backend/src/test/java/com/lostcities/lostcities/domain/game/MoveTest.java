@@ -20,12 +20,12 @@ public class MoveTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    Player player;
+    private Player player;
 
-    Card blue5Card = Card.expedition(Color.BLUE, 5);
-    Card green2Card = Card.expedition(Color.GREEN, 2);
-    Card yellow4Card = Card.expedition(Color.YELLOW, 4);
-    Card blueWagerCard = Card.wager(Color.BLUE, 0);
+    private Card blue5Card = Card.expedition(Color.BLUE, 5);
+    private Card green2Card = Card.expedition(Color.GREEN, 2);
+    private Card yellow4Card = Card.expedition(Color.YELLOW, 4);
+    private Card blueWagerCard = Card.wager(Color.BLUE, 0);
 
     @Before
     public void setup() {
