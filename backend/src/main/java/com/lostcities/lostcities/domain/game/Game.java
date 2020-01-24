@@ -4,7 +4,6 @@ import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.user.User;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,8 +12,9 @@ import java.util.stream.Stream;
 
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,16 +34,10 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Convert(converter = GameStatusEnumConverter.class)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private long randomSeed;
-
-    /**
-     * Player # turn - 1 or 2
-     */
-    @Transient
-    private int playerTurn;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Move> moves;
@@ -61,6 +55,9 @@ public class Game {
 
     @Transient
     private Player player2;
+
+    @Transient
+    private Player currentTurnPlayer;
 
     @Transient
     private Deck deck;
@@ -82,42 +79,18 @@ public class Game {
         restoreState();
     }
 
-    @PostLoad
-    private void postLoadInit() {
-        deck = Deck.getShuffledDeck(new Random(randomSeed));
-        board = new GameBoard();
-        if(user1 != null) {
-            player1 = new Player(user1.getId(), user1.getUsername());
-        }
-        if(user2 != null) {
-            player2 = new Player(user2.getId(), user2.getUsername());
-        }
-        restoreState();
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void beforeSaving() {
-        if(user1 == null && player1 != null) {
-            user1 = new User(player1.getId(), player1.getName());
-        }
-        if(user2 == null && player2 != null) {
-            user2 = new User(player2.getId(), player2.getName());
-        }
-    }
-
     public void joinGameAsSecondPlayer(Player player2) {
         this.player2 = player2;
         status = Status.ReadyToStart;
     }
 
-    public void start() {
+    private void start() {
         drawStartingHands();
         status = Status.Started;
-        playerTurn = 0;
+        currentTurnPlayer = player1;
     }
 
-    public void gameOver() {
+    private void gameOver() {
         status = Status.Ended;
     }
 
@@ -128,9 +101,7 @@ public class Game {
         if(didStart()) {
             start();
         }
-        for(Move move : moves) {
-            makeMove(move);
-        }
+        reRunMoves();
     }
 
     private boolean didStart() {
@@ -145,16 +116,16 @@ public class Game {
         return status;
     }
 
+    protected void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
     public Deck getDeck() {
         return deck;
     }
 
     public GameBoard getBoard() {
         return board;
-    }
-
-    public long getRandomSeed() {
-        return randomSeed;
     }
 
     public Player getPlayer1() {
@@ -169,25 +140,26 @@ public class Game {
         return Stream.of(player1, player2).filter(Objects::nonNull);
     }
 
+    private boolean allPlayersReady() {
+        return Stream.of(player1, player2)
+                .allMatch(p -> p != null && p.isReadyToStart());
+    }
+
     public Optional<Player> getPlayerById(Long playerId) {
         return getPlayersStream()
                 .filter(player -> player.getId() == playerId)
                 .findFirst();
     }
 
-    public void drawStartingHands() {
-        if(player1 == null || player2 == null) {
-            throw new IllegalStateException("Cannot draw starting hands because player 1 or 2 is missing");
-        }
-
+    private void drawStartingHands() {
         var player1Hand = new ArrayList<Card>();
         var player2Hand = new ArrayList<Card>();
 
         // First draw all the cards, then actually "give" them to the players.
         // This way, if the is deck too small (shouldn't be), we can fail and players aren't left with partial hands.
         for(int i = 0; i < Player.HAND_SIZE; i++) {
-            player1Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
-            player2Hand.add(deck.draw().orElseThrow(IllegalStateException::new));
+            player1Hand.add(deck.draw().orElseThrow(EmptyDeckException::new));
+            player2Hand.add(deck.draw().orElseThrow(EmptyDeckException::new));
         }
 
         player1Hand.forEach(card -> player1.addToHand(card));
@@ -195,16 +167,63 @@ public class Game {
     }
 
     public void makeMove(Move move) {
+        move.setGame(this);
+        Move lastMove = moves.size() > 0 ? moves.get(moves.size() - 1) : null;
+        runMove(move, lastMove);
+        if(!deck.isEmpty()) {
+            moves.add(move);
+        }
+    }
+
+    private void reRunMoves() {
+        Move previousMove = null;
+        for(Move move : moves) {
+            move.setPlayer(getPlayerById(move.getUser().getId()).orElse(null));
+            runMove(move, previousMove);
+            previousMove = move;
+        }
+    }
+
+    private void runMove(Move move, Move previousMove) {
+        validateMove(move, previousMove);
+        move.execute(deck, board);
+        postMoveUpdateState(move);
+    }
+
+    private void validateMove(Move move, Move previousMove) {
+        if(getPlayersStream().noneMatch(player -> player == move.getPlayer())) {
+            throw new IllegalStateException("Move's player is not valid");
+        }
         if(deck.isEmpty()) {
             throw new EmptyDeckException("Cannot make move because deck is empty");
         }
+        if(status != Status.Started && !move.allowedBeforeGameStarts()) {
+            throw new GameNotStartedException();
+        }
+        if(!move.canPlayAfter(previousMove)) {
+            throw new IllegalMoveException("Move " + move.getType() + " cannot be played after previously played move " +
+                    (previousMove == null ? "" : previousMove.getType()));
+        }
+        if(move.doesTurnMatter() && !currentTurnPlayer.equals(move.getPlayer())) {
+            throw new NotPlayersTurnException(currentTurnPlayer.getName());
+        }
+    }
 
-        move.setGame(this);
-        move.execute(deck, board);
-        moves.add(move);
-
-        if(deck.isEmpty()) {
+    private void postMoveUpdateState(Move move) {
+        if(!didStart() && allPlayersReady()) {
+            start();
+        } else if(deck.isEmpty()) {
             gameOver();
+        } else if(move.doesEndTurn()) {
+            advancePlayerTurn();
+        }
+    }
+
+    private void advancePlayerTurn() {
+        if(currentTurnPlayer.equals(player1)) {
+            currentTurnPlayer = player2;
+        } else {
+            currentTurnPlayer = player1;
         }
     }
 
@@ -212,7 +231,7 @@ public class Game {
      * Create instance of existing Game with two players joined
      */
     public static Game create(long randomSeed, Player player1, Player player2) {
-        Deck deck = Deck.getShuffledDeck(new Random(randomSeed));
+        Deck deck = Deck.createShuffled(new Random(randomSeed));
         return new Game(randomSeed, deck, new GameBoard(), player1, player2);
     }
 
@@ -228,27 +247,10 @@ public class Game {
     }
 
     public enum Status {
-        New(0),
-        ReadyToStart(1),
-        Started(2),
-        Ended(3);
-
-        public int code;
-
-        Status(int code) {
-            this.code = code;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public static Status fromCode(int code) {
-            return Arrays.stream(Status.values())
-                    .filter(status -> status.code == code)
-                    .findAny()
-                    .orElseThrow(IllegalArgumentException::new);
-        }
+        New,
+        ReadyToStart,
+        Started,
+        Ended
     }
 
     @Override
@@ -256,12 +258,33 @@ public class Game {
         return "Game{" +
                 "id=" + id +
                 ", randomSeed=" + randomSeed +
-                ", playerTurn=" + playerTurn +
                 ", player1=" + player1 +
                 ", player2=" + player2 +
                 ", deck=" + deck +
                 ", board=" + board +
                 ", status=" + status +
                 '}';
+    }
+
+    @PostLoad
+    private void postLoad() {
+        deck = Deck.createShuffled(new Random(randomSeed));
+        board = new GameBoard();
+        player1 = new Player(user1.getId(), user1.getUsername());
+        if(user2 != null) {
+            player2 = new Player(user2.getId(), user2.getUsername());
+        }
+        restoreState();
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void beforeSaving() {
+        if(user1 == null) {
+            user1 = new User(player1.getId(), player1.getName());
+        }
+        if(user2 == null) {
+            user2 = new User(player2.getId(), player2.getName());
+        }
     }
 }

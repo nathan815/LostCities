@@ -15,7 +15,7 @@ public class Player {
 
     private long id;
     private String name;
-    private boolean isReadyToStart;
+    private boolean readyToStart;
     private Set<Card> hand;
     private Map<Color, CardStack> inPlay;
 
@@ -38,11 +38,11 @@ public class Player {
     }
 
     public boolean isReadyToStart() {
-        return isReadyToStart;
+        return readyToStart;
     }
 
     public void setReadyToStart(boolean readyToStart) {
-        isReadyToStart = readyToStart;
+        this.readyToStart = readyToStart;
     }
 
     public Set<Card> getHand() {
@@ -75,13 +75,12 @@ public class Player {
     }
 
     private void validatePlayCard(Card card) {
-        var topCardOpt = getInPlay(card.getColor()).getTop();
-        if(topCardOpt.isPresent()) {
-            var topCard = topCardOpt.get();
-            if(card.getNumber() < topCard.getNumber()) {
-                throw new CardLowerValueException(card, topCard);
-            }
-        }
+        getInPlay(card.getColor())
+                .getTop()
+                .filter(topCard -> card.getNumber() < topCard.getNumber())
+                .ifPresent(topCard -> {
+                    throw new CardLowerValueException(card, topCard);
+                });
     }
 
     public CardStack getInPlay(Color color) {

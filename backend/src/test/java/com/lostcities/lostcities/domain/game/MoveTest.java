@@ -29,15 +29,6 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_moveWithNullType_shouldThrowException() {
-        var move = Move.create(player, null, Color.BLUE);
-
-        thrown.expect(NullPointerException.class);
-
-        move.execute(new Deck(), new GameBoard());
-    }
-
-    @Test
     public void execute_readyToStart_shouldSetPlayerReadyToStart() {
         var move = Move.create(player, Move.Type.ReadyToStart);
         move.execute(new Deck(), new GameBoard());

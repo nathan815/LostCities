@@ -14,6 +14,7 @@ import * as gameApi from '@/api/game';
 import auth from '@/store/modules/auth';
 import { AxiosError } from 'axios';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
+import { ReadyToStart } from '@/model/game/moves';
 
 @Component({
     components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
@@ -22,6 +23,7 @@ export default class GamePlay extends Vue {
     isLoading: boolean = true;
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
+    isStartInProgress: boolean = false;
     alwaysShowHand: boolean = true;
     gameState: GameState = new GameState();
     error: string | null = null;
@@ -74,6 +76,12 @@ export default class GamePlay extends Vue {
         }
     }
 
+    async start() {
+        this.error = null;
+        this.isStartInProgress = true;
+        gameApi.makeMove(this.id, new ReadyToStart());
+    }
+
     get status() {
         return this.gameState.status;
     }
@@ -87,17 +95,17 @@ export default class GamePlay extends Vue {
     }
 
     get isMyGame() {
-        return !!this.player;
+        return !!this.currentPlayer;
     }
 
-    get player(): Player | undefined {
+    get currentPlayer(): Player | undefined {
         return this.gameState.players.find(
             player => auth.currentUser && player.name === auth.currentUser.username
         );
     }
 
     get opponent(): Player | undefined {
-        if (!auth.currentUser || !this.player) return undefined;
+        if (!auth.currentUser || !this.currentPlayer) return undefined;
         return this.gameState.players.find(
             player => auth.currentUser && player.name !== auth.currentUser.username
         );
@@ -114,7 +122,7 @@ export default class GamePlay extends Vue {
     }
 
     get bottomPlayer(): Player | undefined {
-        return this.isMyGame ? this.player : this.gameState.players[1];
+        return this.isMyGame ? this.currentPlayer : this.gameState.players[1];
     }
 
     get bottomPlayerDesc() {
@@ -134,23 +142,28 @@ export default class GamePlay extends Vue {
 
         <div v-if="isLoading" class="loading">
             <b-spinner variant="primary" />
-            Fetching game...
+            Loading game...
         </div>
 
         <b-row v-if="isLoaded">
             <b-col sm="12" md="9" lg="9">
                 <GamePreStartBox
-                    :is-waiting-for-player="isWaitingForPlayer"
-                    :is-join-in-progress="isJoinInProgress"
+                    :game="gameState"
+                    :current-player="currentPlayer"
                     :is-my-game="isMyGame"
-                    :is-ready-to-start="isReadyToStart"
+                    :is-join-in-progress="isJoinInProgress"
+                    :is-start-in-progress="isStartInProgress"
                     @join="join"
+                    @start="start"
                 />
 
                 <b-row class="cards-in-play-top">
                     <b-col cols="2" class="p-2">
                         <div class="player-info top">
                             <span class="description">{{ topPlayerDesc }}</span>
+                            <small v-if="topPlayer && isMyGame" class="description">
+                                {{ topPlayer.name }}
+                            </small>
                         </div>
                     </b-col>
 
@@ -220,17 +233,21 @@ export default class GamePlay extends Vue {
     </b-container>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .player-info {
     height: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 
     .description {
         text-align: center;
         font-size: 13px;
+    }
+    small.description {
+        font-size: 11px;
+        color: #555;
     }
 }
 .cards-in-play-top {

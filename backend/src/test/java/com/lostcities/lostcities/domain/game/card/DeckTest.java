@@ -11,7 +11,7 @@ public class DeckTest {
 
     @Test
     public void getShuffledDeck_returnsProperlyShuffledDeckGivenASeed() {
-        Deck deck = Deck.getShuffledDeck(new Random(1L));
+        Deck deck = Deck.createShuffled(new Random(1L));
         assertEquals(60, deck.size());
         String expectedCards = "RED_7_0,YELLOW_9_0,YELLOW_7_0,WHITE_2_0,RED_9_0,WHITE_5_0,YELLOW_1_1,WHITE_6_0," +
                 "RED_6_0,WHITE_1_2,YELLOW_10_0,YELLOW_3_0,GREEN_9_0,YELLOW_1_2,BLUE_1_0,BLUE_5_0,WHITE_4_0,RED_8_0," +
