@@ -1,16 +1,13 @@
 package com.lostcities.lostcities.domain.game;
 
 import com.lostcities.lostcities.domain.game.card.Card;
-import com.lostcities.lostcities.domain.game.card.CardStack;
 import com.lostcities.lostcities.domain.game.card.Color;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class GameBoardTest {
@@ -37,15 +34,15 @@ public class GameBoardTest {
 
         // Order should be LIFO (stack of cards)
 
-        assertEquals(4, board.drawFromDiscard(Color.BLUE).get().getNumber());
-        assertEquals(8, board.drawFromDiscard(Color.BLUE).get().getNumber());
+        assertEquals(4, board.drawFromDiscard(Color.BLUE).get().getValue());
+        assertEquals(8, board.drawFromDiscard(Color.BLUE).get().getValue());
 
         assertTrue(board.drawFromDiscard(Color.RED).get().isWager());
-        assertEquals(10, board.drawFromDiscard(Color.RED).get().getNumber());
-        assertEquals(5, board.drawFromDiscard(Color.RED).get().getNumber());
+        assertEquals(10, board.drawFromDiscard(Color.RED).get().getValue());
+        assertEquals(5, board.drawFromDiscard(Color.RED).get().getValue());
 
-        assertEquals(4, board.drawFromDiscard(Color.GREEN).get().getNumber());
-        assertEquals(2, board.drawFromDiscard(Color.GREEN).get().getNumber());
+        assertEquals(4, board.drawFromDiscard(Color.GREEN).get().getValue());
+        assertEquals(2, board.drawFromDiscard(Color.GREEN).get().getValue());
     }
 
     @Test

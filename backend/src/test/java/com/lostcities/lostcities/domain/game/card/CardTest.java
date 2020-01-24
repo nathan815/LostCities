@@ -77,9 +77,9 @@ public class CardTest {
 
     @Test
     public void createWagerCard_shouldConstructCardWithNumber1() {
-        assertEquals(1, Card.createWagerCard(Color.RED, 0).getNumber());
-        assertEquals(1, Card.createWagerCard(Color.RED, 1).getNumber());
-        assertEquals(1, Card.createWagerCard(Color.RED, 2).getNumber());
+        assertEquals(1, Card.createWagerCard(Color.RED, 0).getValue());
+        assertEquals(1, Card.createWagerCard(Color.RED, 1).getValue());
+        assertEquals(1, Card.createWagerCard(Color.RED, 2).getValue());
     }
 
     @Test
