@@ -39,10 +39,10 @@ public class GameTest {
         assertEquals(Game.Status.Started, game.getStatus());
 
         assertThat(game.getPlayer1().getHand(), is(cardSetFromStrings("GREEN_8_0", "YELLOW_6_0", "YELLOW_5_0",
-                "WHITE_7_0", "BLUE_9_0", "BLUE_6_0", "RED_1_2", "BLUE_7_0")));
+                "WHITE_7_0", "BLUE_9_0", "BLUE_6_0", "RED_0_2", "BLUE_7_0")));
 
-        assertThat(game.getPlayer2().getHand(), is(cardSetFromStrings("RED_5_0", "BLUE_8_0", "WHITE_1_0", "YELLOW_2_0",
-                "BLUE_1_1", "RED_1_1", "RED_2_0", "WHITE_9_0")));
+        assertThat(game.getPlayer2().getHand(), is(cardSetFromStrings("RED_5_0", "BLUE_8_0", "WHITE_0_0", "YELLOW_2_0",
+                "BLUE_0_1", "RED_0_1", "RED_2_0", "WHITE_9_0")));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class GameTest {
 
     @Test
     public void makeMove_ifEmptyDeck_shouldThrowException() {
-        Card red3 = Card.createExpeditionCard(Color.RED, 3);
+        Card red3 = Card.expedition(Color.RED, 3);
         player1.addToHand(red3);
 
         Game game = new Game(RANDOM_SEED, new Deck(), new GameBoard(), player1, player2);
@@ -107,7 +107,7 @@ public class GameTest {
 
     @Test
     public void makeMove_ifNotPlayersTurn_shouldThrowException() {
-        Card red2Card = Card.createExpeditionCard(Color.RED, 2);
+        Card red2Card = Card.expedition(Color.RED, 2);
         Game game = createGameAndStart();
 
         thrown.expect(NotPlayersTurnException.class);
@@ -124,9 +124,9 @@ public class GameTest {
 
     @Test
     public void makeMove_shouldWorkForSeveralValidMoves() {
-        Card red2Card = Card.createExpeditionCard(Color.RED, 2);
-        Card red3Card = Card.createExpeditionCard(Color.RED, 3);
-        Card blue3Card = Card.createExpeditionCard(Color.BLUE, 3);
+        Card red2Card = Card.expedition(Color.RED, 2);
+        Card red3Card = Card.expedition(Color.RED, 3);
+        Card blue3Card = Card.expedition(Color.BLUE, 3);
         Game game = createGameAndStart();
 
         int initialDeckSize = Deck.STARTING_SIZE - (2 * Player.HAND_SIZE);
@@ -151,8 +151,8 @@ public class GameTest {
 
     @Test
     public void makeMove_drawLastCardInDeck_shouldEndGame() {
-        Card red3Card = Card.createExpeditionCard(Color.RED, 3);
-        Card blue3Card = Card.createExpeditionCard(Color.BLUE, 3);
+        Card red3Card = Card.expedition(Color.RED, 3);
+        Card blue3Card = Card.expedition(Color.BLUE, 3);
         Game game = createGameAndStart();
         game.setDeck(Deck.of(red3Card)); // 1 card in deck
 

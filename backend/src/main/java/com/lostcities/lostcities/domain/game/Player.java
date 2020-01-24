@@ -79,7 +79,7 @@ public class Player {
     private void validatePlayCard(Card card) {
         getInPlay(card.getColor())
                 .getTop()
-                .filter(topCard -> card.getNumber() < topCard.getNumber())
+                .filter(topCard -> card.getValue() < topCard.getValue())
                 .ifPresent(topCard -> {
                     throw new CardLowerValueException(card, topCard);
                 });

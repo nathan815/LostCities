@@ -1,8 +1,15 @@
-import { Card, Discard } from './card';
+import { Card, Discard } from '@/model/game/card';
 import { Player } from '@/model/game/player';
 
-export interface Board {
-    discard: Discard;
+export class Board {
+    discard: Discard = {};
+    constructor(discard: Discard) {
+        const sortedDiscard = {};
+        Object.keys(discard).forEach(
+            color => (sortedDiscard[color] = discard[color].map(Card.fromObject))
+        );
+        this.discard = sortedDiscard;
+    }
 }
 
 export enum GameStatus {
@@ -24,6 +31,7 @@ export class GameState {
 
     constructor(state?: any) {
         Object.assign(this, state);
+        this.hand = this.hand.map(Card.fromObject).sort(Card.compare);
     }
 
     get isNew() {

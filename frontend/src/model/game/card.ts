@@ -28,6 +28,17 @@ export class Card {
     public toString() {
         return this.color + ' ' + (this.isWager ? `wager ${this.instance}` : this.value);
     }
+
+    public static fromObject(data: any) {
+        return new Card(data.value, data.color.toLowerCase(), data.instance);
+    }
+
+    /** Compares two cards based on color, then value */
+    public static compare(a: Card, b: Card) {
+        const stringCompare = a.color.toString().localeCompare(b.color.toString());
+        const valueCompare = a.value - b.value;
+        return stringCompare || valueCompare;
+    }
 }
 
 export type Discard = {

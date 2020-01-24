@@ -1,33 +1,28 @@
 package com.lostcities.lostcities.domain.game.card;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 
 public class Card {
 
-    private static final int WAGER_CARD_NUMBER = 1;
+    public static final int WAGER_CARD_VALUE = 0;
 
-    @JsonIgnore
     private int instance;
 
-    @JsonProperty
     private Color color;
 
-    @JsonProperty
-    private int number;
+    private int value;
 
-    public Card(Color color, Integer number) {
+    public Card(Color color, Integer value) {
         this.instance = 0;
         this.color = color;
-        this.number = number;
+        this.value = value;
     }
 
-    public Card(Color color, Integer number, Integer instance) {
+    public Card(Color color, Integer value, Integer instance) {
         this.instance = instance;
         this.color = color;
-        this.number = number;
+        this.value = value;
     }
 
     public static Card fromString(String cardString) {
@@ -49,11 +44,11 @@ public class Card {
         }
     }
 
-    public static Card createWagerCard(Color color, int instance) {
-        return new Card(color, WAGER_CARD_NUMBER, instance);
+    public static Card wager(Color color, int instance) {
+        return new Card(color, WAGER_CARD_VALUE, instance);
     }
 
-    public static Card createExpeditionCard(Color color, int number) {
+    public static Card expedition(Color color, int number) {
         if(number < 2 || number > 10) {
             throw new IllegalArgumentException("Expedition card number must be between 2 and 10");
         }
@@ -64,24 +59,22 @@ public class Card {
         return color;
     }
 
-    public int getNumber() {
-        return number;
+    public int getValue() {
+        return value;
     }
 
-    @JsonProperty
     public boolean isWager() {
-        return number == WAGER_CARD_NUMBER;
+        return value == WAGER_CARD_VALUE;
     }
 
-    @JsonProperty
     @Override
     public String toString() {
-        return color + "_" + number + "_" + instance;
+        return color + "_" + value + "_" + instance;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(color, number, instance);
+        return Objects.hash(color, value, instance);
     }
 
     @Override
@@ -91,6 +84,6 @@ public class Card {
         Card card = (Card) o;
         return Objects.equals(instance, card.instance) &&
                 Objects.equals(color, card.color) &&
-                Objects.equals(number, card.number);
+                Objects.equals(value, card.value);
     }
 }
