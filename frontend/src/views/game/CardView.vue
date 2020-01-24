@@ -70,11 +70,11 @@ $cardColors: (
     ),
     'green': (
         #28ae3c,
-        #41b53f,
+        #45dc43,
     ),
     'red': (
         #d40505,
-        #ef7872,
+        #f0677b,
     ),
 );
 $cardBack: #6b574b, #83655c;
