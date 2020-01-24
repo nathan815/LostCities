@@ -20,15 +20,18 @@ export enum GameStatus {
 }
 
 export class GameState {
-    id: number = 0;
-    status: GameStatus = GameStatus.New;
-    deckSize: number = 0;
-    board: Board = {
+    public id: number = 0;
+    public status: GameStatus = GameStatus.New;
+    public deckSize: number = 0;
+
+    public board: Board = {
         discard: {},
     };
-    players: Player[] = [];
-    currentTurnPlayerId: number = 0;
-    hand: Card[] = [];
+
+    private currentTurnPlayerId: number = 0;
+    public players: Player[] = [];
+
+    public hand: Card[] = [];
 
     constructor(state?: any) {
         Object.assign(this, state);
@@ -41,5 +44,13 @@ export class GameState {
 
     get isReadyToStart() {
         return this.status === GameStatus.ReadyToStart;
+    }
+
+    get currentTurnPlayer() {
+        return this.findPlayerById(this.currentTurnPlayerId);
+    }
+
+    findPlayerById(id: number): Player | undefined {
+        return this.players.find(player => player.id == id);
     }
 }

@@ -86,12 +86,8 @@ export default class GamePlay extends Vue {
         return this.gameState.status;
     }
 
-    get isReadyToStart() {
-        return this.status === GameStatus.ReadyToStart;
-    }
-
-    get isWaitingForPlayer() {
-        return this.status === GameStatus.New;
+    get isMyTurn() {
+        return this.gameState.currentTurnPlayer == this.myPlayer;
     }
 
     get isMyGame() {
@@ -206,10 +202,14 @@ export default class GamePlay extends Vue {
                 <div class="sidebar">
                     <b-card class="status">
                         <b-card-text class="text-italic">
-                            Player 2's turn
+                            It is
+                            <b>{{ isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s` }}</b>
+                            turn
                         </b-card-text>
                         <b-card-text>
-                            <b-button variant="primary" size="sm">Nudge</b-button>
+                            <b-button variant="primary" size="sm" :disabled="isMyTurn">
+                                Nudge
+                            </b-button>
                             <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
                                 <template v-slot:button-content>
                                     <i class="fas fa-cog" />

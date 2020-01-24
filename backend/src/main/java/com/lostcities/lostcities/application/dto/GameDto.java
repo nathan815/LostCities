@@ -1,6 +1,7 @@
 package com.lostcities.lostcities.application.dto;
 
 import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +45,7 @@ public class GameDto {
                 game.getId(),
                 game.getDeck().size(),
                 game.getStatus(),
-                game.getCurrentTurnPlayer().getId(),
+                game.getCurrentTurnPlayer().map(Player::getId).orElse(0L),
                 game.getPlayersStream().map(PlayerDto::fromPlayer).collect(Collectors.toList()),
                 GameBoardDto.fromGameBoard(game.getBoard())
         );

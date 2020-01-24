@@ -140,8 +140,8 @@ public class Game {
         return player2;
     }
 
-    public Player getCurrentTurnPlayer() {
-        return currentTurnPlayer;
+    public Optional<Player> getCurrentTurnPlayer() {
+        return Optional.ofNullable(currentTurnPlayer);
     }
 
     public Stream<Player> getPlayersStream() {
