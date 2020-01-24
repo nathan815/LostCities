@@ -45,8 +45,8 @@ public class DeckTest {
 
     @Test
     public void draw_givenCard_removesAndReturnsCard() {
-        var red2Card = Card.createExpeditionCard(Color.RED, 3);
-        var blue2Card = Card.createExpeditionCard(Color.BLUE, 3);
+        var red2Card = Card.expedition(Color.RED, 3);
+        var blue2Card = Card.expedition(Color.BLUE, 3);
         Deck deck = Deck.fromList(Lists.newArrayList((red2Card)));
         assertTrue(deck.draw(red2Card));
         assertFalse(deck.draw(blue2Card));

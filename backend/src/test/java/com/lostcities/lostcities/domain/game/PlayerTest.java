@@ -12,8 +12,8 @@ import static org.junit.Assert.*;
 public class PlayerTest {
 
     private Player player;
-    private Card red2Card = Card.createExpeditionCard(Color.RED, 2);
-    private Card blue4Card = Card.createExpeditionCard(Color.BLUE, 4);
+    private Card red2Card = Card.expedition(Color.RED, 2);
+    private Card blue4Card = Card.expedition(Color.BLUE, 4);
 
     @Before
     public void setup() {

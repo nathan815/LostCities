@@ -47,50 +47,50 @@ public class CardTest {
     @Test
     public void testWagerCardsEquality() {
         // Wager cards are all numbered 1 but have different "instance" numbers
-        assertEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 0));
-        assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.RED, 1));
-        assertNotEquals(Card.createWagerCard(Color.RED, 0), Card.createWagerCard(Color.BLUE, 0));
-        assertFalse(Card.createWagerCard(Color.RED, 0).equals(null));
-        assertFalse(Card.createWagerCard(Color.RED, 0).equals(new Object()));
+        assertEquals(Card.wager(Color.RED, 0), Card.wager(Color.RED, 0));
+        assertNotEquals(Card.wager(Color.RED, 0), Card.wager(Color.RED, 1));
+        assertNotEquals(Card.wager(Color.RED, 0), Card.wager(Color.BLUE, 0));
+        assertFalse(Card.wager(Color.RED, 0).equals(null));
+        assertFalse(Card.wager(Color.RED, 0).equals(new Object()));
     }
 
     @Test
     public void testExpeditionCardsEquality() {
         // Expedition cards are numbered 2-10
-        assertEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.RED, 3));
-        assertEquals(Card.createExpeditionCard(Color.GREEN, 2), Card.createExpeditionCard(Color.GREEN, 2));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.RED, 4));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 3), Card.createExpeditionCard(Color.BLUE, 3));
-        assertNotEquals(Card.createExpeditionCard(Color.RED, 4), Card.createExpeditionCard(Color.GREEN, 5));
-        assertNotEquals(Card.createExpeditionCard(Color.BLUE, 5), Card.createExpeditionCard(Color.BLUE, 10));
+        assertEquals(Card.expedition(Color.RED, 3), Card.expedition(Color.RED, 3));
+        assertEquals(Card.expedition(Color.GREEN, 2), Card.expedition(Color.GREEN, 2));
+        assertNotEquals(Card.expedition(Color.RED, 3), Card.expedition(Color.RED, 4));
+        assertNotEquals(Card.expedition(Color.RED, 3), Card.expedition(Color.BLUE, 3));
+        assertNotEquals(Card.expedition(Color.RED, 4), Card.expedition(Color.GREEN, 5));
+        assertNotEquals(Card.expedition(Color.BLUE, 5), Card.expedition(Color.BLUE, 10));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createExpeditionCard_shouldThrowExceptionForValueLessThan2() {
-        Card.createExpeditionCard(Color.GREEN, 1);
+        Card.expedition(Color.GREEN, 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createExpeditionCard_shouldThrowExceptionForValueGreatThan10() {
-        Card.createExpeditionCard(Color.GREEN, 11);
+        Card.expedition(Color.GREEN, 11);
     }
 
     @Test
     public void createWagerCard_shouldConstructCardWithCorrectValue() {
-        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 0).getValue());
-        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 1).getValue());
-        assertEquals(Card.WAGER_CARD_VALUE, Card.createWagerCard(Color.RED, 2).getValue());
+        assertEquals(Card.WAGER_CARD_VALUE, Card.wager(Color.RED, 0).getValue());
+        assertEquals(Card.WAGER_CARD_VALUE, Card.wager(Color.RED, 1).getValue());
+        assertEquals(Card.WAGER_CARD_VALUE, Card.wager(Color.RED, 2).getValue());
     }
 
     @Test
     public void isWager_shouldReturnTrueForWagerCard() {
-        assertTrue(Card.createWagerCard(Color.RED, 2).isWager());
-        assertTrue(Card.createWagerCard(Color.GREEN, 1).isWager());
+        assertTrue(Card.wager(Color.RED, 2).isWager());
+        assertTrue(Card.wager(Color.GREEN, 1).isWager());
     }
 
     @Test
     public void isWager_shouldReturnFalseForExpeditionCard() {
-        assertFalse(Card.createExpeditionCard(Color.RED, 10).isWager());
-        assertFalse(Card.createExpeditionCard(Color.GREEN, 3).isWager());
+        assertFalse(Card.expedition(Color.RED, 10).isWager());
+        assertFalse(Card.expedition(Color.GREEN, 3).isWager());
     }
 }

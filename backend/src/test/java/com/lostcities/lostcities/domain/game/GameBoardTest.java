@@ -22,13 +22,13 @@ public class GameBoardTest {
     @Test
     public void drawFromDiscard_shouldRemoveAndReturnCardsInLastInFirstOutOrder() {
         List<Card> cards = Arrays.asList(
-                Card.createExpeditionCard(Color.GREEN, 2),
-                Card.createExpeditionCard(Color.GREEN, 4),
-                Card.createExpeditionCard(Color.RED, 5),
-                Card.createExpeditionCard(Color.RED, 10),
-                Card.createExpeditionCard(Color.BLUE, 8),
-                Card.createExpeditionCard(Color.BLUE, 4),
-                Card.createWagerCard(Color.RED, 0)
+                Card.expedition(Color.GREEN, 2),
+                Card.expedition(Color.GREEN, 4),
+                Card.expedition(Color.RED, 5),
+                Card.expedition(Color.RED, 10),
+                Card.expedition(Color.BLUE, 8),
+                Card.expedition(Color.BLUE, 4),
+                Card.wager(Color.RED, 0)
         );
         cards.forEach(board::addToDiscard);
 
@@ -56,10 +56,10 @@ public class GameBoardTest {
 
     @Test
     public void addToDiscard_shouldAddCardToCorrectDiscardStack() {
-        board.addToDiscard(Card.createExpeditionCard(Color.RED, 2));
-        board.addToDiscard(Card.createExpeditionCard(Color.GREEN, 2));
-        board.addToDiscard(Card.createExpeditionCard(Color.BLUE, 3));
-        board.addToDiscard(Card.createExpeditionCard(Color.RED, 5));
+        board.addToDiscard(Card.expedition(Color.RED, 2));
+        board.addToDiscard(Card.expedition(Color.GREEN, 2));
+        board.addToDiscard(Card.expedition(Color.BLUE, 3));
+        board.addToDiscard(Card.expedition(Color.RED, 5));
 
         assertAllDiscardCardsSameColor(board, Color.RED);
         assertAllDiscardCardsSameColor(board, Color.BLUE);

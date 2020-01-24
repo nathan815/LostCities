@@ -44,11 +44,11 @@ public class Card {
         }
     }
 
-    public static Card createWagerCard(Color color, int instance) {
+    public static Card wager(Color color, int instance) {
         return new Card(color, WAGER_CARD_VALUE, instance);
     }
 
-    public static Card createExpeditionCard(Color color, int number) {
+    public static Card expedition(Color color, int number) {
         if(number < 2 || number > 10) {
             throw new IllegalArgumentException("Expedition card number must be between 2 and 10");
         }

@@ -22,10 +22,10 @@ public class MoveTest {
 
     Player player;
 
-    Card blue5Card = Card.createExpeditionCard(Color.BLUE, 5);
-    Card green2Card = Card.createExpeditionCard(Color.GREEN, 2);
-    Card yellow4Card = Card.createExpeditionCard(Color.YELLOW, 4);
-    Card blueWagerCard = Card.createWagerCard(Color.BLUE, 0);
+    Card blue5Card = Card.expedition(Color.BLUE, 5);
+    Card green2Card = Card.expedition(Color.GREEN, 2);
+    Card yellow4Card = Card.expedition(Color.YELLOW, 4);
+    Card blueWagerCard = Card.wager(Color.BLUE, 0);
 
     @Before
     public void setup() {
@@ -80,8 +80,8 @@ public class MoveTest {
 
     @Test
     public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() {
-        var green4Card = Card.createExpeditionCard(Color.GREEN, 4);
-        var green5Card = Card.createExpeditionCard(Color.GREEN, 5);
+        var green4Card = Card.expedition(Color.GREEN, 4);
+        var green5Card = Card.expedition(Color.GREEN, 5);
         var deck = new Deck();
         var board = new GameBoard();
 
