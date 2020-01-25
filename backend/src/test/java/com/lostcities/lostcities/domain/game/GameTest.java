@@ -7,12 +7,14 @@ import com.lostcities.lostcities.domain.game.exception.EmptyDeckException;
 import com.lostcities.lostcities.domain.game.exception.GameNotStartedException;
 import com.lostcities.lostcities.domain.game.exception.IllegalMoveException;
 import com.lostcities.lostcities.domain.game.exception.NotPlayersTurnException;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static com.lostcities.lostcities.domain.game.card.CardTestUtils.cardSetFromStrings;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -63,7 +65,37 @@ public class GameTest {
     }
 
     @Test
-    public void gameWith2Players_shouldHaveReadyToStartStatus() {
+    public void getCurrentTurnPlayer_ifGameNotYetStarted_shouldReturnOptionalEmpty() {
+        Game game = Game.create(RANDOM_SEED, player1);
+        assertEquals(Optional.empty(), game.getCurrentTurnPlayer());
+    }
+
+    @Test
+    public void getCurrentTurnPlayer_ifGameJustStarted_shouldReturnPlayer1() {
+        Game game = createGameAndStart();
+        assertEquals(Optional.of(player1), game.getCurrentTurnPlayer());
+    }
+
+    @Test
+    public void getPlayersStream_shouldNotContainNull() {
+        Game game = Game.create(RANDOM_SEED, player1, null);
+        assertThat(game.getPlayersStream().collect(toList()), not(contains(nullValue())));
+    }
+
+    @Test
+    public void getPlayerById_ifPlayerIsInGame_shouldReturnPlayer() {
+        Game game = Game.create(RANDOM_SEED, player1, null);
+        assertEquals(Optional.of(player1), game.getPlayerById(player1.getId()));
+    }
+
+    @Test
+    public void getPlayerById_ifPlayerIsNotInGame_shouldReturnEmptyOptional() {
+        Game game = Game.create(RANDOM_SEED, player1, null);
+        assertEquals(Optional.empty(), game.getPlayerById(200L));
+    }
+
+    @Test
+    public void constructGameWith2Players_shouldHaveReadyToStartStatus() {
         Game game = Game.create(RANDOM_SEED, player1, player2);
         assertEquals(player1, game.getPlayer1());
         assertEquals(player2, game.getPlayer2());

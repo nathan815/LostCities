@@ -20,7 +20,7 @@ export default class Deck extends Vue {
 
 <template>
     <div class="deck">
-        <CardView class="cards" show-side="back" />
+        <CardView class="deck-card" show-side="back" />
         <p>
             <b-badge :variant="numCardsBadgeVariant">{{ size }} cards</b-badge>
         </p>
@@ -35,6 +35,12 @@ export default class Deck extends Vue {
         text-align: center;
         font-size: 13px;
         margin: 0;
+    }
+    .deck-card {
+        box-shadow: 0 0 2px #999;
+    }
+    .badge.badge-light {
+        background: none;
     }
 }
 </style>

@@ -15,19 +15,25 @@ import auth from '@/store/modules/auth';
 import { AxiosError } from 'axios';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 import { ReadyToStart } from '@/model/game/moves';
+import GameStatusCard from '@/views/game/GameStatusCard.vue';
+import { GamePreferences } from '@/model/game/preferences';
 
 @Component({
-    components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
+    components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
     isStartInProgress: boolean = false;
-    alwaysShowHand: boolean = true;
-    gameState: GameState = new GameState();
     error: string | null = null;
+
     subscriptions: Subscription[] = [];
+
+    gameState: GameState = new GameState();
+    preferences: GamePreferences = {
+        handFixedPosition: true,
+    };
 
     get id(): number {
         return parseInt(this.$route.params.id);
@@ -86,33 +92,29 @@ export default class GamePlay extends Vue {
         return this.gameState.status;
     }
 
-    get isReadyToStart() {
-        return this.status === GameStatus.ReadyToStart;
-    }
-
-    get isWaitingForPlayer() {
-        return this.status === GameStatus.New;
+    get isMyTurn() {
+        return this.gameState.currentTurnPlayer == this.myPlayer;
     }
 
     get isMyGame() {
-        return !!this.currentPlayer;
+        return !!this.myPlayer;
     }
 
-    get currentPlayer(): Player | undefined {
+    get myPlayer(): Player | undefined {
         return this.gameState.players.find(
             player => auth.currentUser && player.name === auth.currentUser.username
         );
     }
 
-    get opponent(): Player | undefined {
-        if (!auth.currentUser || !this.currentPlayer) return undefined;
+    get myOpponent(): Player | undefined {
+        if (!auth.currentUser || !this.myPlayer) return undefined;
         return this.gameState.players.find(
             player => auth.currentUser && player.name !== auth.currentUser.username
         );
     }
 
     get topPlayer(): Player | undefined {
-        return this.isMyGame ? this.opponent : this.gameState.players[0];
+        return this.isMyGame ? this.myOpponent : this.gameState.players[0];
     }
 
     get topPlayerDesc() {
@@ -122,7 +124,7 @@ export default class GamePlay extends Vue {
     }
 
     get bottomPlayer(): Player | undefined {
-        return this.isMyGame ? this.currentPlayer : this.gameState.players[1];
+        return this.isMyGame ? this.myPlayer : this.gameState.players[1];
     }
 
     get bottomPlayerDesc() {
@@ -149,7 +151,7 @@ export default class GamePlay extends Vue {
             <b-col sm="12" md="9" lg="9">
                 <GamePreStartBox
                     :game="gameState"
-                    :current-player="currentPlayer"
+                    :my-player="myPlayer"
                     :is-my-game="isMyGame"
                     :is-join-in-progress="isJoinInProgress"
                     :is-start-in-progress="isStartInProgress"
@@ -204,23 +206,12 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <b-card class="status">
-                        <b-card-text class="text-italic">
-                            Player 2's turn
-                        </b-card-text>
-                        <b-card-text>
-                            <b-button variant="primary" size="sm">Nudge</b-button>
-                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light">
-                                <template v-slot:button-content>
-                                    <i class="fas fa-cog" />
-                                </template>
-                                <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
-                                    <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
-                                    Keep hand visible when scrolling
-                                </b-dropdown-item>
-                            </b-dropdown>
-                        </b-card-text>
-                    </b-card>
+                    <GameStatusCard
+                        :game="gameState"
+                        :is-my-game="isMyGame"
+                        :is-my-turn="isMyTurn"
+                        :preferences="preferences"
+                    />
                     <b-card header="Moves" class="history">
                         <b-card-text>
                             <em>No moves have been made yet</em>
@@ -229,7 +220,7 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="alwaysShowHand" />
+        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="preferences.handFixedPosition" />
     </b-container>
 </template>
 

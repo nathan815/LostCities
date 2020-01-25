@@ -10,7 +10,7 @@ export default class GamePreStartBox extends Vue {
     private game!: GameState;
 
     @Prop({ required: true })
-    private currentPlayer!: Player;
+    private myPlayer!: Player;
 
     @Prop({ required: true })
     private isMyGame!: boolean;
@@ -63,11 +63,11 @@ export default class GamePreStartBox extends Vue {
             </div>
             <b-button
                 v-if="isMyGame"
-                :disabled="isStartInProgress || currentPlayer.readyToStart"
+                :disabled="isStartInProgress || myPlayer.readyToStart"
                 variant="success"
                 @click="start"
             >
-                <i :class="`fas ${currentPlayer.readyToStart ? 'fa-check-circle' : 'fa-play-circle'}`" />
+                <i :class="`fas ${myPlayer.readyToStart ? 'fa-check-circle' : 'fa-play-circle'}`" />
                 Start
             </b-button>
         </b-card>
