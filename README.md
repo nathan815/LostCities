@@ -14,20 +14,20 @@ Requires JDK 11+ (`javac -version`). Either OpenJDK or Oracle JDK.
 
 `cd backend`
 
-🛠Compile: `./gradlew build`
+🛠 Compile: `./gradlew build`
 
-▶️Run: `./gradlew bootRun`
+▶️ Run: `./gradlew bootRun`
 
 ### Frontend
 Requires [NodeJS 12+](https://nodejs.org/en/download/) and npm (node package manager, included with NodeJS).
 
 `cd frontend`
 
-🛠Install dependencies: `npm install`
+🛠 Install dependencies: `npm install`
 
-▶️Run: `npm run serve`
+▶️ Run: `npm run serve`
 
-⚡️Production Build: `npm run build`
+⚡️ Production Build: `npm run build`
 
 After running the serve command, frontend Webpack Dev Server should be up and running on http://localhost:8088. It is configured to automatically proxy API requests to `localhost:8088/api/*` to the backend server running on port 8089.
 
@@ -39,7 +39,7 @@ Some recent changes include adopting a domain driven structure/design, improving
 ## Technical Details
 
 ### Backend
-The backend is written in Java, utilizing Spring Boot for the REST API and websocket connections. The domain/business logic is decoupled from Spring &mdash; my goal with this was to learn how to write more testable code decoupled from framework code. The overall structure is inspired by my basic understanding of Domain Driven Design, but it's lacking a lot of the principles. Improvements will be made over time. Feel free to submit an issue or PR if you see something to be improved!
+The backend is written in Java, utilizing Spring Boot for the REST API and websocket connections. The domain/business logic is decoupled from Spring &mdash; my goal with this was to learn how to write more testable code decoupled from framework code. The overall structure is inspired by my basic understanding of Domain Driven Design (DDD), but it's lacking some principles. Improvements will be made over time. Feel free to submit an issue or PR if you see something to be improved!
 
 #### High Level Overview
 
@@ -61,15 +61,20 @@ The backend is written in Java, utilizing Spring Boot for the REST API and webso
 
 - **Presentation Layer** (web package): This is where all the web API and websocket controllers are. The "presentation" is in the form of JSON returned from the API, and STOMP messages sent to subscribed websocket clients via Spring Messaging. Controllers in the presentation layer interact with services in the application layer to complete their tasks.
 
-- **Application Layer** (application package): Application services live here. Application services primarily take in as input and return updated Data Transfer Objects (DTOs) - representations of the domain objects appropriate for 'public' consumption. Application services interact with the domain layer. Typically, the application services call some method from a repository (interface, defined in domain layer) to obtain an instance of a domain object hydrated with data.
+- **Application Layer** (application package): Application services live here. Application services primarily take in as input and return updated Data Transfer Objects (DTOs) - representations of the domain objects appropriate for 'public' consumption. Application services interact with the domain layer. Typically, the application services call some method from a repository to obtain an instance of a domain object hydrated with data.
 
-- **Domain Layer** (domain package): This is where the core game logic lives. It is standard Java code with no dependencies on other layers or Spring. This layer contains domain entities modeled after the domain (Lost Cities), and the entities contain all the logic necessary for game play. The majority of this project's unit tests test the code here. Repository interfaces are also defined here to allow depending layers to call repositories. (Generally, only application services call the repositories.)
-    - <sub><sup>Some entities contain JPA (Java Persistence API) annotations to enable the persistence layer to persist them. Additionally, in some domain entities, there are private methods annotated with 'PostLoad', 'PrePersist' and 'PreUpdate' JPA lifecycle annotations to enable restoration of their state.</sup></sub>
+- **Domain Layer** (domain package): This is where the core game logic lives. It is standard Java code with no dependencies on other layers or on Spring. This layer contains domain entities modeled after the domain (Lost Cities), and the entities contain all the logic necessary for game play. The majority of this project's unit tests test the code here. 
 
-- **Persistence Layer** (persistence package): Implementations of repositories are here, where actual interactions with the database or other persistent data stores happen. (The repository interfaces are defined in the domain layer.) This is considered "infrastructure". No other layers depend on this layer.
+    - Repository interfaces are also defined here
+    - Note that some entities contain JPA (Java Persistence API) annotations to enable the persistence layer to persist them. This isn't a dependency as they are only annotations (metadata).
+
+- **Persistence Layer** (persistence package): Implementations of repositories are defined here. The implemenations are where interactions with the database or other persistent data stores happen. 
+     
+     - Notice that the repository _interfaces_ are defined in the domain layer. This allows layers to call repositories while being decoupled from the persistence layer. A repository implementation could use an in-memory data structure or a database to persist data; the layers using the repository wouldn't know or care.
+     - Considered part of the infrastructure layer in Domain Driven Design.
 
 ### Frontend
 
 The frontend is written in TypeScript and unitizes the Vue.js library. The Vuex stores are written using the vuex wrapper [vuex-typex](https://github.com/mrcrowl/vuex-typex) to enable TypeScript compile-time type safety. Some state is stored in the Vuex store, but the game state of the game currently being viewed is stored in the `GamePlay` component. No other pages need access to the entire game state, so Vuex would be overkill for storing it.
 
-Frontend uses [rx-stomp](https://www.npmjs.com/package/@stomp/rx-stomp) for STOMP over Websocket communication for sending game commands and receiving game state from backend in realtime. rx-stomp uses RxJS so observables can be subscribed to for STOMP queues/topics.
+Utilizes [rx-stomp](https://www.npmjs.com/package/@stomp/rx-stomp) for STOMP over Websocket communication for sending game commands and receiving game state from backend in realtime. rx-stomp uses RxJS so observables can be subscribed to for STOMP queues/topics.
