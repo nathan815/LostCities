@@ -208,8 +208,6 @@ export default class GamePlay extends Vue {
                 <div class="sidebar">
                     <GameStatusCard
                         :game="gameState"
-                        :top-player="topPlayer"
-                        :bottom-player="bottomPlayer"
                         :is-my-game="isMyGame"
                         :is-my-turn="isMyTurn"
                         :preferences="preferences"

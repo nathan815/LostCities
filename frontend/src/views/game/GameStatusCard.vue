@@ -17,12 +17,6 @@ export default class GameStatusCard extends Vue {
     private isMyTurn!: boolean;
 
     @Prop({ required: true })
-    private topPlayer!: Player;
-
-    @Prop({ required: true })
-    private bottomPlayer!: Player;
-
-    @Prop({ required: true })
     private preferences!: GamePreferences;
 
     get currentTurnName() {
@@ -34,6 +28,12 @@ export default class GameStatusCard extends Vue {
         return null;
     }
 
+    get headingText() {
+        const playerNames = this.game.players.map(p => p.name);
+        if (playerNames.length == 1) playerNames.push('_______');
+        return playerNames.join(' vs. ');
+    }
+
     toggleHandFixedPositionPreference() {
         this.$emit('preference-change');
         this.preferences.handFixedPosition = !this.preferences.handFixedPosition;
@@ -43,7 +43,7 @@ export default class GameStatusCard extends Vue {
 <template>
     <b-card no-body class="status">
         <b-card-header>
-            {{ topPlayer.name || '______' }} vs. {{ bottomPlayer.name || '______' }}
+            {{ headingText }}
         </b-card-header>
         <b-card-body>
             <b-card-text class="status-text">
