@@ -224,7 +224,7 @@ export default class GamePlay extends Vue {
                             >
                                 Nudge
                             </b-button>
-                            <b-dropdown id="dropdown-1" size="sm" class="m-md-2" variant="light" right="true">
+                            <b-dropdown size="sm" class="m-md-2" variant="light" :right="true">
                                 <template v-slot:button-content>
                                     <i class="fas fa-cog" />
                                 </template>
