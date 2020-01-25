@@ -15,19 +15,25 @@ import auth from '@/store/modules/auth';
 import { AxiosError } from 'axios';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 import { ReadyToStart } from '@/model/game/moves';
+import GameStatusCard from '@/views/game/GameStatusCard.vue';
+import { GamePreferences } from '@/model/game/preferences';
 
 @Component({
-    components: { GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
+    components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
     isStartInProgress: boolean = false;
-    alwaysShowHand: boolean = true;
-    gameState: GameState = new GameState();
     error: string | null = null;
+
     subscriptions: Subscription[] = [];
+
+    gameState: GameState = new GameState();
+    preferences: GamePreferences = {
+        handFixedPosition: true,
+    };
 
     get id(): number {
         return parseInt(this.$route.params.id);
@@ -126,15 +132,6 @@ export default class GamePlay extends Vue {
         else if (this.bottomPlayer) return this.bottomPlayer.name;
         else return 'Player 2';
     }
-
-    get currentTurnName() {
-        if (this.isMyTurn) {
-            return 'your';
-        } else if (this.gameState.currentTurnPlayer) {
-            return `${this.gameState.currentTurnPlayer.name}'s`;
-        }
-        return null;
-    }
 }
 </script>
 
@@ -209,42 +206,14 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <b-card no-body class="status">
-                        <b-card-header>
-                            {{ topPlayer.name || '______' }} vs. {{ bottomPlayer.name || '______' }}
-                        </b-card-header>
-                        <b-card-body>
-                            <b-card-text class="status-text">
-                                <template v-if="gameState.isStarted">
-                                    It is
-                                    <b>{{ currentTurnName }}</b>
-                                    turn
-                                </template>
-                                <template v-if="!gameState.isStarted">
-                                    <em>Game has not yet started</em>
-                                </template>
-                            </b-card-text>
-                            <b-card-text v-if="isMyGame">
-                                <b-button
-                                    v-if="gameState.isStarted"
-                                    variant="primary"
-                                    size="sm"
-                                    :disabled="isMyTurn"
-                                >
-                                    Nudge
-                                </b-button>
-                                <b-dropdown size="sm" class="m-md-2" variant="light" right>
-                                    <template v-slot:button-content>
-                                        <i class="fas fa-cog" />
-                                    </template>
-                                    <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
-                                        <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
-                                        Keep hand fixed at bottom
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </b-card-text>
-                        </b-card-body>
-                    </b-card>
+                    <GameStatusCard
+                        :game="gameState"
+                        :top-player="topPlayer"
+                        :bottom-player="bottomPlayer"
+                        :is-my-game="isMyGame"
+                        :is-my-turn="isMyTurn"
+                        :preferences="preferences"
+                    />
                     <b-card header="Moves" class="history">
                         <b-card-text>
                             <em>No moves have been made yet</em>
@@ -253,7 +222,7 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="alwaysShowHand" />
+        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="preferences.handFixedPosition" />
     </b-container>
 </template>
 
@@ -296,12 +265,6 @@ export default class GamePlay extends Vue {
     .card {
         margin-bottom: 15px;
         font-size: 95%;
-    }
-    .card-text {
-        text-align: center;
-    }
-    .status-text {
-        font-size: 105%;
     }
 }
 </style>
