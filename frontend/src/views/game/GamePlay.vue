@@ -126,6 +126,15 @@ export default class GamePlay extends Vue {
         else if (this.bottomPlayer) return this.bottomPlayer.name;
         else return 'Player 2';
     }
+
+    get currentTurnName() {
+        if (this.isMyTurn) {
+            return 'your';
+        } else if (this.gameState.currentTurnPlayer) {
+            return `${this.gameState.currentTurnPlayer.name}'s`;
+        }
+        return null;
+    }
 }
 </script>
 
@@ -200,40 +209,41 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <b-card class="status text-center">
-                        <b-card-text class="status-text">
-                            <template v-if="gameState.isStarted">
-                                It is
-                                <b>
-                                    {{
-                                        isMyTurn ? 'your' : `${gameState.currentTurnPlayer.name}'s`
-                                    }}
-                                </b>
-                                turn
-                            </template>
-                            <template v-if="!gameState.isStarted">
-                                <em>Game has not yet started</em>
-                            </template>
-                        </b-card-text>
-                        <b-card-text v-if="isMyGame">
-                            <b-button
-                                v-if="gameState.isStarted"
-                                variant="primary"
-                                size="sm"
-                                :disabled="isMyTurn"
-                            >
-                                Nudge
-                            </b-button>
-                            <b-dropdown size="sm" class="m-md-2" variant="light" :right="true">
-                                <template v-slot:button-content>
-                                    <i class="fas fa-cog" />
+                    <b-card no-body class="status">
+                        <b-card-header>
+                            {{ topPlayer.name || '______' }} vs. {{ bottomPlayer.name || '______' }}
+                        </b-card-header>
+                        <b-card-body>
+                            <b-card-text class="status-text">
+                                <template v-if="gameState.isStarted">
+                                    It is
+                                    <b>{{ currentTurnName }}</b>
+                                    turn
                                 </template>
-                                <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
-                                    <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
-                                    Keep hand fixed at bottom
-                                </b-dropdown-item>
-                            </b-dropdown>
-                        </b-card-text>
+                                <template v-if="!gameState.isStarted">
+                                    <em>Game has not yet started</em>
+                                </template>
+                            </b-card-text>
+                            <b-card-text v-if="isMyGame">
+                                <b-button
+                                    v-if="gameState.isStarted"
+                                    variant="primary"
+                                    size="sm"
+                                    :disabled="isMyTurn"
+                                >
+                                    Nudge
+                                </b-button>
+                                <b-dropdown size="sm" class="m-md-2" variant="light" right>
+                                    <template v-slot:button-content>
+                                        <i class="fas fa-cog" />
+                                    </template>
+                                    <b-dropdown-item @click="alwaysShowHand = !alwaysShowHand">
+                                        <i class="fas" :class="{ 'fa-check': alwaysShowHand }" />
+                                        Keep hand fixed at bottom
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                            </b-card-text>
+                        </b-card-body>
                     </b-card>
                     <b-card header="Moves" class="history">
                         <b-card-text>
@@ -287,8 +297,11 @@ export default class GamePlay extends Vue {
         margin-bottom: 15px;
         font-size: 95%;
     }
+    .card-text {
+        text-align: center;
+    }
     .status-text {
-        font-size: 110%;
+        font-size: 105%;
     }
 }
 </style>
