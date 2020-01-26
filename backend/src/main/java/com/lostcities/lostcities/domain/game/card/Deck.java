@@ -20,6 +20,8 @@ public class Deck {
 
     private static final List<Card> STARTING_DECK = Collections.unmodifiableList(buildStartingCardList());
     public static final int STARTING_SIZE = STARTING_DECK.size();
+    private static final int MIN_CARD_VALUE = 2;
+    private static final int MAX_CARD_VALUE = 10;
 
     private CardStack cards;
 
@@ -46,7 +48,7 @@ public class Deck {
         cards.add(Card.wager(color, 1));
         cards.add(Card.wager(color, 2));
 
-        cards.addAll(IntStream.range(2, 11)
+        cards.addAll(IntStream.rangeClosed(MIN_CARD_VALUE, MAX_CARD_VALUE)
                 .mapToObj((i) -> Card.expedition(color, i))
                 .collect(Collectors.toList()));
 
