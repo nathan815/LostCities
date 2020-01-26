@@ -1,5 +1,6 @@
 import { Card, Discard } from '@/model/game/card';
 import { Player } from '@/model/game/player';
+import { Move } from '@/model/game/moves';
 
 export class Board {
     discard: Discard = {};
@@ -30,6 +31,7 @@ export class GameState {
 
     private currentTurnPlayerId: number = 0;
     public players: Player[] = [];
+    public moves: Move[] = [];
 
     public hand: Card[] = [];
 

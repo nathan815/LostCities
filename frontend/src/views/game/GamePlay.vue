@@ -2,21 +2,21 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Subscription } from 'rxjs';
+import { AxiosError } from 'axios';
+
+import auth from '@/store/modules/auth';
+import * as gameApi from '@/api/game';
+import { GameState, GameStatus } from '@/model/game';
+import { Player } from '@/model/game/player';
+import { GamePreferences } from '@/model/game/preferences';
+import { Move, MoveType } from '@/model/game/moves';
 
 import BoardView from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
-import { GameState, GameStatus } from '@/model/game';
-import { Player } from '@/model/game/player';
-
-import * as gameApi from '@/api/game';
-import auth from '@/store/modules/auth';
-import { AxiosError } from 'axios';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
-import { ReadyToStart } from '@/model/game/moves';
 import GameStatusCard from '@/views/game/GameStatusCard.vue';
-import { GamePreferences } from '@/model/game/preferences';
 
 @Component({
     components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
@@ -85,7 +85,10 @@ export default class GamePlay extends Vue {
     async start() {
         this.error = null;
         this.isStartInProgress = true;
-        gameApi.makeMove(this.id, new ReadyToStart());
+        gameApi.makeMove(
+            this.id,
+            new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.ReadyToStart)
+        );
     }
 
     get status() {
@@ -212,9 +215,13 @@ export default class GamePlay extends Vue {
                         :is-my-turn="isMyTurn"
                         :preferences="preferences"
                     />
-                    <b-card header="Moves" class="history">
+                    <b-card header="Log" class="history">
                         <b-card-text>
-                            <em>No moves have been made yet</em>
+                            <em v-if="gameState.moves.length === 0">Nothing here yet</em>
+                            <div v-for="move in gameState.moves" :key="move">
+                                {{ gameState.findPlayerById(move.playerId).name }} -
+                                {{ move.type }}
+                            </div>
                         </b-card-text>
                     </b-card>
                 </div>

@@ -8,16 +8,16 @@ import com.lostcities.lostcities.domain.game.card.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameBoardDto {
+public class BoardDto {
 
     @JsonProperty("discard")
     public Map<Color, DiscardSummary> topOfDiscards;
 
-    private GameBoardDto(Map<Color, DiscardSummary> topOfDiscards) {
+    private BoardDto(Map<Color, DiscardSummary> topOfDiscards) {
         this.topOfDiscards = topOfDiscards;
     }
 
-    public static GameBoardDto fromGameBoard(GameBoard gameBoard) {
+    public static BoardDto fromGameBoard(GameBoard gameBoard) {
         Map<Color, DiscardSummary> topOfDiscards = new HashMap<>();
         for(var entry : gameBoard.getDiscardStacksMap().entrySet()) {
             Color color = entry.getKey();
@@ -26,7 +26,7 @@ public class GameBoardDto {
                 topOfDiscards.put(color, new DiscardSummary(cardStack.size(), topCard));
             });
         }
-        return new GameBoardDto(topOfDiscards);
+        return new BoardDto(topOfDiscards);
     }
 
     private static class DiscardSummary {

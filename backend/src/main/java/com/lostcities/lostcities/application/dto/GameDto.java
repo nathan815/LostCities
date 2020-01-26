@@ -6,7 +6,8 @@ import com.lostcities.lostcities.domain.game.card.Card;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * DTO for Game
@@ -21,16 +22,18 @@ public class GameDto {
     public Game.Status status;
     public long currentTurnPlayerId;
     public List<PlayerDto> players;
-    public GameBoardDto board;
+    public List<MoveDto> moves;
+    public BoardDto board;
     public Set<Card> hand;
 
     public GameDto(long id, int deckSize, Game.Status status, long currentTurnPlayerId, List<PlayerDto> players,
-                   GameBoardDto board) {
+                   List<MoveDto> moves, BoardDto board) {
         this.id = id;
         this.deckSize = deckSize;
         this.status = status;
         this.currentTurnPlayerId = currentTurnPlayerId;
         this.players = players;
+        this.moves = moves;
         this.board = board;
         this.hand = Collections.emptySet();
     }
@@ -46,8 +49,9 @@ public class GameDto {
                 game.getDeck().size(),
                 game.getStatus(),
                 game.getCurrentTurnPlayer().map(Player::getId).orElse(0L),
-                game.getPlayersStream().map(PlayerDto::fromPlayer).collect(Collectors.toList()),
-                GameBoardDto.fromGameBoard(game.getBoard())
+                game.getPlayersStream().map(PlayerDto::fromPlayer).collect(toList()),
+                game.getMoves().stream().map(MoveDto::fromMove).collect(toList()),
+                BoardDto.fromGameBoard(game.getBoard())
         );
     }
 }
