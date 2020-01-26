@@ -30,7 +30,7 @@ export default class GamePlay extends Vue {
 
     subscriptions: Subscription[] = [];
 
-    gameState: GameState = new GameState();
+    game: GameState = new GameState();
     preferences: GamePreferences = {
         handFixedPosition: true,
     };
@@ -49,9 +49,9 @@ export default class GamePlay extends Vue {
     }
 
     private setupSubscriptions() {
-        const setGameState = (gameState: GameState) => {
-            console.log('Received Game State: ', gameState);
-            this.gameState = gameState;
+        const setGameState = (game: GameState) => {
+            console.log('Received Game State: ', game);
+            this.game = game;
             this.isLoading = false;
             this.isLoaded = true;
         };
@@ -92,11 +92,11 @@ export default class GamePlay extends Vue {
     }
 
     get status() {
-        return this.gameState.status;
+        return this.game.status;
     }
 
     get isMyTurn() {
-        return this.gameState.currentTurnPlayer == this.myPlayer;
+        return this.game.currentTurnPlayer == this.myPlayer;
     }
 
     get isMyGame() {
@@ -104,20 +104,20 @@ export default class GamePlay extends Vue {
     }
 
     get myPlayer(): Player | undefined {
-        return this.gameState.players.find(
+        return this.game.players.find(
             player => auth.currentUser && player.name === auth.currentUser.username
         );
     }
 
     get myOpponent(): Player | undefined {
         if (!auth.currentUser || !this.myPlayer) return undefined;
-        return this.gameState.players.find(
+        return this.game.players.find(
             player => auth.currentUser && player.name !== auth.currentUser.username
         );
     }
 
     get topPlayer(): Player | undefined {
-        return this.isMyGame ? this.myOpponent : this.gameState.players[0];
+        return this.isMyGame ? this.myOpponent : this.game.players[0];
     }
 
     get topPlayerDesc() {
@@ -127,7 +127,7 @@ export default class GamePlay extends Vue {
     }
 
     get bottomPlayer(): Player | undefined {
-        return this.isMyGame ? this.myPlayer : this.gameState.players[1];
+        return this.isMyGame ? this.myPlayer : this.game.players[1];
     }
 
     get bottomPlayerDesc() {
@@ -153,7 +153,7 @@ export default class GamePlay extends Vue {
         <b-row v-if="isLoaded">
             <b-col sm="12" md="9" lg="9">
                 <GamePreStartBox
-                    :game="gameState"
+                    :game="game"
                     :my-player="myPlayer"
                     :is-my-game="isMyGame"
                     :is-join-in-progress="isJoinInProgress"
@@ -184,11 +184,11 @@ export default class GamePlay extends Vue {
                 <b-row>
                     <b-col cols="2">
                         <div class="draw-pile">
-                            <Deck :size="gameState.deckSize" />
+                            <Deck :size="game.deckSize" />
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <BoardView :board="gameState.board" />
+                        <BoardView :board="game.board" />
                     </b-col>
                 </b-row>
 
@@ -210,16 +210,16 @@ export default class GamePlay extends Vue {
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
                     <GameStatusCard
-                        :game="gameState"
+                        :game="game"
                         :is-my-game="isMyGame"
                         :is-my-turn="isMyTurn"
                         :preferences="preferences"
                     />
                     <b-card header="Log" class="history">
                         <b-card-text>
-                            <em v-if="gameState.moves.length === 0">Nothing here yet</em>
-                            <div v-for="move in gameState.moves" :key="move">
-                                {{ gameState.findPlayerById(move.playerId).name }} -
+                            <em v-if="game.moves.length === 0">Nothing here yet</em>
+                            <div v-for="move in game.moves" :key="move">
+                                {{ game.findPlayerById(move.playerId).name }} -
                                 {{ move.type }}
                             </div>
                         </b-card-text>
@@ -227,7 +227,7 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-        <Hand v-if="isMyGame" :cards="gameState.hand" :fixed="preferences.handFixedPosition" />
+        <Hand v-if="isMyGame" :cards="game.hand" :fixed="preferences.handFixedPosition" />
     </b-container>
 </template>
 
