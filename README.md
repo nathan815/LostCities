@@ -1,5 +1,5 @@
 # Lost Cities
-
+  
 [![TravisCI Status](https://travis-ci.org/nathan815/LostCities.svg?branch=master)](https://travis-ci.org/nathan815/LostCities)
 [![Codecov](https://codecov.io/gh/nathan815/LostCities/branch/master/graph/badge.svg)](https://codecov.io/gh/nathan815/LostCities)
 [![Codacy](https://api.codacy.com/project/badge/Grade/410d3531a0ee4e7eb87a19b071f34f29)](https://www.codacy.com/manual/nathan815/LostCities?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nathan815/LostCities&amp;utm_campaign=Badge_Grade)
@@ -57,7 +57,7 @@ The backend is written in Java, utilizing Spring Boot for the REST API and webso
                                                     |                     |
                                                     +---------------------+
 ```
-*An arrow denotes a dependency: a layer may only reference objects from the layer(s) it depends on. Diagram created with [asciiflow](http://asciiflow.com/).*
+*An arrow denotes a one-way dependency. Each layer may only reference objects from the layer(s) it depends on. This diagram was created with [asciiflow](http://asciiflow.com/).*
 
 - **Presentation Layer** (web package): This is where all the web API and websocket controllers are. The "presentation" is in the form of JSON returned from the API, and STOMP messages sent to subscribed websocket clients via Spring Messaging. Controllers in the presentation layer interact with services in the application layer to complete their tasks.
 
@@ -75,6 +75,6 @@ The backend is written in Java, utilizing Spring Boot for the REST API and webso
 
 ### Frontend
 
-The frontend is written in TypeScript and unitizes the Vue.js library. The Vuex stores are written using the vuex wrapper [vuex-typex](https://github.com/mrcrowl/vuex-typex) to enable TypeScript compile-time type safety. Some state is stored in the Vuex store, but the game state of the game currently being viewed is stored in the `GamePlay` component. No other pages need access to the entire game state, so Vuex would be overkill for storing it.
+The frontend is written in TypeScript and uses Vue.js + Vuex. The Vuex stores are written using the vuex wrapper [vuex-typex](https://github.com/mrcrowl/vuex-typex) to enable typed methods with TypeScript. Some state is stored in the Vuex store, but the game state of the game being played/viewed is stored in the `GamePlay` component as it is only accessed from that page.
 
 Utilizes [rx-stomp](https://www.npmjs.com/package/@stomp/rx-stomp) for STOMP over Websocket communication for sending game commands and receiving game state from backend in realtime. rx-stomp uses RxJS so observables can be subscribed to for STOMP queues/topics.
