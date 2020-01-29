@@ -102,7 +102,6 @@ public class GameTest {
         assertEquals(Game.Status.ReadyToStart, game.getStatus());
     }
 
-
     @Test
     public void makeMove_ReadyToStart_ifGameNotStarted_shouldNotThrowException() {
         Game game = Game.create(RANDOM_SEED, player1, player2);
@@ -179,6 +178,7 @@ public class GameTest {
 
         int drawnCount = 2;
         assertEquals(initialDeckSize - drawnCount, game.getDeck().size());
+        assertEquals(8, game.getMoves().size());
     }
 
     @Test
