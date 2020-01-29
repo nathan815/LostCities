@@ -218,9 +218,9 @@ export default class GamePlay extends Vue {
                     <b-card header="Log" class="history">
                         <b-card-text>
                             <em v-if="game.moves.length === 0">Nothing here yet</em>
-                            <div v-for="move in game.moves" :key="move">
-                                {{ game.findPlayerById(move.playerId).name }} -
-                                {{ move.type }}
+                            <div v-for="move in game.moves" :key="move.toString()">
+                                <b>{{ game.findPlayerById(move.playerId).name }}</b>
+                                {{ move.description }}
                             </div>
                         </b-card-text>
                     </b-card>
