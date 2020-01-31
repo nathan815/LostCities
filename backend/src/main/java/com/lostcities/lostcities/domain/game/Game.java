@@ -120,6 +120,10 @@ public class Game {
         return status;
     }
 
+    public List<Move> getMoves() {
+        return moves;
+    }
+
     protected void setDeck(Deck deck) {
         this.deck = deck;
     }

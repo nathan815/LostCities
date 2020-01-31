@@ -1,5 +1,6 @@
 import { Card, Discard } from '@/model/game/card';
 import { Player } from '@/model/game/player';
+import { Move } from '@/model/game/moves';
 
 export class Board {
     discard: Discard = {};
@@ -30,12 +31,14 @@ export class GameState {
 
     private currentTurnPlayerId: number = 0;
     public players: Player[] = [];
+    public moves: Move[] = [];
 
     public hand: Card[] = [];
 
     constructor(state?: any) {
         Object.assign(this, state);
         this.hand = this.hand.map(Card.fromObject).sort(Card.compare);
+        this.moves = this.moves.map(Move.fromObject);
     }
 
     get isNew() {
