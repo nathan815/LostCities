@@ -6,8 +6,10 @@ import com.lostcities.lostcities.domain.game.card.Deck;
 import com.lostcities.lostcities.domain.game.exception.EmptyDeckException;
 import com.lostcities.lostcities.domain.game.exception.EmptyDiscardException;
 import com.lostcities.lostcities.domain.user.User;
+import com.lostcities.lostcities.persistence.CardConverter;
 import java.util.Objects;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,10 +41,10 @@ public class Move {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Transient
+    @Convert(converter = CardConverter.class)
     private Card card = null;
 
-    @Transient
+    @Enumerated(EnumType.STRING)
     private Color color = null;
 
     public Move() {
