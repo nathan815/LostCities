@@ -8,6 +8,13 @@ export enum MoveType {
     DrawDiscard = 'DrawDiscard',
 }
 
+export interface MoveDto {
+    playerId: number;
+    type: string;
+    card?: string;
+    color?: string;
+}
+
 export class Move {
     playerId: number;
     type: MoveType;
@@ -38,11 +45,25 @@ export class Move {
         }
     }
 
-    public static fromObject(obj: any): Move {
-        return new Move(obj.playerId, obj.type, obj.card && Card.fromObject(obj.card), obj.color);
+    public toDto(): MoveDto {
+        return {
+            playerId: this.playerId,
+            type: this.type,
+            card: this.card ? this.card.toString() : undefined,
+            color: this.color ? this.color.toString() : undefined,
+        };
     }
 
     public toString() {
         return `${this.playerId} ${this.type} ${this.card} ${this.color}`;
+    }
+
+    public static fromDto(obj: MoveDto): Move {
+        return new Move(
+            obj.playerId,
+            MoveType[obj.type],
+            obj.card ? Card.fromString(obj.card) : undefined,
+            obj.color ? Color[obj.color] : undefined
+        );
     }
 }

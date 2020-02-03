@@ -37,8 +37,10 @@ export class GameState {
 
     constructor(state?: any) {
         Object.assign(this, state);
-        this.hand = this.hand.map(Card.fromObject).sort(Card.compare);
-        this.moves = this.moves.map(Move.fromObject);
+        if (state) {
+            this.hand = state.hand.map(Card.fromObject).sort(Card.compare);
+            this.moves = state.moves.map(move => Move.fromDto(move));
+        }
     }
 
     get isNew() {

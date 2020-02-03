@@ -17,6 +17,7 @@ import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 import GameStatusCard from '@/views/game/GameStatusCard.vue';
+import { Card } from '@/model/game/card';
 
 @Component({
     components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
@@ -88,6 +89,20 @@ export default class GamePlay extends Vue {
         gameApi.makeMove(
             this.id,
             new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.ReadyToStart)
+        );
+    }
+
+    playCard(card: Card) {
+        gameApi.makeMove(
+            this.id,
+            new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.PlayCard, card)
+        );
+    }
+
+    discardCard(card: Card) {
+        gameApi.makeMove(
+            this.id,
+            new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DiscardCard, card)
         );
     }
 
@@ -227,7 +242,14 @@ export default class GamePlay extends Vue {
                 </div>
             </b-col>
         </b-row>
-        <Hand v-if="isMyGame" :cards="game.hand" :fixed="preferences.handFixedPosition" />
+        <Hand
+            v-if="isMyGame"
+            :is-my-turn="isMyTurn"
+            :cards="game.hand"
+            :fixed="preferences.handFixedPosition"
+            @play="playCard"
+            @discard="discardCard"
+        />
     </b-container>
 </template>
 

@@ -25,7 +25,10 @@ export function requestGameState(gameId) {
 }
 
 export function makeMove(gameId: number, move: Move) {
-    stompClient.publish({ destination: gamePath(gameId, 'move'), body: JSON.stringify(move) });
+    stompClient.publish({
+        destination: gamePath(gameId, 'move'),
+        body: JSON.stringify(move.toDto()),
+    });
 }
 
 export function join(gameId: number): Promise<AxiosResponse> {
