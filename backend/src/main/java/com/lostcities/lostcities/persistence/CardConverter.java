@@ -9,7 +9,7 @@ import javax.persistence.Converter;
 public class CardConverter implements AttributeConverter<Card, String> {
     @Override
     public String convertToDatabaseColumn(Card card) {
-        return card.toString();
+        return card == null ? null : card.toString();
     }
 
     @Override
