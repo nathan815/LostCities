@@ -5,38 +5,30 @@ import com.lostcities.lostcities.domain.game.GameBoard;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.CardStack;
 import com.lostcities.lostcities.domain.game.card.Color;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BoardDto {
 
-    @JsonProperty("discard")
-    public Map<Color, DiscardSummary> topOfDiscards;
+    private static final int DISCARD_COUNT = 3;
 
-    private BoardDto(Map<Color, DiscardSummary> topOfDiscards) {
+    @JsonProperty("discard")
+    public Map<Color, List<Card>> topOfDiscards;
+
+    private BoardDto(Map<Color, List<Card>> topOfDiscards) {
         this.topOfDiscards = topOfDiscards;
     }
 
     public static BoardDto fromGameBoard(GameBoard gameBoard) {
-        Map<Color, DiscardSummary> topOfDiscards = new HashMap<>();
-        for(var entry : gameBoard.getDiscardStacksMap().entrySet()) {
+        Map<Color, List<Card>> topOfDiscards = new HashMap<>();
+        for (var entry : gameBoard.getDiscardStacksMap().entrySet()) {
             Color color = entry.getKey();
             CardStack cardStack = entry.getValue();
-            cardStack.getTop().ifPresent(topCard -> {
-                topOfDiscards.put(color, new DiscardSummary(cardStack.size(), topCard));
-            });
+            topOfDiscards.put(color, cardStack.getTopCards(DISCARD_COUNT));
         }
         return new BoardDto(topOfDiscards);
-    }
-
-    private static class DiscardSummary {
-        int count;
-        Card topCard;
-
-        public DiscardSummary(int count, Card topCard) {
-            this.count = count;
-            this.topCard = topCard;
-        }
     }
 
 }

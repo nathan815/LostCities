@@ -19,7 +19,7 @@ export default class BoardView extends Vue {
     }
 
     lastThreeDiscardCards(color: Color): Card[] {
-        return this.discard[color] ? this.discard[color]!.slice(-3) : [];
+        return this.discard[color] ? this.discard[color]! : [];
     }
 
     // Returns some custom style for a card given its index in the pile

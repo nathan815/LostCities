@@ -7,7 +7,7 @@ export enum Color {
 }
 
 export function getColorEnumValues(): Color[] {
-    return Object.keys(Color).map(key => Color[key]);
+    return Object.keys(Color).map(key => Color[key].toUpperCase());
 }
 
 export class Card {

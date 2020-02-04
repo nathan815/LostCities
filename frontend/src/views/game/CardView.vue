@@ -27,7 +27,7 @@ export default class CardView extends Vue {
         const classes: string[] = [];
         classes.push(this.showSide);
         if (this.card) {
-            classes.push(`color-${this.card.color}`);
+            classes.push(`color-${this.card.color.toLowerCase()}`);
         }
         return classes;
     }
