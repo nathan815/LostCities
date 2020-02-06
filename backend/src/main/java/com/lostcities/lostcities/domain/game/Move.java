@@ -138,16 +138,18 @@ public class Move {
         if(allowedBeforeGameStarts()) {
             return true;
         }
-        if(previousMove == null) {
-            return false;
-        }
-        if(previousMove.type == Type.DrawDiscard && previousMove.card == this.card) {
+        if(previousMove == null || isDrawingCardJustDiscarded(previousMove)) {
             return false;
         }
 
         boolean firstMoveOfTurn = previousMove.doesEndTurn() && this.type.isFirstMoveOfTurn();
         boolean moveIsOneOrderAbovePrevious = this.type.order - previousMove.type.order == 1;
         return firstMoveOfTurn || moveIsOneOrderAbovePrevious;
+    }
+
+    private boolean isDrawingCardJustDiscarded(Move previousMove) {
+        return previousMove.getType() == Type.DiscardCard && this.getType() == Type.DrawDiscard
+                && this.getColor() == previousMove.getCard().getColor();
     }
 
     protected boolean doesTurnMatter() {
