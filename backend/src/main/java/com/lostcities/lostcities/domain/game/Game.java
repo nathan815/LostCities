@@ -212,15 +212,15 @@ public class Game {
         if(status != Status.Started && !move.allowedBeforeGameStarts()) {
             throw new GameNotStartedException();
         }
+        if(move.doesTurnMatter() && !currentTurnPlayer.equals(move.getPlayer())) {
+            throw new NotPlayersTurnException(move.getPlayer().getName());
+        }
         if(!move.canPlayAfter(previousMove)) {
             throw new IllegalMoveException(String.format(
                     "Move %s cannot be played after previously played move %s",
                     move.getDescription(),
                     previousMove == null ? "" : previousMove.getDescription()
             ));
-        }
-        if(move.doesTurnMatter() && !currentTurnPlayer.equals(move.getPlayer())) {
-            throw new NotPlayersTurnException(currentTurnPlayer.getName());
         }
     }
 

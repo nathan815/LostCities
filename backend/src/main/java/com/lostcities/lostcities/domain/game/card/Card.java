@@ -1,5 +1,7 @@
 package com.lostcities.lostcities.domain.game.card;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 
@@ -69,6 +71,7 @@ public class Card {
         return instance;
     }
 
+    @JsonIgnore
     public boolean isWager() {
         return value == WAGER_CARD_VALUE;
     }
