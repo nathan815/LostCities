@@ -2,11 +2,11 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { GameState } from '@/model/game';
-import { Player } from '@/model/game/player';
 import { GamePreferences } from '@/model/game/preferences';
+import { MoveType } from '@/model/game/moves';
 
 @Component
-export default class GameStatusCard extends Vue {
+export default class GameStatusBox extends Vue {
     @Prop({ required: true })
     private game!: GameState;
 
@@ -38,6 +38,17 @@ export default class GameStatusCard extends Vue {
         this.$emit('preference-change');
         this.preferences.handFixedPosition = !this.preferences.handFixedPosition;
     }
+
+    get nextMoveHint() {
+        const moveTypes = this.game.nextPossibleMoves;
+        if (moveTypes.includes(MoveType.DrawDeck) && moveTypes.includes(MoveType.DrawDiscard)) {
+            return 'Draw a Card';
+        }
+        if (moveTypes.includes(MoveType.DiscardCard) && moveTypes.includes(MoveType.PlayCard)) {
+            return 'Play or Discard';
+        }
+        return '';
+    }
 }
 </script>
 <template>
@@ -48,9 +59,14 @@ export default class GameStatusCard extends Vue {
         <b-card-body>
             <b-card-text class="status-text">
                 <template v-if="game.isStarted">
-                    It is
-                    <b>{{ currentTurnName }}</b>
-                    turn
+                    <div>
+                        It is
+                        <b>{{ currentTurnName }}</b>
+                        turn
+                    </div>
+                    <div v-if="isMyTurn" class="next-move-hint">
+                        {{ nextMoveHint }}
+                    </div>
                 </template>
                 <template v-if="!game.isStarted">
                     <em>Game has not yet started</em>
@@ -66,7 +82,7 @@ export default class GameStatusCard extends Vue {
                     </template>
                     <b-dropdown-item @click="toggleHandFixedPositionPreference">
                         <i class="fas" :class="{ 'fa-check': preferences.handFixedPosition }" />
-                        Keep hand fixed at bottom
+                        Always keep hand visible
                     </b-dropdown-item>
                 </b-dropdown>
             </b-card-text>
@@ -79,5 +95,9 @@ export default class GameStatusCard extends Vue {
 }
 .status-text {
     font-size: 105%;
+}
+.next-move-hint {
+    font-style: italic;
+    font-size: 90%;
 }
 </style>

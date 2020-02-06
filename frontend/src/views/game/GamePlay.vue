@@ -16,11 +16,11 @@ import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
-import GameStatusCard from '@/views/game/GameStatusCard.vue';
+import GameStatusBox from '@/views/game/GameStatusBox.vue';
 import { Card } from '@/model/game/card';
 
 @Component({
-    components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
+    components: { GameStatusBox, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
@@ -245,7 +245,7 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <GameStatusCard
+                    <GameStatusBox
                         :game="game"
                         :is-my-game="isMyGame"
                         :is-my-turn="isMyTurn"
@@ -255,7 +255,7 @@ export default class GamePlay extends Vue {
                         <b-card-text>
                             <em v-if="game.moves.length === 0">Nothing here yet</em>
                             <div v-for="move in game.moves" :key="move.toString()">
-                                <b>{{ game.findPlayerById(move.playerId).name }}</b>
+                                <em>{{ game.findPlayerById(move.playerId).name }}</em>
                                 {{ move.description }}
                             </div>
                         </b-card-text>
