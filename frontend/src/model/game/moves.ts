@@ -33,13 +33,13 @@ export class Move {
             case MoveType.ReadyToStart:
                 return 'is ready to start';
             case MoveType.DrawDeck:
-                return `drew ${this.card} from the deck`;
+                return `drew from the deck`;
             case MoveType.PlayCard:
                 return `played ${this.card}`;
             case MoveType.DiscardCard:
                 return `discarded ${this.card}`;
             case MoveType.DrawDiscard:
-                return `drew ${this.card} from discard`;
+                return `drew from ${this.color} discard`;
             default:
                 return '';
         }
