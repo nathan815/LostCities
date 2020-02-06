@@ -161,7 +161,7 @@ public class Move {
     }
 
     protected boolean doesEndTurn() {
-        return type.endsTurn;
+        return type.isLastMoveOfTurn();
     }
 
     public Set<Type> getNextPossibleMoveTypes() {
@@ -192,28 +192,27 @@ public class Move {
     }
 
     public enum Type {
-        ReadyToStart(0, false),
-        PlayCard(1, false),
-        DiscardCard(1, false),
-        DrawDeck(2, true),
-        DrawDiscard(2, true);
+        ReadyToStart(0),
+        PlayCard(1),
+        DiscardCard(1),
+        DrawDeck(2),
+        DrawDiscard(2);
 
         private static final int TURN_FIRST_ORDER = 1;
+        private static final int TURN_LAST_ORDER = 2;
 
         protected int order;
-        protected boolean endsTurn;
 
         public boolean isFirstMoveOfTurn() {
             return order == TURN_FIRST_ORDER;
         }
 
-        Type(int order, boolean endsTurn) {
-            this.order = order;
-            this.endsTurn = endsTurn;
+        public boolean isLastMoveOfTurn() {
+            return order == TURN_LAST_ORDER;
         }
-    }
 
-    public enum TurnStage {
-        PlayOrDiscard, Draw;
+        Type(int order) {
+            this.order = order;
+        }
     }
 }
