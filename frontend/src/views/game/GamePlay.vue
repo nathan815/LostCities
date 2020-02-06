@@ -18,9 +18,10 @@ import Hand from '@/views/game/Hand.vue';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 import GameStatusBox from '@/views/game/GameStatusBox.vue';
 import { Card } from '@/model/game/card';
+import MoveLog from '@/views/game/MoveLog.vue';
 
 @Component({
-    components: { GameStatusBox, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
+    components: { MoveLog, GameStatusBox, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
@@ -251,15 +252,7 @@ export default class GamePlay extends Vue {
                         :is-my-turn="isMyTurn"
                         :preferences="preferences"
                     />
-                    <b-card header="Log" class="history">
-                        <b-card-text>
-                            <em v-if="game.moves.length === 0">Nothing here yet</em>
-                            <div v-for="move in game.moves" :key="move.toString()">
-                                <em>{{ game.findPlayerById(move.playerId).name }}</em>
-                                {{ move.description }}
-                            </div>
-                        </b-card-text>
-                    </b-card>
+                    <MoveLog :game="game" />
                 </div>
             </b-col>
         </b-row>
