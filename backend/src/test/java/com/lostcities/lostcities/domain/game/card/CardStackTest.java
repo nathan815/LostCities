@@ -12,15 +12,15 @@ public class CardStackTest {
             yellow8Card = Card.expedition(Color.YELLOW, 8);
 
     @Test
-    public void getTopCards_shouldReturnTopNCards() {
+    public void getTopCards_shouldReturnTopNCardsInSameOrderAsInserted() {
         CardStack stack = new CardStack();
         stack.addToTop(green3Card);
         stack.addToTop(red4Card);
         stack.addToTop(yellow8Card);
 
         assertThat(stack.getTopCards(1), contains(yellow8Card));
-        assertThat(stack.getTopCards(2), contains(yellow8Card, red4Card));
-        assertThat(stack.getTopCards(3), contains(yellow8Card, red4Card, green3Card));
+        assertThat(stack.getTopCards(2), contains(red4Card, yellow8Card));
+        assertThat(stack.getTopCards(3), contains(green3Card, red4Card, yellow8Card));
     }
 
     @Test

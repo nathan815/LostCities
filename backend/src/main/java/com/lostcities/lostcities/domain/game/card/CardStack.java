@@ -40,12 +40,8 @@ public class CardStack implements Iterable<Card> {
 
     public List<Card> getTopCards(int n) {
         if (n < 0) throw new IllegalArgumentException("n must be positive");
-        List<Card> topCards = new ArrayList<>();
         int count = Math.min(cards.size(), n);
-        for (int i = 1; i <= count; i++) {
-            topCards.add(cards.get(cards.size() - i));
-        }
-        return topCards;
+        return cards.subList(cards.size() - count, cards.size());
     }
 
     public boolean isEmpty() {
