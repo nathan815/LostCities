@@ -1,6 +1,6 @@
-import { Card, Discard } from '@/model/game/card';
-import { Player } from '@/model/game/player';
-import { Move } from '@/model/game/moves';
+import {Card, Discard} from '@/model/game/card';
+import {Player} from '@/model/game/player';
+import {Move, MoveType} from '@/model/game/moves';
 
 export class Board {
     discard: Discard = {};
@@ -32,14 +32,16 @@ export class GameState {
     private currentTurnPlayerId: number = 0;
     public players: Player[] = [];
     public moves: Move[] = [];
+    public nextPossibleMoves: MoveType[] = [];
 
     public hand: Card[] = [];
 
     constructor(state?: any) {
-        Object.assign(this, state);
         if (state) {
+            Object.assign(this, state);
             this.hand = state.hand.map(Card.fromObject).sort(Card.compare);
             this.moves = state.moves.map(move => Move.fromDto(move));
+            this.nextPossibleMoves = state.nextPossibleMoves.map(move => MoveType[move]);
         }
     }
 

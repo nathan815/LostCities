@@ -3,13 +3,15 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Card } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
+import { GameState } from '@/model/game';
+import { MoveType } from '@/model/game/moves';
 
 @Component({
     components: { CardView },
 })
 export default class Hand extends Vue {
     @Prop()
-    cards!: Card[];
+    game!: GameState;
 
     @Prop()
     isMyTurn!: boolean;
@@ -24,15 +26,23 @@ export default class Hand extends Vue {
     discard(card: Card) {
         this.$emit('discard', card);
     }
+
+    get showActions() {
+        return (
+            this.isMyTurn &&
+            this.game.nextPossibleMoves.includes(MoveType.PlayCard) &&
+            this.game.nextPossibleMoves.includes(MoveType.DiscardCard)
+        );
+    }
 }
 </script>
 
 <template>
     <b-row>
         <b-container class="hand" :class="{ fixed: fixed }">
-            <div v-for="card in cards" :key="card.toString()" class="hand-card-container">
+            <div v-for="card in game.hand" :key="card.toString()" class="hand-card-container">
                 <CardView :card="card" class="hand-card" />
-                <div v-if="isMyTurn" class="action-bar-container">
+                <div v-if="showActions" class="action-bar-container">
                     <div class="action-bar">
                         <b-button
                             variant="outline-light"
@@ -53,7 +63,7 @@ export default class Hand extends Vue {
                     </div>
                 </div>
             </div>
-            <div v-if="cards.length === 0">
+            <div v-if="game.hand.length === 0">
                 <em>Your hand is empty</em>
             </div>
         </b-container>

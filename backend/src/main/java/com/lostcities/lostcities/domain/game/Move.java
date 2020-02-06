@@ -7,7 +7,13 @@ import com.lostcities.lostcities.domain.game.exception.EmptyDeckException;
 import com.lostcities.lostcities.domain.game.exception.EmptyDiscardException;
 import com.lostcities.lostcities.domain.user.User;
 import com.lostcities.lostcities.persistence.CardConverter;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -91,6 +97,14 @@ public class Move {
         this.game = game;
     }
 
+    public String getDescription() {
+        List<String> params = new ArrayList<>();
+        if(color != null) params.add(color.toString());
+        if(card != null) params.add(card.toString());
+
+        return String.format("%s %s", type, params.isEmpty() ? "" : "(" + String.join(",", params) + ")");
+    }
+
     protected void execute(Deck deck, GameBoard board) {
         switch(type) {
             case ReadyToStart:
@@ -127,8 +141,11 @@ public class Move {
         if(previousMove == null) {
             return false;
         }
+        if(previousMove.type == Type.DrawDiscard && previousMove.card == this.card) {
+            return false;
+        }
 
-        boolean firstMoveOfTurn = previousMove.doesEndTurn() && this.type.order == 1;
+        boolean firstMoveOfTurn = previousMove.doesEndTurn() && this.type.isFirstMoveOfTurn();
         boolean moveIsOneOrderAbovePrevious = this.type.order - previousMove.type.order == 1;
         return firstMoveOfTurn || moveIsOneOrderAbovePrevious;
     }
@@ -143,6 +160,21 @@ public class Move {
 
     protected boolean doesEndTurn() {
         return type.endsTurn;
+    }
+
+    public Set<Type> getNextPossibleMoveTypes() {
+        if(this.doesEndTurn()) {
+            return getStartingMoves();
+        }
+        return Stream.of(Type.values())
+                .filter(moveType -> moveType.order - this.type.order == 1)
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<Type> getStartingMoves() {
+        return Stream.of(Type.values())
+                .filter(Type::isFirstMoveOfTurn)
+                .collect(Collectors.toSet());
     }
 
     public static Move create(Player player, Type type) {
@@ -164,8 +196,14 @@ public class Move {
         DrawDeck(2, true),
         DrawDiscard(2, true);
 
+        private static final int TURN_FIRST_ORDER = 1;
+
         protected int order;
         protected boolean endsTurn;
+
+        public boolean isFirstMoveOfTurn() {
+            return order == TURN_FIRST_ORDER;
+        }
 
         Type(int order, boolean endsTurn) {
             this.order = order;

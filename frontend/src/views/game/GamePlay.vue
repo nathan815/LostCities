@@ -244,8 +244,8 @@ export default class GamePlay extends Vue {
         </b-row>
         <Hand
             v-if="isMyGame"
+            :game="game"
             :is-my-turn="isMyTurn"
-            :cards="game.hand"
             :fixed="preferences.handFixedPosition"
             @play="playCard"
             @discard="discardCard"
