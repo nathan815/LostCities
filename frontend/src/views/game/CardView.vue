@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Card } from '@/model/game/card';
+import { isDev } from '@/util';
 
 @Component
 export default class CardView extends Vue {
@@ -11,6 +12,11 @@ export default class CardView extends Vue {
     @Prop({ default: 'front' })
     showSide!: 'front' | 'back';
 
+    mounted() {
+        if (isDev && !(this.card instanceof Card)) {
+            console.error('CardView: card object must be an instance of Card');
+        }
+    }
     get isBlank() {
         return this.card === undefined;
     }
