@@ -166,14 +166,14 @@ public class Move {
 
     public Set<Type> getNextPossibleMoveTypes() {
         if(this.doesEndTurn()) {
-            return getStartingMoves();
+            return getStartingMoveTypes();
         }
         return Stream.of(Type.values())
                 .filter(moveType -> moveType.order - this.type.order == 1)
                 .collect(Collectors.toSet());
     }
 
-    public static Set<Type> getStartingMoves() {
+    public static Set<Type> getStartingMoveTypes() {
         return Stream.of(Type.values())
                 .filter(Type::isFirstMoveOfTurn)
                 .collect(Collectors.toSet());
@@ -211,5 +211,9 @@ public class Move {
             this.order = order;
             this.endsTurn = endsTurn;
         }
+    }
+
+    public enum TurnStage {
+        PlayOrDiscard, Draw;
     }
 }

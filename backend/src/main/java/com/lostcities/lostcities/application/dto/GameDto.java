@@ -51,7 +51,7 @@ public class GameDto {
         List<Move> moves = game.getMoves();
         Set<Move.Type> nextPossibleMoves = moves.size() > 0
                 ? moves.get(game.getMoves().size() - 1).getNextPossibleMoveTypes()
-                : Move.getStartingMoves();
+                : Move.getStartingMoveTypes();
 
         return new GameDto(
                 game.getId(),
