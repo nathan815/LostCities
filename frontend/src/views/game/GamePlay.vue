@@ -93,17 +93,34 @@ export default class GamePlay extends Vue {
     }
 
     playCard(card: Card) {
-        gameApi.makeMove(
-            this.id,
-            new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.PlayCard, card)
-        );
+        if (this.isMyTurn) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.PlayCard, card)
+            );
+        }
     }
 
     discardCard(card: Card) {
-        gameApi.makeMove(
-            this.id,
-            new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DiscardCard, card)
-        );
+        if (this.isMyTurn) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DiscardCard, card)
+            );
+        }
+    }
+
+    drawFromDeck() {
+        if (this.canDrawDeck) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DrawDeck)
+            );
+        }
+    }
+
+    get canDrawDeck() {
+        return this.isMyTurn && this.game.nextPossibleMoves.includes(MoveType.DrawDeck);
     }
 
     get status() {
@@ -199,7 +216,11 @@ export default class GamePlay extends Vue {
                 <b-row>
                     <b-col cols="2">
                         <div class="draw-pile">
-                            <Deck :size="game.deckSize" />
+                            <Deck
+                                :size="game.deckSize"
+                                :can-draw="canDrawDeck"
+                                @card-click="drawFromDeck"
+                            />
                         </div>
                     </b-col>
                     <b-col cols="10">

@@ -35,7 +35,7 @@ export default class CardView extends Vue {
 </script>
 
 <template>
-    <div class="game-card" :class="classNames">
+    <div class="game-card" :class="classNames" @click="$emit('click')">
         <div v-if="card && showFront" class="game-card-value">
             <template v-if="card.isWager">
                 <span><i class="fas fa-handshake" /></span>
