@@ -58,7 +58,7 @@ export default class BoardView extends Vue {
     position: relative;
     width: 100%;
     height: auto;
-    margin: 0 auto;
+    margin: 5px auto;
     border-radius: 2px;
     overflow: hidden;
     box-shadow: 0 0 3px #555;
