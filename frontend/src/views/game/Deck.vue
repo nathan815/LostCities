@@ -16,7 +16,7 @@ export default class Deck extends Vue {
     canDraw!: boolean;
 
     get numCardsBadgeVariant() {
-        return this.size <= WARN_CARDS_LEFT ? 'danger' : 'light';
+        return this.size > 0 && this.size <= WARN_CARDS_LEFT ? 'danger' : 'light';
     }
 }
 </script>
