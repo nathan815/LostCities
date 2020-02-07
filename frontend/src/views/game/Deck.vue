@@ -32,7 +32,7 @@ export default class Deck extends Vue {
         />
         <p>
             <b-badge :variant="numCardsBadgeVariant">
-                {{ `${size} card${size === 1 ? '' : 's'}` }}
+                {{ `${size === 0 ? 'No' : size} card${size === 1 ? '' : 's'}` }}
             </b-badge>
         </p>
     </div>
