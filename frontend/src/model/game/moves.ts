@@ -45,7 +45,7 @@ export class Move {
             case MoveType.DiscardCard:
                 return `discarded ${this.card}`;
             case MoveType.DrawDiscard:
-                return `drew from ${this.color} discard`;
+                return `drew from the ${this.color} discard`;
             default:
                 return '';
         }
