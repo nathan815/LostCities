@@ -68,16 +68,18 @@ export default class Hand extends Vue {
 </template>
 
 <style lang="scss" scoped>
+@import '../../styles/variables';
+
 .spacer {
     height: 185px;
 }
 .hand {
-    box-shadow: 0 -5px 5px -5px #ccc;
+    box-shadow: 0 -6px 6px -7px #444;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    background: #f5f5f5; // TODO: add sass variable for body background
+    background: $body-bg;
     z-index: 2;
     position: relative;
     &.fixed {

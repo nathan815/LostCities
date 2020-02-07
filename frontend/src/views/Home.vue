@@ -23,9 +23,9 @@ export default class Home extends Vue {
             <img src="../assets/pyramids.png" class="pyramids" />
             <div class="content">
                 <h1 class="display-4">
-                    {{ isLoggedIn ? `${username}, start an expedition...` : 'Your adventure awaits...' }}
+                    {{ isLoggedIn ? `Hello, ${username}!` : 'Your adventure awaits...' }}
                 </h1>
-                <b-button to="/games/new" variant="primary" size="lg">
+                <b-button to="/games/new" variant="dark" size="lg">
                     <i class="fas fa-play" />
                     Play Now
                 </b-button>
@@ -68,7 +68,7 @@ export default class Home extends Vue {
     .content {
         z-index: 2;
         position: relative;
-        color: theme-color('primary');
+        color: #fff;
         h1 {
             font-family: Georgia, serif;
         }
@@ -80,14 +80,6 @@ export default class Home extends Vue {
         left: 0;
         width: 100%;
         z-index: 1;
-    }
-}
-@keyframes jumbotron-animation {
-    0% {
-        transform: scale(0.7);
-    }
-    100% {
-        transform: scale(1);
     }
 }
 .stats {

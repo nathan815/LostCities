@@ -30,7 +30,7 @@ export default class Hand extends Vue {
 </script>
 
 <template>
-    <b-card no-body header="Log" class="history">
+    <b-card no-body header="Log" class="log-card" bg-variant="dark">
         <b-card-body ref="log" class="log-card-body">
             <b-card-text>
                 <em v-if="game.moves.length === 0">Nothing here yet</em>
@@ -48,6 +48,9 @@ export default class Hand extends Vue {
 </template>
 
 <style lang="scss" scoped>
+.log-card {
+    color: #fff;
+}
 .log-card-body {
     max-height: 250px;
     overflow: scroll;
@@ -57,7 +60,7 @@ export default class Hand extends Vue {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    line-height: 1;
+    line-height: 1.2;
     &:not(:last-child) {
         margin-bottom: 5px;
     }
@@ -65,9 +68,7 @@ export default class Hand extends Vue {
 .log-entry-number {
     padding-right: 5px;
     padding-top: 2px;
-    color: #777;
-}
-.log-entry-text {
+    color: #999;
 }
 .log-misc {
     text-align: center;

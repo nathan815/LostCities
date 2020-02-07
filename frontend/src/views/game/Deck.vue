@@ -16,7 +16,7 @@ export default class Deck extends Vue {
     canDraw!: boolean;
 
     get numCardsBadgeVariant() {
-        return this.size > 0 && this.size <= WARN_CARDS_LEFT ? 'danger' : 'light';
+        return this.size > 0 && this.size <= WARN_CARDS_LEFT ? 'danger' : 'dark';
     }
 }
 </script>
@@ -48,7 +48,7 @@ export default class Deck extends Vue {
         margin: 0;
     }
     .deck-card {
-        box-shadow: 0 0 2px #999;
+        box-shadow: 0 0 2px #444;
         &.can-draw {
             cursor: pointer;
             &:hover {
@@ -56,7 +56,10 @@ export default class Deck extends Vue {
             }
         }
     }
-    .badge.badge-light {
+    .badge {
+        font-weight: normal;
+    }
+    .badge.badge-dark {
         background: none;
     }
 }

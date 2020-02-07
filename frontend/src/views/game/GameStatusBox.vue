@@ -52,7 +52,7 @@ export default class GameStatusBox extends Vue {
 }
 </script>
 <template>
-    <b-card no-body class="status">
+    <b-card no-body class="status-card" bg-variant="dark">
         <b-card-header>
             {{ headingText }}
         </b-card-header>
@@ -89,6 +89,9 @@ export default class GameStatusBox extends Vue {
     </b-card>
 </template>
 <style scoped lang="scss">
+.status-card {
+    color: #fff;
+}
 .card-text {
     text-align: center;
 }
