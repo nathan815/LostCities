@@ -96,16 +96,16 @@ public class Move {
 
     public String getDescription() {
         List<String> params = new ArrayList<>();
-        if(color != null) params.add(color.toString());
-        if(card != null) params.add(card.toString());
+        if (color != null) params.add(color.toString());
+        if (card != null) params.add(card.toString());
 
         return String.format("%s %s", type, params.isEmpty() ? "" : "(" + String.join(",", params) + ")");
     }
 
     protected void execute(Deck deck, GameBoard board) {
-        switch(type) {
+        switch (type) {
             case ReadyToStart:
-                if(player.isReadyToStart()) {
+                if (player.isReadyToStart()) {
                     throw new IllegalStateException("Player already started");
                 }
                 player.setReadyToStart(true);
@@ -132,10 +132,10 @@ public class Move {
     }
 
     protected boolean canPlayAfter(Move previousMove) {
-        if(allowedBeforeGameStarts()) {
+        if (allowedBeforeGameStarts()) {
             return true;
         }
-        if(previousMove == null || isDrawingCardJustDiscarded(previousMove)) {
+        if (previousMove == null || isDrawingCardJustDiscarded(previousMove)) {
             return false;
         }
 
