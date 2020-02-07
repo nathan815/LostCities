@@ -14,7 +14,7 @@ export default class CardView extends Vue {
 
     mounted() {
         if (isDev && this.showFront && !(this.card instanceof Card)) {
-            console.error('CardView: card object must be an instance of Card. card = ', this.card);
+            console.error('CardView: card object property is not an instance of Card: ', this.card);
         }
     }
     get isBlank() {
@@ -51,6 +51,9 @@ export default class CardView extends Vue {
                 <span>{{ card.value }}</span>
                 <span>{{ card.value }}</span>
             </template>
+        </div>
+        <div v-if="showBack">
+            <i class="far fa-compass" />
         </div>
     </div>
 </template>
@@ -114,6 +117,12 @@ $cardBack: #6b574b, #83655c;
     }
     &.back {
         background: card-background($cardBack);
+        font-size: 45px;
+        color: #222;
+        text-shadow: 0 0 3px #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 @each $color, $colorValues in $cardColors {
