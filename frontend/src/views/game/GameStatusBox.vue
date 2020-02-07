@@ -68,9 +68,8 @@ export default class GameStatusBox extends Vue {
                         {{ nextMoveHint }}
                     </div>
                 </template>
-                <template v-if="!game.isStarted">
-                    <em>Game has not yet started</em>
-                </template>
+                <em v-if="game.isNew">Game has not yet started</em>
+                <em v-if="game.isEnded">Game Over</em>
             </b-card-text>
             <b-card-text v-if="isMyGame">
                 <b-button v-if="game.isStarted" variant="primary" size="sm" :disabled="isMyTurn">
