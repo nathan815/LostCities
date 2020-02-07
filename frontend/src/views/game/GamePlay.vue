@@ -28,7 +28,6 @@ export default class GamePlay extends Vue {
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
     isStartInProgress: boolean = false;
-    error: string | null = null;
 
     subscriptions: Subscription[] = [];
 
@@ -59,8 +58,8 @@ export default class GamePlay extends Vue {
         };
         const handleError = error => {
             console.log(error);
-            this.error = error.error;
             this.isLoading = false;
+            this.showErrorToast(error.error);
         };
         this.subscriptions.push(
             gameApi.errorObservable().subscribe(handleError),
@@ -69,15 +68,23 @@ export default class GamePlay extends Vue {
         );
     }
 
+    private showErrorToast(message, title = 'Error') {
+        this.$root.$bvToast.toast(message, {
+            title: title,
+            autoHideDelay: 5000,
+            variant: 'danger',
+            toaster: 'b-toaster-top-center',
+        });
+    }
+
     async join() {
         if (this.status === GameStatus.New) {
-            this.error = null;
             this.isJoinInProgress = true;
             await gameApi.join(this.id).catch((err: AxiosError) => {
                 if (err.response && err.response.status === 403) {
-                    this.error = 'You must login to join a game';
+                    this.showErrorToast('You must login to join a game');
                 } else {
-                    this.error = err.message;
+                    this.showErrorToast(err.message);
                 }
             });
             this.isJoinInProgress = false;
@@ -85,7 +92,6 @@ export default class GamePlay extends Vue {
     }
 
     async start() {
-        this.error = null;
         this.isStartInProgress = true;
         gameApi.makeMove(
             this.id,
@@ -173,11 +179,6 @@ export default class GamePlay extends Vue {
 
 <template>
     <b-container class="game-play-container">
-        <b-alert :show="error" variant="warning">
-            <b>Error:</b>
-            {{ error }}
-        </b-alert>
-
         <div v-if="isLoading" class="loading">
             <b-spinner variant="primary" />
             Loading game...
