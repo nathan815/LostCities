@@ -41,7 +41,7 @@ export default class CardsInPlayView extends Vue {
             <div class="card-stack" :class="{ flipped: isTop }" :style="cardStackStyle">
                 <CardView
                     v-for="(card, index) in cards[color]"
-                    :key="card.toString()"
+                    :key="index"
                     :card="card"
                     :style="{ top: `${5 + index * 18}px` }"
                     class="in-play-card"

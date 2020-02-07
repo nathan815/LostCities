@@ -1,24 +1,24 @@
 export enum Color {
-    Yellow = 'yellow',
-    Blue = 'blue',
-    White = 'white',
-    Green = 'green',
-    Red = 'red',
+    YELLOW = 'yellow',
+    BLUE = 'blue',
+    WHITE = 'white',
+    GREEN = 'green',
+    RED = 'red',
 }
 
 export function getColorEnumValues(): Color[] {
-    return Object.keys(Color).map(key => Color[key]);
+    return Object.keys(Color).map(key => Color[key].toUpperCase());
 }
 
 export class Card {
-    value: number = 0;
-    color: Color = Color.White;
-    instance?: number;
+    value: number;
+    color: Color;
+    instance: number;
 
-    constructor(value: number, color: Color, instance?: number) {
+    constructor(color: Color, value: number, instance?: number) {
         this.value = value;
         this.color = color;
-        this.instance = instance;
+        this.instance = instance || 0;
     }
 
     get isWager() {
@@ -26,11 +26,16 @@ export class Card {
     }
 
     public toString() {
-        return this.color + ' ' + (this.isWager ? `wager ${this.instance}` : this.value);
+        return `${this.color}_${this.value}_${this.instance}`;
     }
 
-    public static fromObject(data: any) {
-        return new Card(data.value, data.color.toLowerCase(), data.instance);
+    public static fromDto(data: { color: string; value: number; instance: number }) {
+        return new Card(Color[data.color], data.value, data.instance);
+    }
+
+    public static fromString(str: string): Card {
+        const parts = str.split('_');
+        return new Card(Color[parts[0]], parseInt(parts[1]), parseInt(parts[2]));
     }
 
     /** Compares two cards based on color, then value */
@@ -48,3 +53,10 @@ export type Discard = {
 export type CardsInPlay = {
     [key in Color]?: Card[];
 };
+
+export function instantiateColorCardListObjects(colorToCards: CardsInPlay | Discard): CardsInPlay | Discard {
+    Object.keys(colorToCards).forEach(color => {
+        colorToCards[color] = colorToCards[color].map(card => Card.fromDto(card));
+    });
+    return colorToCards;
+}

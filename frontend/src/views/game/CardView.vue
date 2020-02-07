@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { Card } from '@/model/game/card';
+import { isDev } from '@/util';
 
 @Component
 export default class CardView extends Vue {
@@ -11,6 +12,11 @@ export default class CardView extends Vue {
     @Prop({ default: 'front' })
     showSide!: 'front' | 'back';
 
+    mounted() {
+        if (isDev && this.showFront && !(this.card instanceof Card)) {
+            console.error('CardView: card object must be an instance of Card. card = ', this.card);
+        }
+    }
     get isBlank() {
         return this.card === undefined;
     }
@@ -27,7 +33,7 @@ export default class CardView extends Vue {
         const classes: string[] = [];
         classes.push(this.showSide);
         if (this.card) {
-            classes.push(`color-${this.card.color}`);
+            classes.push(`color-${this.card.color.toLowerCase()}`);
         }
         return classes;
     }
@@ -35,7 +41,7 @@ export default class CardView extends Vue {
 </script>
 
 <template>
-    <div class="game-card" :class="classNames">
+    <div class="game-card" :class="classNames" @click="$emit('click')">
         <div v-if="card && showFront" class="game-card-value">
             <template v-if="card.isWager">
                 <span><i class="fas fa-handshake" /></span>

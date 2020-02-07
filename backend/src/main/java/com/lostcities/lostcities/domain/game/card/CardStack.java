@@ -1,10 +1,6 @@
 package com.lostcities.lostcities.domain.game.card;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.joining;
@@ -40,6 +36,12 @@ public class CardStack implements Iterable<Card> {
 
     public Optional<Card> getTop() {
         return cards.isEmpty() ? Optional.empty() : Optional.of(cards.get(cards.size() - 1));
+    }
+
+    public List<Card> getTopCards(int n) {
+        if (n < 0) throw new IllegalArgumentException("n must be positive");
+        int count = Math.min(cards.size(), n);
+        return cards.subList(cards.size() - count, cards.size());
     }
 
     public boolean isEmpty() {

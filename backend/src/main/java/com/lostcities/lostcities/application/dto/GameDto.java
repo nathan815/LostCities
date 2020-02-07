@@ -1,8 +1,10 @@
 package com.lostcities.lostcities.application.dto;
 
 import com.lostcities.lostcities.domain.game.Game;
+import com.lostcities.lostcities.domain.game.Move;
 import com.lostcities.lostcities.domain.game.Player;
 import com.lostcities.lostcities.domain.game.card.Card;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -25,14 +27,16 @@ public class GameDto {
     public List<MoveDto> moves;
     public BoardDto board;
     public Set<Card> hand;
+    public Move.TurnStage turnStage;
 
-    public GameDto(long id, int deckSize, Game.Status status, long currentTurnPlayerId, List<PlayerDto> players,
-                   List<MoveDto> moves, BoardDto board) {
+    private GameDto(long id, int deckSize, Game.Status status, long currentTurnPlayerId, List<PlayerDto> players,
+                   Move.TurnStage turnStage, List<MoveDto> moves, BoardDto board) {
         this.id = id;
         this.deckSize = deckSize;
         this.status = status;
         this.currentTurnPlayerId = currentTurnPlayerId;
         this.players = players;
+        this.turnStage = turnStage;
         this.moves = moves;
         this.board = board;
         this.hand = Collections.emptySet();
@@ -44,13 +48,15 @@ public class GameDto {
     }
 
     public static GameDto fromGame(Game game) {
+        List<Move> moves = game.getMoves();
         return new GameDto(
                 game.getId(),
                 game.getDeck().size(),
                 game.getStatus(),
                 game.getCurrentTurnPlayer().map(Player::getId).orElse(0L),
                 game.getPlayersStream().map(PlayerDto::fromPlayer).collect(toList()),
-                game.getMoves().stream().map(MoveDto::fromMove).collect(toList()),
+                moves.get(moves.size()-1).getType().getStage().getFollowingStage(),
+                moves.stream().map(MoveDto::fromMove).collect(toList()),
                 BoardDto.fromGameBoard(game.getBoard())
         );
     }

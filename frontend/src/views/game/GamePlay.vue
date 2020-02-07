@@ -9,24 +9,25 @@ import * as gameApi from '@/api/game';
 import { GameState, GameStatus } from '@/model/game';
 import { Player } from '@/model/game/player';
 import { GamePreferences } from '@/model/game/preferences';
-import { Move, MoveType } from '@/model/game/moves';
+import { Move, MoveType, TurnStage } from '@/model/game/moves';
 
 import BoardView from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
 import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
-import GameStatusCard from '@/views/game/GameStatusCard.vue';
+import GameStatusBox from '@/views/game/GameStatusBox.vue';
+import { Card } from '@/model/game/card';
+import MoveLog from '@/views/game/MoveLog.vue';
 
 @Component({
-    components: { GameStatusCard, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
+    components: { MoveLog, GameStatusBox, GamePreStartBox, Hand, CardsInPlayView, BoardView, Deck },
 })
 export default class GamePlay extends Vue {
     isLoading: boolean = true;
     isLoaded: boolean = false;
     isJoinInProgress: boolean = false;
     isStartInProgress: boolean = false;
-    error: string | null = null;
 
     subscriptions: Subscription[] = [];
 
@@ -57,8 +58,8 @@ export default class GamePlay extends Vue {
         };
         const handleError = error => {
             console.log(error);
-            this.error = error.error;
             this.isLoading = false;
+            this.showErrorToast(error.error);
         };
         this.subscriptions.push(
             gameApi.errorObservable().subscribe(handleError),
@@ -67,15 +68,23 @@ export default class GamePlay extends Vue {
         );
     }
 
+    private showErrorToast(message, title = 'Error') {
+        this.$root.$bvToast.toast(message, {
+            title: title,
+            autoHideDelay: 5000,
+            variant: 'danger',
+            toaster: 'b-toaster-top-center',
+        });
+    }
+
     async join() {
         if (this.status === GameStatus.New) {
-            this.error = null;
             this.isJoinInProgress = true;
             await gameApi.join(this.id).catch((err: AxiosError) => {
                 if (err.response && err.response.status === 403) {
-                    this.error = 'You must login to join a game';
+                    this.showErrorToast('You must login to join a game');
                 } else {
-                    this.error = err.message;
+                    this.showErrorToast(err.message);
                 }
             });
             this.isJoinInProgress = false;
@@ -83,12 +92,42 @@ export default class GamePlay extends Vue {
     }
 
     async start() {
-        this.error = null;
         this.isStartInProgress = true;
         gameApi.makeMove(
             this.id,
             new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.ReadyToStart)
         );
+    }
+
+    playCard(card: Card) {
+        if (this.isMyTurn) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.PlayCard, card)
+            );
+        }
+    }
+
+    discardCard(card: Card) {
+        if (this.isMyTurn) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DiscardCard, card)
+            );
+        }
+    }
+
+    drawFromDeck() {
+        if (this.canDrawCard) {
+            gameApi.makeMove(
+                this.id,
+                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DrawDeck)
+            );
+        }
+    }
+
+    get canDrawCard() {
+        return this.isMyTurn && this.game.turnStage == TurnStage.Draw;
     }
 
     get status() {
@@ -140,11 +179,6 @@ export default class GamePlay extends Vue {
 
 <template>
     <b-container class="game-play-container">
-        <b-alert :show="error" variant="warning">
-            <b>Error:</b>
-            {{ error }}
-        </b-alert>
-
         <div v-if="isLoading" class="loading">
             <b-spinner variant="primary" />
             Loading game...
@@ -184,7 +218,11 @@ export default class GamePlay extends Vue {
                 <b-row>
                     <b-col cols="2">
                         <div class="draw-pile">
-                            <Deck :size="game.deckSize" />
+                            <Deck
+                                :size="game.deckSize"
+                                :can-draw="canDrawCard"
+                                @card-click="drawFromDeck"
+                            />
                         </div>
                     </b-col>
                     <b-col cols="10">
@@ -209,25 +247,24 @@ export default class GamePlay extends Vue {
 
             <b-col sm="12" md="3" lg="3">
                 <div class="sidebar">
-                    <GameStatusCard
+                    <GameStatusBox
                         :game="game"
                         :is-my-game="isMyGame"
                         :is-my-turn="isMyTurn"
                         :preferences="preferences"
                     />
-                    <b-card header="Log" class="history">
-                        <b-card-text>
-                            <em v-if="game.moves.length === 0">Nothing here yet</em>
-                            <div v-for="move in game.moves" :key="move.toString()">
-                                <b>{{ game.findPlayerById(move.playerId).name }}</b>
-                                {{ move.description }}
-                            </div>
-                        </b-card-text>
-                    </b-card>
+                    <MoveLog :game="game" />
                 </div>
             </b-col>
         </b-row>
-        <Hand v-if="isMyGame" :cards="game.hand" :fixed="preferences.handFixedPosition" />
+        <Hand
+            v-if="isMyGame"
+            :game="game"
+            :is-my-turn="isMyTurn"
+            :fixed="preferences.handFixedPosition"
+            @play="playCard"
+            @discard="discardCard"
+        />
     </b-container>
 </template>
 

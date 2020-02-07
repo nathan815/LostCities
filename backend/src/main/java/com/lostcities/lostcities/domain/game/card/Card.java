@@ -1,11 +1,15 @@
 package com.lostcities.lostcities.domain.game.card;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 
 public class Card {
 
     public static final int WAGER_CARD_VALUE = 0;
+    public static final int MIN_VALUE = 2;
+    public static final int MAX_VALUE = 10;
 
     private int instance;
 
@@ -13,13 +17,13 @@ public class Card {
 
     private int value;
 
-    public Card(Color color, Integer value) {
+    public Card(Color color, int value) {
         this.instance = 0;
         this.color = color;
         this.value = value;
     }
 
-    public Card(Color color, Integer value, Integer instance) {
+    public Card(Color color, int value, int instance) {
         this.instance = instance;
         this.color = color;
         this.value = value;
@@ -49,7 +53,7 @@ public class Card {
     }
 
     public static Card expedition(Color color, int number) {
-        if(number < 2 || number > 10) {
+        if(number < MIN_VALUE || number > MAX_VALUE) {
             throw new IllegalArgumentException("Expedition card number must be between 2 and 10");
         }
         return new Card(color, number, 0);
@@ -63,6 +67,11 @@ public class Card {
         return value;
     }
 
+    public int getInstance() {
+        return instance;
+    }
+
+    @JsonIgnore
     public boolean isWager() {
         return value == WAGER_CARD_VALUE;
     }
