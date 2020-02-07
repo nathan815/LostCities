@@ -11,9 +11,6 @@ import com.lostcities.lostcities.persistence.CardConverter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -142,8 +139,8 @@ public class Move {
             return false;
         }
 
-        boolean firstMoveOfTurn = previousMove.doesEndTurn() && this.type.isFirstMoveOfTurn();
-        boolean moveIsOneOrderAbovePrevious = this.type.order - previousMove.type.order == 1;
+        boolean firstMoveOfTurn = previousMove.doesEndTurn() && this.type.stage.isFirstStage();
+        boolean moveIsOneOrderAbovePrevious = this.type.stage.order - previousMove.type.stage.order == 1;
         return firstMoveOfTurn || moveIsOneOrderAbovePrevious;
     }
 
@@ -157,26 +154,11 @@ public class Move {
     }
 
     protected boolean allowedBeforeGameStarts() {
-        return type == Type.ReadyToStart;
+        return type.stage == TurnStage.PreStart;
     }
 
     protected boolean doesEndTurn() {
-        return type.isLastMoveOfTurn();
-    }
-
-    public Set<Type> getNextPossibleMoveTypes() {
-        if(this.doesEndTurn()) {
-            return getStartingMoveTypes();
-        }
-        return Stream.of(Type.values())
-                .filter(moveType -> moveType.order - this.type.order == 1)
-                .collect(Collectors.toSet());
-    }
-
-    public static Set<Type> getStartingMoveTypes() {
-        return Stream.of(Type.values())
-                .filter(Type::isFirstMoveOfTurn)
-                .collect(Collectors.toSet());
+        return type.stage.isLastStage();
     }
 
     public static Move create(Player player, Type type) {
@@ -191,28 +173,51 @@ public class Move {
         return new Move(player, type, null, color);
     }
 
-    public enum Type {
-        ReadyToStart(0),
-        PlayCard(1),
-        DiscardCard(1),
-        DrawDeck(2),
-        DrawDiscard(2);
+    public enum TurnStage {
+        PreStart(0), PlayOrDiscard(1), Draw(2);
 
-        private static final int TURN_FIRST_ORDER = 1;
-        private static final int TURN_LAST_ORDER = 2;
+        private static final TurnStage FIRST_STAGE = TurnStage.PlayOrDiscard;
+        private static final TurnStage LAST_STAGE = TurnStage.Draw;
 
         protected int order;
 
-        public boolean isFirstMoveOfTurn() {
-            return order == TURN_FIRST_ORDER;
-        }
-
-        public boolean isLastMoveOfTurn() {
-            return order == TURN_LAST_ORDER;
-        }
-
-        Type(int order) {
+        TurnStage(int order) {
             this.order = order;
+        }
+
+        public boolean isFirstStage() {
+            return order == FIRST_STAGE.order;
+        }
+
+        public boolean isLastStage() {
+            return order == LAST_STAGE.order;
+        }
+
+        public TurnStage getFollowingStage() {
+            for (TurnStage stage : values()) {
+                if (stage.order > this.order) {
+                    return stage;
+                }
+            }
+            return FIRST_STAGE;
+        }
+    }
+
+    public enum Type {
+        ReadyToStart(TurnStage.PreStart),
+        PlayCard(TurnStage.PlayOrDiscard),
+        DiscardCard(TurnStage.PlayOrDiscard),
+        DrawDeck(TurnStage.Draw),
+        DrawDiscard(TurnStage.Draw);
+
+        protected TurnStage stage;
+
+        Type(TurnStage stage) {
+            this.stage = stage;
+        }
+
+        public TurnStage getStage() {
+            return stage;
         }
     }
 }

@@ -4,7 +4,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { Card } from '@/model/game/card';
 import CardView from '@/views/game/CardView.vue';
 import { GameState } from '@/model/game';
-import { MoveType } from '@/model/game/moves';
+import { TurnStage } from '@/model/game/moves';
 
 @Component({
     components: { CardView },
@@ -28,11 +28,7 @@ export default class Hand extends Vue {
     }
 
     get showActions() {
-        return (
-            this.isMyTurn &&
-            this.game.nextPossibleMoves.includes(MoveType.PlayCard) &&
-            this.game.nextPossibleMoves.includes(MoveType.DiscardCard)
-        );
+        return this.isMyTurn && this.game.turnStage == TurnStage.PlayOrDiscard;
     }
 }
 </script>

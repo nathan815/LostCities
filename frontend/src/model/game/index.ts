@@ -1,6 +1,6 @@
 import { Card, Discard, instantiateColorCardListObjects } from '@/model/game/card';
 import { Player } from '@/model/game/player';
-import { Move, MoveType } from '@/model/game/moves';
+import { Move, TurnStage } from '@/model/game/moves';
 
 export class Board {
     discard: Discard = {};
@@ -24,6 +24,7 @@ export class GameState {
     public id: number = 0;
     public status: GameStatus = GameStatus.Unknown;
     public deckSize: number = 0;
+    public turnStage: TurnStage = TurnStage.PreStart;
     private currentTurnPlayerId: number = 0;
 
     public board: Board = {
@@ -31,7 +32,6 @@ export class GameState {
     };
     public players: Player[] = [];
     public moves: Move[] = [];
-    public nextPossibleMoves: MoveType[] = [];
 
     public hand: Card[] = [];
 
@@ -40,12 +40,12 @@ export class GameState {
             this.id = data.id;
             this.status = data.status;
             this.deckSize = data.deckSize;
+            this.turnStage = data.turnStage as TurnStage;
             this.currentTurnPlayerId = data.currentTurnPlayerId;
 
             this.board = Board.fromDto(data.board);
             this.players = data.players.map(player => Player.fromDto(player));
             this.moves = data.moves.map(move => Move.fromDto(move));
-            this.nextPossibleMoves = data.nextPossibleMoves.map(move => MoveType[move]);
             this.hand = data.hand.map(Card.fromDto).sort(Card.compare);
         }
     }

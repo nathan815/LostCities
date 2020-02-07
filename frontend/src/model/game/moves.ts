@@ -1,5 +1,11 @@
 import { Card, Color } from '@/model/game/card';
 
+export enum TurnStage {
+    PreStart = 'PreStart',
+    PlayOrDiscard = 'PlayOrDiscard',
+    Draw = 'Draw',
+}
+
 export enum MoveType {
     ReadyToStart = 'ReadyToStart',
     PlayCard = 'PlayCard',

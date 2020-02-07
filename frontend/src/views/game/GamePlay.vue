@@ -9,7 +9,7 @@ import * as gameApi from '@/api/game';
 import { GameState, GameStatus } from '@/model/game';
 import { Player } from '@/model/game/player';
 import { GamePreferences } from '@/model/game/preferences';
-import { Move, MoveType } from '@/model/game/moves';
+import { Move, MoveType, TurnStage } from '@/model/game/moves';
 
 import BoardView from '@/views/game/Board.vue';
 import CardsInPlayView from '@/views/game/CardsInPlayView.vue';
@@ -118,7 +118,7 @@ export default class GamePlay extends Vue {
     }
 
     drawFromDeck() {
-        if (this.canDrawDeck) {
+        if (this.canDrawCard) {
             gameApi.makeMove(
                 this.id,
                 new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DrawDeck)
@@ -126,8 +126,8 @@ export default class GamePlay extends Vue {
         }
     }
 
-    get canDrawDeck() {
-        return this.isMyTurn && this.game.nextPossibleMoves.includes(MoveType.DrawDeck);
+    get canDrawCard() {
+        return this.isMyTurn && this.game.turnStage == TurnStage.Draw;
     }
 
     get status() {
@@ -220,7 +220,7 @@ export default class GamePlay extends Vue {
                         <div class="draw-pile">
                             <Deck
                                 :size="game.deckSize"
-                                :can-draw="canDrawDeck"
+                                :can-draw="canDrawCard"
                                 @card-click="drawFromDeck"
                             />
                         </div>

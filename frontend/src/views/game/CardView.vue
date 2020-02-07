@@ -13,8 +13,8 @@ export default class CardView extends Vue {
     showSide!: 'front' | 'back';
 
     mounted() {
-        if (isDev && !(this.card instanceof Card)) {
-            console.error('CardView: card object must be an instance of Card');
+        if (isDev && this.showFront && !(this.card instanceof Card)) {
+            console.error('CardView: card object must be an instance of Card. card = ', this.card);
         }
     }
     get isBlank() {

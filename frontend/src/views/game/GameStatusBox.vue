@@ -3,7 +3,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { GameState } from '@/model/game';
 import { GamePreferences } from '@/model/game/preferences';
-import { MoveType } from '@/model/game/moves';
+import { TurnStage } from '@/model/game/moves';
 
 @Component
 export default class GameStatusBox extends Vue {
@@ -39,15 +39,15 @@ export default class GameStatusBox extends Vue {
         this.preferences.handFixedPosition = !this.preferences.handFixedPosition;
     }
 
-    get nextMoveHint() {
-        const moveTypes = this.game.nextPossibleMoves;
-        if (moveTypes.includes(MoveType.DrawDeck) && moveTypes.includes(MoveType.DrawDiscard)) {
-            return 'Draw a Card';
+    get nextMoveHint(): string {
+        switch (this.game.turnStage) {
+            case TurnStage.Draw:
+                return 'Draw a Card';
+            case TurnStage.PlayOrDiscard:
+                return 'Play or Discard';
+            default:
+                return '';
         }
-        if (moveTypes.includes(MoveType.DiscardCard) && moveTypes.includes(MoveType.PlayCard)) {
-            return 'Play or Discard';
-        }
-        return '';
     }
 }
 </script>
