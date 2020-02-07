@@ -1,19 +1,19 @@
-import {Card, Discard} from '@/model/game/card';
-import {Player} from '@/model/game/player';
-import {Move, MoveType} from '@/model/game/moves';
+import { Card, Discard, instantiateColorCardListObjects } from '@/model/game/card';
+import { Player } from '@/model/game/player';
+import { Move, MoveType } from '@/model/game/moves';
 
 export class Board {
     discard: Discard = {};
     constructor(discard: Discard) {
-        const sortedDiscard = {};
-        Object.keys(discard).forEach(
-            color => (sortedDiscard[color] = discard[color].map(Card.fromObject))
-        );
-        this.discard = sortedDiscard;
+        this.discard = discard;
+    }
+    public static fromDto(data: { discard: Discard }): Board {
+        return new Board(instantiateColorCardListObjects(data.discard));
     }
 }
 
 export enum GameStatus {
+    Unknown = 'Unknown',
     New = 'New',
     ReadyToStart = 'ReadyToStart',
     Started = 'Started',
@@ -22,26 +22,31 @@ export enum GameStatus {
 
 export class GameState {
     public id: number = 0;
-    public status: GameStatus = GameStatus.New;
+    public status: GameStatus = GameStatus.Unknown;
     public deckSize: number = 0;
+    private currentTurnPlayerId: number = 0;
 
     public board: Board = {
         discard: {},
     };
-
-    private currentTurnPlayerId: number = 0;
     public players: Player[] = [];
     public moves: Move[] = [];
     public nextPossibleMoves: MoveType[] = [];
 
     public hand: Card[] = [];
 
-    constructor(state?: any) {
-        if (state) {
-            Object.assign(this, state);
-            this.hand = state.hand.map(Card.fromObject).sort(Card.compare);
-            this.moves = state.moves.map(move => Move.fromDto(move));
-            this.nextPossibleMoves = state.nextPossibleMoves.map(move => MoveType[move]);
+    constructor(data?: any) {
+        if (data) {
+            this.id = data.id;
+            this.status = data.status;
+            this.deckSize = data.deckSize;
+            this.currentTurnPlayerId = data.currentTurnPlayerId;
+
+            this.board = Board.fromDto(data.board);
+            this.players = data.players.map(player => Player.fromDto(player));
+            this.moves = data.moves.map(move => Move.fromDto(move));
+            this.nextPossibleMoves = data.nextPossibleMoves.map(move => MoveType[move]);
+            this.hand = data.hand.map(Card.fromDto).sort(Card.compare);
         }
     }
 

@@ -26,6 +26,7 @@ export default class Deck extends Vue {
         <CardView
             class="deck-card"
             :class="{ 'can-draw': canDraw }"
+            :title="canDraw ? 'Click To Draw' : ''"
             show-side="back"
             @click="$emit('card-click')"
         />

@@ -29,7 +29,7 @@ export class Card {
         return `${this.color}_${this.value}_${this.instance}`;
     }
 
-    public static fromObject(data: { color: string; value: number; instance: number }) {
+    public static fromDto(data: { color: string; value: number; instance: number }) {
         return new Card(Color[data.color], data.value, data.instance);
     }
 
@@ -53,3 +53,10 @@ export type Discard = {
 export type CardsInPlay = {
     [key in Color]?: Card[];
 };
+
+export function instantiateColorCardListObjects(colorToCards: CardsInPlay | Discard): CardsInPlay | Discard {
+    Object.keys(colorToCards).forEach(color => {
+        colorToCards[color] = colorToCards[color].map(card => Card.fromDto(card));
+    });
+    return colorToCards;
+}
