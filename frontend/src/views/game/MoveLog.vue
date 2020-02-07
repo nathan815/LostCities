@@ -41,6 +41,7 @@ export default class Hand extends Vue {
                         {{ move.description }}
                     </span>
                 </div>
+                <div v-if="game.isEnded" class="log-misc"><em>Game has ended</em></div>
             </b-card-text>
         </b-card-body>
     </b-card>
@@ -67,5 +68,8 @@ export default class Hand extends Vue {
     color: #777;
 }
 .log-entry-text {
+}
+.log-misc {
+    text-align: center;
 }
 </style>
