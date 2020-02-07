@@ -33,14 +33,22 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_readyToStart_shouldSetPlayerReadyToStart() {
+    public void execute_moveReadyToStart_shouldSetPlayerReadyToStart() {
         var move = Move.create(player, Move.Type.ReadyToStart);
         move.execute(new Deck(), new GameBoard());
         assertTrue(player.isReadyToStart());
     }
 
     @Test
-    public void execute_deckIsEmpty_shouldThrowException() {
+    public void execute_moveReadyToStart_ifPlayerIsAlreadyReadyToStart_shouldThrowException() {
+        player.setReadyToStart(true);
+        var move = Move.create(player, Move.Type.ReadyToStart);
+        thrown.expect(IllegalStateException.class);
+        move.execute(new Deck(), new GameBoard());
+    }
+
+    @Test
+    public void execute_ifDeckIsEmpty_shouldThrowException() {
         var move = Move.create(player, Move.Type.DrawDeck);
 
         thrown.expect(EmptyDeckException.class);
@@ -49,7 +57,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_drawFromEmptyRedDiscard_shouldThrowException() {
+    public void execute_moveDrawFromEmptyRedDiscard_shouldThrowException() {
         player.addToHand(blue5Card);
         var deck = Deck.of(yellow4Card);
         var board = new GameBoard();
@@ -63,7 +71,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCardNotInHandHand_shouldThrowException() {
+    public void execute_movePlayCard_ifCardNotInHandHand_shouldThrowException() {
         var move = Move.create(player, Move.Type.PlayCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
@@ -71,7 +79,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_discardCardNotInHandHand_shouldThrowException() {
+    public void execute_moveDiscardCard_ifCardNotInHandHand_shouldThrowException() {
         var move = Move.create(player, Move.Type.DiscardCard, blue5Card);
 
         thrown.expect(CardNotInHandException.class);
@@ -79,7 +87,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCardOfLowerValueThanTopCardForColor_shouldThrowException() {
+    public void execute_movePlayCard_ifCardIsLowerValueThanTopCard_shouldThrowException() {
         var green4Card = Card.expedition(Color.GREEN, 4);
         var green5Card = Card.expedition(Color.GREEN, 5);
         var deck = new Deck();
@@ -99,7 +107,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_playCard_shouldAddCardToCorrectCardPile() {
+    public void execute_movePlayCard_shouldAddCardToCorrectCardPile() {
         player.addToHand(blue5Card);
 
         var move = Move.create(player, Move.Type.PlayCard, blue5Card);
@@ -110,7 +118,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_discardCard_shouldAddToDiscardCardPileAndRemoveFromPlayerHand() {
+    public void execute_moveDiscardCard_shouldAddToDiscardCardPileAndRemoveFromPlayerHand() {
         var deck = Deck.of(green2Card);
         var board = new GameBoard();
         player.addToHand(blue5Card);
@@ -123,7 +131,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_drawFromDeck_shouldRemoveCardFromDeckAndAddToPlayerHand() {
+    public void execute_moveDrawFromDeck_shouldRemoveCardFromDeckAndAddToPlayerHand() {
         var deck = Deck.of(blueWagerCard, yellow4Card, green2Card);
         var board = new GameBoard();
         var move = Move.create(player, Move.Type.DrawDeck);
@@ -136,7 +144,7 @@ public class MoveTest {
     }
 
     @Test
-    public void execute_drawFromDiscard_shouldRemoveCardFromDiscardAndAddToPlayerHand() {
+    public void execute_moveDrawFromDiscard_shouldRemoveCardFromDiscardAndAddToPlayerHand() {
         var deck = new Deck();
         var board = new GameBoard();
         board.addToDiscard(blue5Card);

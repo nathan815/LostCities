@@ -28,6 +28,10 @@ public class GameTest {
     private Player player1;
     private Player player2;
 
+    private Card red2Card = Card.expedition(Color.RED, 2);
+    private Card red3Card = Card.expedition(Color.RED, 3);
+    private Card blue3Card = Card.expedition(Color.BLUE, 3);
+
     @Before
     public void before() {
         player1 = new Player(1L, "Player1 Name");
@@ -154,37 +158,42 @@ public class GameTest {
     }
 
     @Test
+    public void makeMove_drawCardJustDiscarded_shouldThrowException() {
+        Game game = createGameAndStart();
+        game.setDeck(Deck.of(red2Card, red3Card));
+
+        game.makeMove(Move.create(player1, Move.Type.DiscardCard, Card.expedition(Color.GREEN, 8)));
+
+        thrown.expect(IllegalMoveException.class);
+        game.makeMove(Move.create(player1, Move.Type.DrawDiscard, Color.GREEN));
+    }
+
+    @Test
     public void makeMove_shouldWorkForSeveralValidMoves() {
-        Card red2Card = Card.expedition(Color.RED, 2);
-        Card red3Card = Card.expedition(Color.RED, 3);
-        Card blue3Card = Card.expedition(Color.BLUE, 3);
         Game game = createGameAndStart();
 
         int initialDeckSize = Deck.STARTING_SIZE - (2 * Player.HAND_SIZE);
         assertEquals(initialDeckSize, game.getDeck().size());
 
-        player1.addToHand(red2Card);
-        player1.addToHand(red3Card);
-        player2.addToHand(blue3Card);
-
-        game.makeMove(Move.create(player1, Move.Type.PlayCard, red2Card));
+        game.makeMove(Move.create(player1, Move.Type.PlayCard, Card.expedition(Color.GREEN, 8)));
         game.makeMove(Move.create(player1, Move.Type.DrawDeck));
 
-        game.makeMove(Move.create(player2, Move.Type.DiscardCard, blue3Card));
+        game.makeMove(Move.create(player2, Move.Type.DiscardCard, Card.expedition(Color.RED, 5)));
         game.makeMove(Move.create(player2, Move.Type.DrawDeck));
 
-        game.makeMove(Move.create(player1, Move.Type.PlayCard, red3Card));
-        game.makeMove(Move.create(player1, Move.Type.DrawDiscard, Color.BLUE));
+        game.makeMove(Move.create(player1, Move.Type.DiscardCard, Card.expedition(Color.YELLOW, 5)));
+        game.makeMove(Move.create(player1, Move.Type.DrawDiscard, Color.RED));
+
+        game.makeMove(Move.create(player2, Move.Type.PlayCard, Card.expedition(Color.BLUE, 8)));
+        game.makeMove(Move.create(player2, Move.Type.DrawDiscard, Color.YELLOW));
 
         int drawnCount = 2;
         assertEquals(initialDeckSize - drawnCount, game.getDeck().size());
-        assertEquals(8, game.getMoves().size());
+        assertEquals(10, game.getMoves().size());
     }
 
     @Test
     public void makeMove_drawLastCardInDeck_shouldEndGame() {
-        Card red3Card = Card.expedition(Color.RED, 3);
-        Card blue3Card = Card.expedition(Color.BLUE, 3);
         Game game = createGameAndStart();
         game.setDeck(Deck.of(red3Card)); // 1 card in deck
 
