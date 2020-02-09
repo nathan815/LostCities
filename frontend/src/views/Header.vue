@@ -29,7 +29,7 @@ export default class Navbar extends Vue {
                 <b-navbar-nav>
                     <b-nav-item to="/games" exact>
                         <i class="fas fa-list-ul" />
-                        Games
+                        All Games
                     </b-nav-item>
                     <b-nav-item to="/leaderboard">
                         <i class="fas fa-trophy" />
@@ -61,6 +61,9 @@ export default class Navbar extends Vue {
 .navbar {
     z-index: 2;
     .site-name {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 30px;
         line-height: 1;
         font-family: Bangers, Arial, sans-serif;
