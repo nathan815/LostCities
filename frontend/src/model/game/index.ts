@@ -62,6 +62,10 @@ export class GameState {
         return this.status === GameStatus.Started;
     }
 
+    get isEnded() {
+        return this.status === GameStatus.Ended;
+    }
+
     get currentTurnPlayer(): Player | undefined {
         return this.findPlayerById(this.currentTurnPlayerId);
     }

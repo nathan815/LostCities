@@ -12,6 +12,9 @@ export default class BoardView extends Vue {
     @Prop({ required: true })
     board!: Board;
 
+    @Prop({ required: true })
+    canDraw!: boolean;
+
     colors = getColorEnumValues();
 
     get discard() {
@@ -31,6 +34,13 @@ export default class BoardView extends Vue {
             transform: `rotate(${index + 0.3}deg)`,
         };
     }
+
+    discardCardClassNames(color: Color, index: number) {
+        return {
+            'discard-card': true,
+            'can-draw': this.canDraw && index === this.lastThreeDiscardCards(color).length-1,
+        };
+    }
 }
 </script>
 
@@ -45,7 +55,8 @@ export default class BoardView extends Vue {
                         :key="index"
                         :card="card"
                         :style="discardCardStyle(index)"
-                        class="discard-card"
+                        :class="discardCardClassNames(color, index)"
+                        @click="$emit('draw', color)"
                     />
                 </div>
             </div>
@@ -88,6 +99,12 @@ export default class BoardView extends Vue {
     }
     .discard-card {
         position: absolute;
+        &.can-draw {
+            cursor: pointer;
+            &:hover {
+                filter: brightness(110%);
+            }
+        }
     }
 }
 </style>

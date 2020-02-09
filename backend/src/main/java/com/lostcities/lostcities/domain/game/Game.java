@@ -96,6 +96,7 @@ public class Game {
 
     private void gameOver() {
         status = Status.Ended;
+        currentTurnPlayer = null;
     }
 
     private void restoreState() {
@@ -182,9 +183,7 @@ public class Game {
         move.setGame(this);
         Move lastMove = moves.size() > 0 ? moves.get(moves.size() - 1) : null;
         runMove(move, lastMove);
-        if(!deck.isEmpty()) {
-            moves.add(move);
-        }
+        moves.add(move);
     }
 
     private void reRunMoves() {
@@ -261,13 +260,6 @@ public class Game {
         return create(randomSeed, player1, null);
     }
 
-    public enum Status {
-        New,
-        ReadyToStart,
-        Started,
-        Ended
-    }
-
     @Override
     public String toString() {
         return "Game{" +
@@ -301,5 +293,12 @@ public class Game {
         if(user2 == null) {
             user2 = new User(player2.getId(), player2.getName());
         }
+    }
+
+    public enum Status {
+        New,
+        ReadyToStart,
+        Started,
+        Ended
     }
 }

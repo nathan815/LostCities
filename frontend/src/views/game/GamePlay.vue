@@ -17,7 +17,7 @@ import Deck from '@/views/game/Deck.vue';
 import Hand from '@/views/game/Hand.vue';
 import GamePreStartBox from '@/views/game/GamePreStartBox.vue';
 import GameStatusBox from '@/views/game/GameStatusBox.vue';
-import { Card } from '@/model/game/card';
+import { Card, Color } from '@/model/game/card';
 import MoveLog from '@/views/game/MoveLog.vue';
 
 @Component({
@@ -100,28 +100,30 @@ export default class GamePlay extends Vue {
     }
 
     playCard(card: Card) {
-        if (this.isMyTurn) {
-            gameApi.makeMove(
-                this.id,
-                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.PlayCard, card)
-            );
-        }
+        this.makeMove(MoveType.PlayCard, card);
     }
 
     discardCard(card: Card) {
-        if (this.isMyTurn) {
-            gameApi.makeMove(
-                this.id,
-                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DiscardCard, card)
-            );
-        }
+        this.makeMove(MoveType.DiscardCard, card);
     }
 
     drawFromDeck() {
         if (this.canDrawCard) {
+            this.makeMove(MoveType.DrawDeck);
+        }
+    }
+
+    drawFromDiscard(color: Color) {
+        if (this.canDrawCard) {
+            this.makeMove(MoveType.DrawDiscard, undefined, color);
+        }
+    }
+
+    makeMove(type: MoveType, card?: Card, color?: Color) {
+        if (this.isMyTurn) {
             gameApi.makeMove(
                 this.id,
-                new Move((this.myPlayer && this.myPlayer.id) || 0, MoveType.DrawDeck)
+                new Move((this.myPlayer && this.myPlayer.id) || 0, type, card, color)
             );
         }
     }
@@ -226,7 +228,7 @@ export default class GamePlay extends Vue {
                         </div>
                     </b-col>
                     <b-col cols="10">
-                        <BoardView :board="game.board" />
+                        <BoardView :board="game.board" :can-draw="canDrawCard" @draw="drawFromDiscard" />
                     </b-col>
                 </b-row>
 
