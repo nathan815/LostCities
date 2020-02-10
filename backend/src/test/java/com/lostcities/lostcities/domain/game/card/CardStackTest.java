@@ -33,33 +33,4 @@ public class CardStackTest {
     public void getTopCards_shouldThrowException_givenNegativeN() {
         new CardStack().getTopCards(-2);
     }
-
-    @Test
-    public void calculateScore_shouldBe0_whenStackIsEmpty() {
-        CardStack stack = new CardStack();
-        assertThat(stack.calculateScore(), equalTo(0));
-    }
-
-    @Test
-    public void calculateScore_shouldAddValuesOfCards() {
-        CardStack stack = new CardStack();
-
-        stack.addToTop(Card.expedition(Color.BLUE, 3));
-        stack.addToTop(Card.expedition(Color.BLUE, 4));
-        stack.addToTop(Card.expedition(Color.BLUE, 8));
-
-        assertThat(stack.calculateScore(), equalTo(-5)); // -20 + 3 + 4 + 8
-    }
-
-    @Test
-    public void calculateScore_shouldCalculateWager() {
-        CardStack stack = new CardStack();
-
-        stack.addToTop(Card.wager(Color.BLUE, 0));
-        stack.addToTop(Card.expedition(Color.BLUE, 3));
-        stack.addToTop(Card.expedition(Color.BLUE, 4));
-        stack.addToTop(Card.expedition(Color.BLUE, 8));
-
-        assertThat(stack.calculateScore(), equalTo(-10)); // (-20 + 3 + 4 + 8) * 2
-    }
 }

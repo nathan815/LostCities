@@ -74,4 +74,35 @@ public class PlayerTest {
         assertEquals(new Player(1L, "Bobby").hashCode(), new Player(1L, "Bobby Tables").hashCode());
         assertNotEquals(new Player(1L, "Bobby").hashCode(), new Player(2L, "Bobby").hashCode());
     }
+
+    @Test
+    public void calculateScore_ifPlayerHasNoCardsInPlay_shouldReturn0() {
+        assertEquals(0, player.calculateScore());
+    }
+
+    @Test
+    public void calculateScore_shouldProperlyCalculateScore() {
+        // First set up player's hand
+        player.addToHand(Card.expedition(Color.BLUE, 9));
+        player.addToHand(Card.wager(Color.GREEN, 0));
+        player.addToHand(Card.expedition(Color.GREEN, 5));
+        player.addToHand(Card.expedition(Color.GREEN, 7));
+        player.addToHand(Card.expedition(Color.GREEN, 8));
+        player.addToHand(Card.expedition(Color.GREEN, 10));
+
+        // Now play some cards
+
+        // blue score = -20 + 9 = -11
+        player.play(Card.expedition(Color.BLUE, 9));
+
+        // green score = (-20 + 5 + 7 + 8 + 10) * 2 = 20
+        player.play(Card.wager(Color.GREEN, 0));
+        player.play(Card.expedition(Color.GREEN, 5));
+        player.play(Card.expedition(Color.GREEN, 7));
+        player.play(Card.expedition(Color.GREEN, 8));
+        player.play(Card.expedition(Color.GREEN, 10));
+
+        // total score = -11 + 20 = 9
+        assertEquals(9, player.calculateScore());
+    }
 }
