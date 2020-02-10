@@ -7,6 +7,8 @@ import static java.util.stream.Collectors.joining;
 
 public class CardStack implements Iterable<Card> {
 
+    private final static int INITIAL_VALUE = -20;
+
     // Use a list for the cards so we can insert cards anywhere, as one might with a real stack of cards
     private List<Card> cards;
 
@@ -42,6 +44,18 @@ public class CardStack implements Iterable<Card> {
         if (n < 0) throw new IllegalArgumentException("n must be positive");
         int count = Math.min(cards.size(), n);
         return cards.subList(cards.size() - count, cards.size());
+    }
+
+    public int calculateScore() {
+        if (cards.isEmpty()) {
+            return 0;
+        }
+        int value = INITIAL_VALUE, multiplier = 1;
+        for(Card card : cards) {
+            if(card.isWager()) multiplier++;
+            else value += card.getValue();
+        }
+        return value * multiplier;
     }
 
     public boolean isEmpty() {

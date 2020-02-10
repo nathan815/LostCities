@@ -55,6 +55,10 @@ public class Player {
         return name;
     }
 
+    public int calculateScore() {
+        return inPlay.values().stream().map(CardStack::calculateScore).reduce(Integer::sum).orElse(0);
+    }
+
     protected void addToHand(Card card) {
         hand.add(card);
     }
