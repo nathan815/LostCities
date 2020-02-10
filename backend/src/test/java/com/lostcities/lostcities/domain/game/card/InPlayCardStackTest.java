@@ -8,54 +8,80 @@ import static org.junit.Assert.assertThat;
 
 public class InPlayCardStackTest {
 
-    private InPlayCardStack stack;
+    private InPlayCardStack cards;
 
     @Before
     public void before() {
-        stack = new InPlayCardStack();
+        cards = new InPlayCardStack();
     }
 
     @Test
     public void calculateValue_shouldBe0_whenStackIsEmpty() {
-        assertThat(stack.calculateValue(), equalTo(0));
+        assertThat(cards.calculateValue(), equalTo(0));
     }
 
     @Test
     public void calculateValue_shouldAddValuesOfCards() {
-        stack.addToTop(Card.expedition(Color.BLUE, 3));
-        stack.addToTop(Card.expedition(Color.BLUE, 4));
-        stack.addToTop(Card.expedition(Color.BLUE, 8));
+        cards.addToTop(Card.expedition(Color.BLUE, 3));
+        cards.addToTop(Card.expedition(Color.BLUE, 4));
+        cards.addToTop(Card.expedition(Color.BLUE, 8));
 
         int expected = -20 + 3 + 4 + 8; // -5
-        assertThat(stack.calculateValue(), equalTo(expected)); //
+        assertThat(cards.calculateValue(), equalTo(expected)); //
     }
 
     @Test
-    public void calculateValue_shouldMultiplyProperlyWith1Wager() {
-        testWagers(1);
+    public void calculateValue_shouldCorrectlyCalculateWithExpeditionCardsAnd1Wager() {
+        testWagersWithExpeditionCards(1);
     }
 
     @Test
-    public void calculateValue_shouldMultiplyProperlyWith2Wagers() {
-        testWagers(2);
+    public void calculateValue_shouldCorrectlyCalculateWithExpeditionCardsAnd2Wagers() {
+        testWagersWithExpeditionCards(2);
     }
 
     @Test
-    public void calculateValue_shouldMultiplyProperlyWith3Wagers() {
-        testWagers(3);
+    public void calculateValue_shouldCorrectlyCalculateWithExpeditionCardsAnd3Wagers() {
+        testWagersWithExpeditionCards(3);
     }
 
-    private void testWagers(int numWagerCards) {
-        for (int i = 0; i < numWagerCards; i++) {
-            stack.addToTop(Card.wager(Color.BLUE, i));
-        }
-        stack.addToTop(Card.expedition(Color.BLUE, 3));
-        stack.addToTop(Card.expedition(Color.BLUE, 4));
-        stack.addToTop(Card.expedition(Color.BLUE, 8));
+    @Test
+    public void calculateValue_shouldCorrectlyCalculateWithNoExpeditionCardsAnd1Wager() {
+        testWagersWithoutExpeditionCards(1);
+    }
+
+    @Test
+    public void calculateValue_shouldCorrectlyCalculateWithNoExpeditionCardsAnd2Wagers() {
+        testWagersWithoutExpeditionCards(2);
+    }
+
+    @Test
+    public void calculateValue_shouldCorrectlyCalculateWithNoExpeditionCardsAnd3Wagers() {
+        testWagersWithoutExpeditionCards(3);
+    }
+
+    private void testWagersWithExpeditionCards(int numWagerCards) {
+        addWagersToCardStack(numWagerCards);
+        cards.addToTop(Card.expedition(Color.BLUE, 3));
+        cards.addToTop(Card.expedition(Color.BLUE, 4));
+        cards.addToTop(Card.expedition(Color.BLUE, 8));
 
         int multiplier = 1 + numWagerCards;
         int expected = (-20 + 3 + 4 + 8) * multiplier;
-        assertThat(stack.calculateValue(), equalTo(expected));
+        assertThat(cards.calculateValue(), equalTo(expected));
+    }
+
+    private void testWagersWithoutExpeditionCards(int numWagerCards) {
+        addWagersToCardStack(numWagerCards);
+        int multiplier = 1 + numWagerCards;
+        int expected = -20 * multiplier;
+        assertThat(cards.calculateValue(), equalTo(expected));
+    }
+
+    private void addWagersToCardStack(int numWagerCards) {
+        for (int i = 0; i < numWagerCards; i++) {
+            cards.addToTop(Card.wager(Color.BLUE, i));
+        }
     }
 
 }
