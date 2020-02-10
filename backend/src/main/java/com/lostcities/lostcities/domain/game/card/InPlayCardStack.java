@@ -4,7 +4,7 @@ public class InPlayCardStack extends CardStack {
 
     private final static int INITIAL_EXPEDITION_VALUE = -20;
 
-    public int calculateScore() {
+    public int calculateValue() {
         if (getCards().isEmpty()) {
             return 0;
         }

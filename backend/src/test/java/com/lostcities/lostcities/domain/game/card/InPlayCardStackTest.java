@@ -16,32 +16,32 @@ public class InPlayCardStackTest {
     }
 
     @Test
-    public void calculateScore_shouldBe0_whenStackIsEmpty() {
-        assertThat(stack.calculateScore(), equalTo(0));
+    public void calculateValue_shouldBe0_whenStackIsEmpty() {
+        assertThat(stack.calculateValue(), equalTo(0));
     }
 
     @Test
-    public void calculateScore_shouldAddValuesOfCards() {
+    public void calculateValue_shouldAddValuesOfCards() {
         stack.addToTop(Card.expedition(Color.BLUE, 3));
         stack.addToTop(Card.expedition(Color.BLUE, 4));
         stack.addToTop(Card.expedition(Color.BLUE, 8));
 
         int expected = -20 + 3 + 4 + 8; // -5
-        assertThat(stack.calculateScore(), equalTo(expected)); //
+        assertThat(stack.calculateValue(), equalTo(expected)); //
     }
 
     @Test
-    public void calculateScore_shouldMultiplyProperlyWith1Wager() {
+    public void calculateValue_shouldMultiplyProperlyWith1Wager() {
         testWagers(1);
     }
 
     @Test
-    public void calculateScore_shouldMultiplyProperlyWith2Wagers() {
+    public void calculateValue_shouldMultiplyProperlyWith2Wagers() {
         testWagers(2);
     }
 
     @Test
-    public void calculateScore_shouldMultiplyProperlyWith3Wagers() {
+    public void calculateValue_shouldMultiplyProperlyWith3Wagers() {
         testWagers(3);
     }
 
@@ -55,7 +55,7 @@ public class InPlayCardStackTest {
 
         int multiplier = 1 + numWagerCards;
         int expected = (-20 + 3 + 4 + 8) * multiplier;
-        assertThat(stack.calculateScore(), equalTo(expected));
+        assertThat(stack.calculateValue(), equalTo(expected));
     }
 
 }

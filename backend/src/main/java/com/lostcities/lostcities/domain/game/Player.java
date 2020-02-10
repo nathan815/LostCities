@@ -57,7 +57,7 @@ public class Player {
     }
 
     public int calculateScore() {
-        return inPlay.values().stream().map(InPlayCardStack::calculateScore).reduce(Integer::sum).orElse(0);
+        return inPlay.values().stream().map(InPlayCardStack::calculateValue).reduce(Integer::sum).orElse(0);
     }
 
     protected void addToHand(Card card) {
