@@ -20,7 +20,7 @@ export default class Navbar extends Vue {
 }
 </script>
 <template>
-    <b-navbar toggleable="md" type="dark" variant="primary" class="navbar">
+    <b-navbar toggleable="md" type="dark" variant="dark" class="navbar">
         <div class="container">
             <b-navbar-brand to="/" class="site-name">Lost Cities</b-navbar-brand>
             <b-navbar-toggle target="nav-collapse" />
@@ -29,7 +29,7 @@ export default class Navbar extends Vue {
                 <b-navbar-nav>
                     <b-nav-item to="/games" exact>
                         <i class="fas fa-list-ul" />
-                        Games
+                        All Games
                     </b-nav-item>
                     <b-nav-item to="/leaderboard">
                         <i class="fas fa-trophy" />
@@ -38,12 +38,10 @@ export default class Navbar extends Vue {
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
-                    <b-form>
-                        <b-button v-if="showPlayButton" to="/games/new" variant="light" class="my- mr-2">
-                            <i class="fas fa-play" />
-                            Play Now
-                        </b-button>
-                    </b-form>
+                    <b-nav-item to="/games/1" exact>
+                        <i class="fas fa-plus-circle" />
+                        New Game
+                    </b-nav-item>
 
                     <b-nav-item-dropdown v-if="isLoggedIn" :text="user.username" right>
                         <b-dropdown-item to="/settings">Settings</b-dropdown-item>
@@ -63,6 +61,9 @@ export default class Navbar extends Vue {
 .navbar {
     z-index: 2;
     .site-name {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 30px;
         line-height: 1;
         font-family: Bangers, Arial, sans-serif;

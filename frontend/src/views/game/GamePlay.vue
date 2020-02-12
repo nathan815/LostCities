@@ -182,7 +182,7 @@ export default class GamePlay extends Vue {
 <template>
     <b-container class="game-play-container">
         <div v-if="isLoading" class="loading">
-            <b-spinner variant="primary" />
+            <b-spinner variant="light" />
             Loading game...
         </div>
 
@@ -284,7 +284,7 @@ export default class GamePlay extends Vue {
     }
     small.description {
         font-size: 11px;
-        color: #555;
+        color: #ccc;
     }
 }
 .cards-in-play-top {

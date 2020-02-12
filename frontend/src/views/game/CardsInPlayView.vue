@@ -70,8 +70,8 @@ export default class CardsInPlayView extends Vue {
         transform: rotate(180deg);
     }
     .placeholder {
-        background: #efefef;
-        border: 1px dashed #dcdcdc;
+        background: #52525233;
+        border: 1px dashed #424242;
         border-radius: 5px;
         width: 85%;
         height: 70%;
