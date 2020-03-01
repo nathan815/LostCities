@@ -7,6 +7,8 @@
 Online version of the Lost Cities game built with Java, Spring Boot, and VueJS.
 
 ## Set Up
+_Adding Docker soon_
+
 First, clone the repository: `git clone https://github.com/nathan815/LostCities`
 
 ### Backend
