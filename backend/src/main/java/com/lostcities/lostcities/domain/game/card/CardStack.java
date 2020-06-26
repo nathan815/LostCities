@@ -7,7 +7,6 @@ import static java.util.stream.Collectors.joining;
 
 public class CardStack implements Iterable<Card> {
 
-    // Use a list for the cards so we can insert cards anywhere, as one might with a real stack of cards
     private List<Card> cards;
 
     public CardStack() {

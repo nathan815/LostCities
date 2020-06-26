@@ -3,6 +3,7 @@ package com.lostcities.lostcities.domain.game;
 import com.lostcities.lostcities.domain.game.card.Card;
 import com.lostcities.lostcities.domain.game.card.CardStack;
 import com.lostcities.lostcities.domain.game.card.Color;
+import com.lostcities.lostcities.domain.game.card.InPlayCardStack;
 import com.lostcities.lostcities.domain.game.exception.CardLowerValueException;
 import com.lostcities.lostcities.domain.game.exception.CardNotInHandException;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class Player {
     private String name;
     private boolean readyToStart;
     private Set<Card> hand;
-    private Map<Color, CardStack> inPlay;
+    private Map<Color, InPlayCardStack> inPlay;
 
     public Player(long id, String name) {
         this.id = id;
@@ -31,7 +32,7 @@ public class Player {
     private void initializeInPlayMap() {
         inPlay = new HashMap<>();
         for(var color : Color.values()) {
-            inPlay.putIfAbsent(color, new CardStack());
+            inPlay.putIfAbsent(color, new InPlayCardStack());
         }
     }
 
@@ -53,6 +54,10 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public int calculateScore() {
+        return inPlay.values().stream().map(InPlayCardStack::calculateValue).reduce(Integer::sum).orElse(0);
     }
 
     protected void addToHand(Card card) {
@@ -89,7 +94,7 @@ public class Player {
         return inPlay.get(color);
     }
 
-    public Map<Color, CardStack> getInPlay() {
+    public Map<Color, InPlayCardStack> getInPlay() {
         return inPlay;
     }
 
